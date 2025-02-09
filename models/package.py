@@ -1,3 +1,5 @@
+class Package:
+    pass
 # Class should have the following attributes:
 #
 # Id
