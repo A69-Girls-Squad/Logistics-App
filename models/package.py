@@ -27,7 +27,6 @@ class Package:
         self._is_assigned = False
         self._route = None #?
 
-
     @property
     def start_location(self):
         return self._start_location
@@ -56,7 +55,6 @@ class Package:
     def route(self):
         return self._route
 
-
     def __str__(self):
         return f"""ID: {self._id}
 Start Location: {self._start_location}
@@ -65,5 +63,4 @@ Weight: {self._weight:.2f}kg
 Customer Email Address: {self._customer_email}
 Departure time: {self._departure_time}
 Estimated arrival time: {self._estimated_arrival_time}"""
-
 
