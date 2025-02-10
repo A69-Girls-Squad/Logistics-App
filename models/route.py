@@ -111,6 +111,7 @@ class Route:
             f"\nAssigned Truck ID: {self.assigned_truck.id}"
             f"\nStatus: {self.status}"
             f"\nCurrent Location: {self.current_location}"
+            f"\n============"
         )
 
     def calculating_expected_arrival_times(self):
