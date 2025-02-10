@@ -1,5 +1,11 @@
+import re
+from commands.validation_helpers import try_parse_float
+
+
 class Package:
     _current_id = 0
+
+    _email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+") #convert a regex pattern into a regex object
 
     @classmethod
     def _next_id(cls):
@@ -8,9 +14,13 @@ class Package:
 
     def __init__(self, start_location: str, end_location: str, weight: float, customer_email: str):
         self._id = Package._next_id()
-        self._start_location = start_location
-        self._end_location = end_location
-        self._weight = weight
+        self._start_location = start_location # to create a class of the cities for validation
+        self._end_location = end_location# to create a class of the cities for validation
+        if weight < 0:
+            raise ValueError("Weight can not be negative number")
+        self._weight = try_parse_float(weight)
+        if not Package._email_regex.fullmatch(customer_email):
+            raise ValueError(f"Invalid email address: {customer_email}")
         self._customer_email = customer_email
         self._departure_time = None
         self._estimated_arrival_time = None
@@ -51,7 +61,7 @@ class Package:
         return f"""ID: {self._id}
 Start Location: {self._start_location}
 End Location {self._end_location}
-Weight: {self._weight}kg
+Weight: {self._weight:.2f}kg
 Customer Email Address: {self._customer_email}
 Departure time: {self._departure_time}
 Estimated arrival time: {self._estimated_arrival_time}"""
