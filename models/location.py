@@ -1,5 +1,4 @@
 class Location:
-
     CITIES = {
         "SYD": 0,
         "MEL": 1,
@@ -20,7 +19,6 @@ class Location:
         [4016, 3509, 2785, 2481, 4311, 4025, 0]
     ]
 
-    # To implement JSON file
     def __init__(self, name: str):
         self._name = name
 
@@ -28,5 +26,6 @@ class Location:
     def name(self):
         return self._name
 
-    def get_distance(self, city_1, city_2):
-        return self.DISTANCES[self.CITIES[city_1][self.CITIES[city_2]]]
+    @staticmethod
+    def get_distance(city_1, city_2):
+        return Location.DISTANCES[Location.CITIES[city_1]][Location.CITIES[city_2]]
