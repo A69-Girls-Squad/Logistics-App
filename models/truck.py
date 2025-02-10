@@ -37,7 +37,7 @@ class Truck:
     
     def assign_to_route(self, route):
         self._assigned_route = route
-        self._status = "Assigned"
+        self._status = "Busy"
 
     def __str__(self):
         return f'Truck with ID: {self._id}, Name: {self.name}, Capacity: {self.capacity}, Range: {self.max_range} created'
