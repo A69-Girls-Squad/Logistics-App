@@ -127,7 +127,10 @@ class Route:
 
     def assign_truck(self, truck: Truck):
         self.assigned_truck = truck
-        truck.assigned_route = self
+
+    def remove_truck(self):
+        self.assigned_truck = None
+        
 
     def assign_package(self, package: Package):
         self._assigned_packages.append(package)
