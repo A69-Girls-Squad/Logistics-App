@@ -1,7 +1,7 @@
 import datetime
-from skeleton.models.location import Location
-from skeleton.models.package import Package
-from skeleton.models.truck import Truck
+from models.location import Location
+from models.package import Package
+from models.truck import Truck
 
 
 class Route:

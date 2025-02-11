@@ -3,7 +3,7 @@ from models.truck import Truck
 
 class AllTrucks:
     def __init__(self):
-        self.mydata = "mydata.json"
+        self.mydata = "trucks.json"
         self.trucks = self.load_trucks()
 
     def load_trucks(self):
