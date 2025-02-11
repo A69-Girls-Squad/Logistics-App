@@ -114,7 +114,7 @@ class Route:
             f"\n============"
         )
 
-    def calculating_expected_arrival_times(self):
+    def calculating_expected_arrival_times(self):              # stops: {SYD: 16/02, MEL: 17/02, BRI: 19/02}
         self._stops[self.locations[0]] = self.departure_time
         expected_arrival_time = self.departure_time
         for i in range(1, len(self.locations)):

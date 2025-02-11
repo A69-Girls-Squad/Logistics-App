@@ -1,15 +1,15 @@
 import json
 class Truck:
-    id_counter = 1001
-    def __init__(self, name, capacity, max_range):
-        self._id = Truck.id_counter
-        Truck.id_counter += 1
 
+    STATUS_FREE = "Free"
+    STATUS_BUSY = "Busy"
+
+    def __init__(self, name: str, capacity: int, max_range: int):
         self._name = name
         self._capacity = capacity
         self._max_range = max_range
         self._assigned_route = None
-        self._status = "Free"
+        self._status = Truck.STATUS_FREE
         self._location = None
     
     @classmethod
@@ -59,17 +59,23 @@ class Truck:
     def location(self, new_location):
         self._location = new_location
 
-    def is_free(self) -> bool:
+    # property for assigned_route
+
+    def is_free(self, route) -> bool:   # multiple route implementation checks -> Diddy
         if self._assigned_route == None:
             return True
     
     def assign_to_route(self, route):
         self._assigned_route = route
-        self._status = "Busy"
+        self._status = Truck.STATUS_BUSY
     
     def remove_from_route(self):
         self._assigned_route = None
-        self._status = "Free"
+        self._status = Truck.STATUS_FREE
 
     def __str__(self):
-        return f'Truck with ID: {self._id}, Name: {self.name}, Capacity: {self.capacity}, Range: {self.max_range} created'
+        return (f"Truck with ID: {self._id}"
+                f"\nName: {self.name}"
+                f"\nCapacity: {self.capacity}"
+                f"\nRange: {self.max_range} created"
+                f"\nStatus: {self.status}")

@@ -3,6 +3,12 @@ from commands.validation_helpers import try_parse_float
 
 
 class Package:
+
+    # STATUS_NOT_ASSIGNED = "Not assigned"
+    # STATUS_ASSIGNED = "Assigned"  ..... - 15/02 >=< datetime.datetime.now()
+    # on delivery   16/02 - 18/02
+    # delivered     19/02 - .....  >=< datetime.datetime.now()
+
     _current_id = 0
 
     _email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+") #convert a regex pattern into a regex object
@@ -15,17 +21,19 @@ class Package:
     def __init__(self, start_location: str, end_location: str, weight: float, customer_email: str):
         self._id = Package._next_id()
         self._start_location = start_location # to create a class of the cities for validation
-        self._end_location = end_location# to create a class of the cities for validation
+        self._end_location = end_location# to create a class of the cities for validation; setter
         if weight < 0:
             raise ValueError("Weight can not be negative number")
-        self._weight = try_parse_float(weight)
+        self._weight = try_parse_float(weight)  # setter
         if not Package._email_regex.fullmatch(customer_email):
             raise ValueError(f"Invalid email address: {customer_email}")
-        self._customer_email = customer_email
+        self._customer_email = customer_email   # setter
         self._departure_time = None
-        self._estimated_arrival_time = None
-        self._is_assigned = False
+        self._estimated_arrival_time = None   # use route.stops.value for the end location
+        self._is_assigned = False   # if self._route: True, else: False
         self._route = None #?
+        # self.status
+
 
     @property
     def start_location(self):
@@ -56,11 +64,11 @@ class Package:
         return self._route
 
     def __str__(self):
-        return f"""ID: {self._id}
-Start Location: {self._start_location}
-End Location {self._end_location}
-Weight: {self._weight:.2f}kg
-Customer Email Address: {self._customer_email}
-Departure time: {self._departure_time}
-Estimated arrival time: {self._estimated_arrival_time}"""
+        return (f"ID: {self._id}"
+                f"\nStart Location: {self._start_location})"
+                f"\nEnd Location {self._end_location}"
+                f"\nWeight: {self._weight:.2f}kg"
+                f"\nCustomer Email Address: {self._customer_email}"
+                f"\nDeparture time: {self._departure_time}"
+                f"\nEstimated arrival time: {self._estimated_arrival_time}")
 
