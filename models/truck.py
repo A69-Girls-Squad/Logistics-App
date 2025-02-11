@@ -61,9 +61,12 @@ class Truck:
 
     # property for assigned_route
 
-    def is_free(self, route) -> bool:   # multiple route implementation checks -> Diddy
-        if self._assigned_route == None:
-            return True
+    def is_free(self, route) -> bool:
+        return (not self.assigned_route
+                or ((self.assigned_route.departure_time > route.expected_arrival_time
+                or self.assigned_route.expected_arrival_time < route.departure_time)
+                and (self.capacity >= route.load
+                and self.max_range >= route.distance)))
     
     def assign_to_route(self, route):
         self._assigned_route = route
