@@ -1,8 +1,8 @@
 from datetime import datetime
-from models.user_role import UserRole
 from models.truck import Truck
 from models.package import Package
 from models.route import Route
+from models.user_role import UserRole
 
 
 class ApplicationData:
