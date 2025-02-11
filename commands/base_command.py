@@ -27,6 +27,7 @@ class BaseCommand:
             raise ValueError(
                 f'Invalid number of arguments. Expected: {count}; received: {len(params)}.")')
 
+
     # def _throw_if_user_logged_in(self):
     #     if self._app_data.has_logged_in_user:
     #         logged_user = self._app_data.logged_in_user
