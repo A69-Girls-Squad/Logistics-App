@@ -1,10 +1,12 @@
-from application_data import ApplicationData
+from core.application_data import ApplicationData
 
 
 class BaseCommand:
     def __init__(self, params, app_data: ApplicationData):
         self._params = params
-        self._app_data =app_data
+        self._app_data = app_data
+        self._requires_login = True
+        self._logged_employee = self._app_data.logged_in_employee
 
     @property
     def params(self):
@@ -18,18 +20,13 @@ class BaseCommand:
         # override in derived classes
         return ""
 
-    def _expected_params_count(self) -> int:
-        raise NotImplementedError('Override in derived class')
+    def requires_login(self):
+        if self._requires_login and not self._app_data.has_logged_in_employee:
+            raise ValueError('You are not logged in! Please login first!')
+        return ""
 
-
-    def validate_params_count(self, params, count): # choose validate from here or from the validation_helper?
-        if len(params) != count:
+    def _throw_if_employee_logged_in(self):
+        if self._app_data.has_logged_in_employee:
+            logged_employee = self._app_data.logged_in_employee
             raise ValueError(
-                f'Invalid number of arguments. Expected: {count}; received: {len(params)}.")')
-
-
-    # def _throw_if_user_logged_in(self):
-    #     if self._app_data.has_logged_in_user:
-    #         logged_user = self._app_data.logged_in_user
-    #         raise ValueError(
-    #             f'User {logged_user.username} is logged in! Please log out first!')
+                f'Employee {logged_employee.username} is logged in! Please log out first!')
