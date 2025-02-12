@@ -3,6 +3,9 @@ from commands.assign_truck_to_route import AssignTruckToRouteCommand
 from commands.bulk_assign_packages import BulkAssignPackagesCommand
 from commands.create_package import CreatePackageCommand
 from commands.create_route import CreateRouteCommand
+from commands.login import LoginCommand
+from commands.logout import LogoutCommand
+from commands.register_employee import RegisterEmployeeCommand
 from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
 from commands.search_route import SearchRouteCommand
 from commands.search_truck import SearchTruckCommand
@@ -22,10 +25,12 @@ class CommandFactory:
     def create(self, input_line: str):
         cmd, *params = input_line.split()
 
-        # if cmd.upper() == 'LOGIN':
-        #     return LoginCommand(self._app_data)
-        # if cmd.upper() == 'LOGOUT':
-        #     return LogoutCommand(self._app_data)
+        if cmd.lower() == 'login':
+            return LoginCommand(params, self._app_data)
+        if cmd.lower() == 'logout':
+            return LogoutCommand(params, self._app_data)
+        if cmd.lower() == 'registeremployee':
+            return RegisterEmployeeCommand(params, self._app_data)
         if cmd.lower() == 'createroute':
             return CreateRouteCommand(params, self._app_data)
         if cmd.lower() == 'createpackage':
