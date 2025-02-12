@@ -15,7 +15,6 @@ class AssignTruckToRouteCommand(BaseCommand):
         validate_params_count(self.params, 2)
         truck_id, route_id = self.params
         
-        # get truck and route from classes or app data?
         truck = self.app_data.find_truck_by_id(truck_id)
         route = self._app_data.find_route_by_id(route_id)
         
