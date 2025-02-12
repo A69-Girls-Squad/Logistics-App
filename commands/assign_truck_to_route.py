@@ -1,9 +1,7 @@
-import logging
 from core.application_data import ApplicationData
 from commands.validation_helpers import validate_params_count
 from base_command import BaseCommand
 
-logger = logging.getLogger(__name__)
 class AssignTruckToRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
@@ -30,7 +28,5 @@ class AssignTruckToRouteCommand(BaseCommand):
         route.assign_truck(truck)
         truck.assign_to_route(route)
         
-        logger.info(f"Truck with id {truck_id} assigned to route {route_id}")
+        self.logger.info(f"Truck with id {truck_id} assigned to route {route_id}")
         return f"Truck with id {truck_id} assigned to route {route_id}"
-        
-
