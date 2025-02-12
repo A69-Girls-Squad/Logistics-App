@@ -1,0 +1,24 @@
+from commands.base_command import BaseCommand
+from commands.validation_helpers import validate_params_count
+from core.application_data import ApplicationData
+
+
+class LoginCommand(BaseCommand):
+    def __init__(self, params, app_data: ApplicationData):
+        validate_params_count(params, 2)
+        super().__init__(app_data)
+        self._params = params
+        self._requires_login = False
+
+
+    def execute(self):
+        self._throw_if_employee_logged_in()
+
+        username, password = self._params
+        employee = self._app_data.find_employee_by_username(username)
+        if employee.password != password:
+            raise ValueError('Wrong username or password!')
+        else:
+            self._app_data.login(employee)
+
+            return f'Employee {employee.username} successfully logged in!'
