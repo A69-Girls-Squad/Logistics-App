@@ -2,7 +2,7 @@ from application_data import ApplicationData
 from commands.base_command import BaseCommand
 
 
-class ShowPackages(BaseCommand):
+class ShowPackagesCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().validate_params_count(params, 4)
         super().__init__(params, app_data)

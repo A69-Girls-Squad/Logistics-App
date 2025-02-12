@@ -2,7 +2,6 @@ from datetime import datetime
 from models.truck import Truck
 from models.package import Package
 from models.route import Route
-from models.user_role import UserRole
 
 
 class ApplicationData:
@@ -10,6 +9,8 @@ class ApplicationData:
         self._trucks = []
         self._routes = []
         self._packages = []
+        self._employee = []
+        self._logged_employee = None
 
     @property
     def trucks(self):
@@ -24,6 +25,10 @@ class ApplicationData:
         return self._packages
 
     @property
+    def employees(self):
+        return self._employee
+
+    @property
     def not_assigned_packages(self):
         not_assigned_packages = []
         for package in self.packages:
@@ -32,12 +37,15 @@ class ApplicationData:
         return not_assigned_packages
 
     @property
-    def logged_in_user(self):
-        pass
+    def logged_in_employee(self):
+        if self.has_logged_in_employee:
+            return self._logged_employee
+        else:
+            raise ValueError('There is no logged in employee.')
 
     @property
-    def users(self):
-        pass
+    def has_logged_in_employee(self):
+        return self._logged_employee is not None
 
     def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str):
         package = Package(start_location, end_location, weight, customer_email)
@@ -62,17 +70,26 @@ class ApplicationData:
             if truck.id == id:
                 return truck
 
-    def create_user(self, username: str, firstname: str, lastname: str, password: str, user_role: UserRole):
-        pass
+    def create_employee(self, username, firstname, lastname, password, employee_role) -> Employee:
+        if len([u for u in self._employee if u.username == username]) > 0:
+            raise ValueError(
+                f'Employee {username} already exist. Choose a different username!')
 
-    def login(self, user):
-        pass
+        employee = Employee(username, firstname, lastname, password, employee_role)
+        self._employee.append(employee)
+
+        return employee
+
+    def find_employee_by_username(self, username: str) -> Employee:
+        filtered = [employee for employee in self._employee if employee.username == username]
+        if not filtered:
+            raise ValueError(f'There is no employee with username {username}!')
+
+        return filtered[0]
+
+    def login(self, employee: Employee):
+        self._logged_employee = employee
 
     def logout(self):
-        pass
+        self._logged_employee = None
 
-    def register_user(self):
-        pass
-
-    def find_user_by_username(self, username):
-        pass
