@@ -47,9 +47,10 @@ class ApplicationData:
     def has_logged_in_employee(self):
         return self._logged_employee is not None
 
-    def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str):
+    def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str) -> Package:
         package = Package(start_location, end_location, weight, customer_email)
         self._packages.append(package)
+        return package
 
     def create_route(self, id, locations: list[str], departure_time: datetime):
         route = Route(id, locations, departure_time)

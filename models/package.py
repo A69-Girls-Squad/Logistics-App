@@ -14,26 +14,29 @@ class Package:
     _email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+") #convert a regex pattern into a regex object
 
     @classmethod
-    def _next_id(cls):
+    def next_id(cls):
         cls._current_id += 1
         return cls._current_id
 
     def __init__(self, start_location: str, end_location: str, weight: float, customer_email: str):
-        self._id = Package._next_id()
-        self._start_location = start_location # to create a class of the cities for validation
-        self._end_location = end_location# to create a class of the cities for validation; setter
+        self._id = Package.next_id()
+        self._start_location = start_location #  for validation
+        self._end_location = end_location#  for validation; setter
         if weight < 0:
             raise ValueError("Weight can not be negative number")
-        self._weight = try_parse_float(weight)  # setter
+        self._weight = try_parse_float(weight)
         if not Package._email_regex.fullmatch(customer_email):
             raise ValueError(f"Invalid email address: {customer_email}")
-        self._customer_email = customer_email   # setter
+        self._customer_email = customer_email
         self._departure_time = None
         self._estimated_arrival_time = None   # use route.stops.value for the end location
         self._is_assigned = False   # if self._route: True, else: False
         self._route = None #?
         # self.status
 
+    @property
+    def id(self):
+        return self._id
 
     @property
     def start_location(self):
@@ -66,9 +69,11 @@ class Package:
     def __str__(self):
         return (f"ID: {self._id}"
                 f"\nStart Location: {self._start_location})"
-                f"\nEnd Location {self._end_location}"
+                f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f}kg"
                 f"\nCustomer Email Address: {self._customer_email}"
                 f"\nDeparture time: {self._departure_time}"
                 f"\nEstimated arrival time: {self._estimated_arrival_time}")
+
+
 
