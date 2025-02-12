@@ -18,6 +18,7 @@ from commands.show_unassigned_packages import ShowUnassignedPackagesCommand
 from core.application_data import ApplicationData
 
 
+
 class CommandFactory:
     def __init__(self, data: ApplicationData):
         self._app_data = data
