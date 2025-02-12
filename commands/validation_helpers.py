@@ -7,5 +7,5 @@ def try_parse_float(s):
     try:
         return float(s)
     except:
-        raise ValueError('Invalid value for price. Should be a number.')
+        raise ValueError('Invalid value for weight. Should be a number.')
 
