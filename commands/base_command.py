@@ -14,7 +14,7 @@ class BaseCommand:
     def app_data(self):
         return self._app_data
 
-    def execute(self):
+    def execute(self) -> str:
         # override in derived classes
         return ""
 
