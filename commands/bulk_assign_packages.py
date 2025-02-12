@@ -20,5 +20,7 @@ class BulkAssignPackagesCommand(BaseCommand):
                 bulk_assigned_packages.append(package.id)
             else:
                 no_more_capacity_message = "No more free capacity. Operation terminated"
-        self.logger.info(f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}")
+
+        self.logger.info(f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message} | Executed by: username")
+
         return f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}"

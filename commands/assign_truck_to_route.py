@@ -28,5 +28,8 @@ class AssignTruckToRouteCommand(BaseCommand):
         route.assign_truck(truck)
         truck.assign_to_route(route)
         
-        self.logger.info(f"Truck with id {truck_id} assigned to route {route_id}")
+        username = self._app_data.logged_in_employee  # not sure if this will work
+
+        self.logger.info(f"Truck with id {truck_id} assigned to route {route_id} | Executed by: {username} ")
+
         return f"Truck with id {truck_id} assigned to route {route_id}"
