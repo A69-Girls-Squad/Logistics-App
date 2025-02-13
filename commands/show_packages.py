@@ -1,18 +1,17 @@
+import application_data
 from application_data import ApplicationData
 from commands.base_command import BaseCommand
+from commands.validation_helpers import validate_params_count
 
 
 class ShowPackagesCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
-        super().validate_params_count(params, 4)
+        validate_params_count(params, 4)
         super().__init__(params, app_data)
 
     def execute(self):
-        start_location, end_location, weight_float, customer_email = self._params
+
+        package = self.app_data.find_package_by_id(application_data.Package.id)
+        return str(package)
 
 
-    # def _requires_login(self) -> bool:
-    #     return True
-    #
-    # def _expected_params_count(self) -> int:
-    #     return 1

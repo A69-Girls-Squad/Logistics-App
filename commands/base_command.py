@@ -25,8 +25,7 @@ class BaseCommand:
         return self._app_data
 
     def execute(self) -> str:
-        # override in derived classes
-        return ""
+        raise NotImplementedError("Execute method has to be overridden")
 
     def requires_login(self):
         if self._requires_login and not self._app_data.has_logged_in_employee:

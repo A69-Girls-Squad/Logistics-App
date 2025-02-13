@@ -13,7 +13,9 @@ class Engine:
                 if input_line.lower() == 'exit':
                     break
                 command = self._command_factory.create(input_line)
-                output.append(command.execute())
+                result = command.execute()
+                output.append(result)
+                print(result)
             except ValueError as err:
                 output.append(err.args[0])
         print('\n'.join(output))
