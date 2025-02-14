@@ -5,7 +5,7 @@ from base_command import BaseCommand
 from models.all_trucks import AllTrucks
 from models.truck import Truck
 
-logger = logging.getLogger(__name__)
+
 
 class ShowTrucksCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
@@ -21,7 +21,7 @@ class ShowTrucksCommand(BaseCommand):
 
         if not trucks:
             print(f"No trucks available with status: {status if status else 'All'}")
-            logger.info(f"No trucks available with status: {status if status else 'All'}")
+            self.logger.info(f"No trucks available with status: {status if status else 'All'}")
             return
         
         print(f"\nAll Trucks Information ({status if status else 'All'}):")
@@ -29,7 +29,7 @@ class ShowTrucksCommand(BaseCommand):
         for truck in trucks:
             print(truck) 
             print("-" * 40)
-            logger.info(f"Truck info: {truck.name} (ID: {truck.id}, Status: {truck.status})")
+            self.logger.info(f"Truck info: {truck.name} (ID: {truck.id}, Status: {truck.status})") #will be deleted
 
     def execute(self):
         status_param = self.params[0].lower()

@@ -1,6 +1,4 @@
 import smtplib
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from models.package import Package
 class SendPackageInfoToCustomerCommand:
     def __init__(self, package: Package):
@@ -23,14 +21,6 @@ class SendPackageInfoToCustomerCommand:
         smtp_server = "smtp.example.com"  
         smtp_port = 587  
 
-        # Create the MIME message
-        msg = MIMEMultipart()
-        msg['From'] = sender_email
-        msg['To'] = to_email
-        msg['Subject'] = subject
-        msg.attach(MIMEText(body, 'plain'))
-
-        # Send the email using smtplib
         try:
             with smtplib.SMTP(smtp_server, smtp_port) as server:
                 server.starttls()  

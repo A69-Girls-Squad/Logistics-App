@@ -33,3 +33,4 @@ class AssignTruckToRouteCommand(BaseCommand):
         self.logger.info(f"Truck with id {truck_id} assigned to route {route_id} | Executed by: {username} ")
 
         return f"Truck with id {truck_id} assigned to route {route_id}"
+    

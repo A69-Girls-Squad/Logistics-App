@@ -15,5 +15,5 @@ class CreatePackageCommand(BaseCommand):
 
         package = self._app_data.create_package(start_location, end_location, weight, customer_email)
 
-
+        self.logger.info(f'Package with ID {package.id} created')
         return f'Package with ID {package.id} was created!'
