@@ -10,6 +10,12 @@ class BulkAssignPackagesCommand(BaseCommand):
         self._params = params
 
     def execute(self):
+        '''
+        Assigns multiple packages to a route.
+        param: route: int
+        return: str
+        
+        '''
         bulk_assigned_packages = []
         no_more_capacity_message = ""
         route_id = self._params[0]

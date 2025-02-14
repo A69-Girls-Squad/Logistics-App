@@ -1,4 +1,4 @@
-from application_data import ApplicationData
+from core.application_data import ApplicationData
 from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count, try_parse_float
 from models.package import Package
@@ -10,6 +10,15 @@ class CreatePackageCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self):
+        '''
+        Assigns available truck to a route.
+        param: start_location: str
+        param: end_location: str
+        param: weight: float
+        param: customer_email: str
+        return: str
+
+        '''
         start_location, end_location, weight_float, customer_email = self._params
         weight = try_parse_float(weight_float)
 
