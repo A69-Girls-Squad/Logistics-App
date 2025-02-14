@@ -59,9 +59,14 @@ class Truck:
     def location(self, new_location):
         self._location = new_location
 
-    # property for assigned_route
-
+    @property
+    def assigned_route(self):
+        return self._assigned_route
+    
     def is_free(self, route) -> bool:
+        '''
+        Checks if the route is free based on departure time, arrival time, truck capacity and truck max range.
+        '''
         return (not self.assigned_route
                 or ((self.assigned_route.departure_time > route.expected_arrival_time
                 or self.assigned_route.expected_arrival_time < route.departure_time)
