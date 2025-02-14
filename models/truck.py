@@ -59,8 +59,10 @@ class Truck:
     def location(self, new_location):
         self._location = new_location
 
-    # property for assigned_route
-
+    @property
+    def assigned_route(self):
+        return self._assigned_route
+    
     def is_free(self, route) -> bool:
         return (not self.assigned_route
                 or ((self.assigned_route.departure_time > route.expected_arrival_time
