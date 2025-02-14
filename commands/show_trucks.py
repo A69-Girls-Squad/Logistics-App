@@ -5,8 +5,6 @@ from base_command import BaseCommand
 from models.all_trucks import AllTrucks
 from models.truck import Truck
 
-
-
 class ShowTrucksCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
@@ -45,6 +43,6 @@ class ShowTrucksCommand(BaseCommand):
 
         self.show_trucks(status=status)
 
-        logger.info(f"Executed ShowTrucksCommand for all trucks with status: {status if status else 'All'}")
+        self.logger.info(f"Executed ShowTrucksCommand for all trucks with status: {status if status else 'All'}")
 
         return f"Displayed trucks with status: {status if status else 'All'}"
