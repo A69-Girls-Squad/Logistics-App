@@ -1,12 +1,20 @@
+import logging
 from core.application_data import ApplicationData
-
-
 class BaseCommand:
     def __init__(self, params, app_data: ApplicationData):
         self._params = params
         self._app_data = app_data
         self._requires_login = True
         self._logged_employee = self._app_data.logged_in_employee
+        self._app_data =app_data
+
+        self.logger = logging.getLogger(self.__class__.__name__)
+
+        logging.basicConfig(
+            format="%(asctime)s - %(name)s - %(message)s",
+            datefmt="%d:%m:%Y %H:%M",
+            level=logging.INFO
+        )
 
     @property
     def params(self):
