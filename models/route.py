@@ -1,5 +1,7 @@
 import datetime
 import uuid
+
+from errors.application_error import ApplicationError
 from models.location import Location
 from models.package import Package
 from models.truck import Truck
@@ -25,7 +27,7 @@ class Route:
         self.departure_time = departure_time
 
         self._id = uuid.uuid1().hex[:6]
-        self._assigned_truck = None
+        self._assigned_truck: Truck
         self._assigned_packages = []
         self._load = 0
         self._stops = {}
@@ -102,7 +104,7 @@ class Route:
     def assigned_truck(self):
         return self._assigned_truck
 
-    @assigned_truck.setter
+    @assigned_truck.setter #Unnecessary to have setter. We have assign_truck method. Should do validations there
     def assigned_truck(self, value: Truck):
         if not value.is_free:
             raise ValueError("This truck is not free!")
@@ -186,12 +188,18 @@ class Route:
 
     def assign_truck(self, truck: Truck):
         self.assigned_truck = truck
+        # Add is_assigned to Truck so it is like Package, to know if the truck is assigned or not and check here
 
     def remove_truck(self):
         self.assigned_truck = None
-        
 
     def assign_package(self, package: Package):
+        if package in self._assigned_packages:
+            raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
+
+        if (self.load + package.weight) > self._assigned_truck.capacity:
+            raise ApplicationError(f"Truck with ID {self._assigned_truck.id} has no more capacity")
+
         self._assigned_packages.append(package)
         self._load += package.weight
         package.assigned_route = self
