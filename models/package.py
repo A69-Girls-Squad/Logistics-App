@@ -63,6 +63,10 @@ class Package:
         return self._estimated_arrival_time
 
     @property
+    def is_assigned(self):
+        return self._is_assigned
+
+    @property
     def route(self):
         return self._route
 

@@ -94,3 +94,10 @@ class ApplicationData:
     def logout(self):
         self._logged_employee = None
 
+    def get_packages_by_assigned_status(self, is_assigned: bool) -> list:
+        result = []
+        for package in self._packages:
+            if package.is_assigned == is_assigned:
+                result.append(package)
+
+        return result
