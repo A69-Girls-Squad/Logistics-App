@@ -2,7 +2,12 @@ from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
 from core.application_data import ApplicationData
 
+'''
+Assigns multiple packages to a route.
+param: route: int
+return: str
 
+'''
 class BulkAssignPackagesCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         validate_params_count(params, 1)
@@ -10,12 +15,7 @@ class BulkAssignPackagesCommand(BaseCommand):
         self._params = params
 
     def execute(self):
-        '''
-        Assigns multiple packages to a route.
-        param: route: int
-        return: str
-        
-        '''
+
         bulk_assigned_packages = []
         no_more_capacity_message = ""
         route_id = self._params[0]
