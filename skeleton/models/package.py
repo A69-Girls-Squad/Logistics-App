@@ -70,6 +70,10 @@ class Package:
     def route(self):
         return self._route
 
+    @route.setter
+    def route(self, value):
+        self._route = value
+
     def __str__(self):
         return (f"ID: {self._id}"
                 f"\nStart Location: {self._start_location})"
