@@ -1,7 +1,7 @@
 from datetime import datetime
-from models.truck import Truck
-from models.package import Package
-from models.route import Route
+from skeleton.models.truck import Truck
+from skeleton.models.package import Package
+from skeleton.models.route import Route
 
 
 class ApplicationData:

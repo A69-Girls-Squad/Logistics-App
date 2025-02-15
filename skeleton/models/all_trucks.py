@@ -1,5 +1,5 @@
 import json
-from models.truck import Truck
+from skeleton.models.truck import Truck
 
 class AllTrucks:
     def __init__(self):

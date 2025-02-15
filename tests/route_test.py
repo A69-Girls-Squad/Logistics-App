@@ -2,9 +2,9 @@ import unittest
 from unittest.mock import patch
 from datetime import datetime, timedelta
 import test_data as td
-from models.package import Package
-from models.route import Route
-from models.truck import Truck
+from skeleton.models.package import Package
+from skeleton.models.route import Route
+from skeleton.models.truck import Truck
 
 
 class Route_Should(unittest.TestCase):

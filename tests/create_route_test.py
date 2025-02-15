@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import Mock
 
-from commands.create_route import CreateRouteCommand
+from skeleton.commands.create_route import CreateRouteCommand
 
 
 def _create_fake_params(

@@ -3,13 +3,12 @@ import json
 import os
 import uuid
 
-from errors.application_error import ApplicationError
+from skeleton.errors.application_error import ApplicationError
 from models.location import Location
 
 from commands.application_error_temp import ApplicationError
-from core.application_data import ApplicationData
-from models.package import Package
-from models.truck import Truck
+from skeleton.models.package import Package
+from skeleton.models.truck import Truck
 
 
 class Route:

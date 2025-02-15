@@ -1,5 +1,5 @@
 import re
-from commands.validation_helpers import try_parse_float
+from skeleton.commands.validation_helpers import try_parse_float
 
 
 class Package:
