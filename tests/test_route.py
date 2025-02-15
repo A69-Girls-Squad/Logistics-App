@@ -135,6 +135,25 @@ class Route_Should(unittest.TestCase):
             with patch('datetime.datetime.now', return_value=route.departure_time+timedelta(days=1)):
                 self.assertEqual(td.EXPECTED_CURRENT_LOCATION, route.current_location)
 
+    @patch("builtins.print")
+    def test_get_distance_invalidCity_1(self, mock_print):
+        Route.get_distance(td.INVALID_CITY, td.VALID_CITY_2)
+        mock_print.assert_called_with(f"Invalid city: {td.INVALID_CITY}")
+
+    @patch("builtins.print")
+    def test_get_distance_invalidCity_2(self, mock_print):
+        Route.get_distance(td.VALID_CITY_1, td.INVALID_CITY)
+        mock_print.assert_called_with(f"Invalid city: {td.INVALID_CITY}")
+
+    @patch("builtins.print")
+    def test_get_distance_equalCities(self, mock_print):
+        Route.get_distance(td.VALID_CITY_1, td.VALID_CITY_1)
+        mock_print.assert_called_with("Cities cannot be the same!")
+
+    def test_get_distance_returnsCorrect(self):
+        distance = Route.get_distance(td.VALID_CITY_1, td.VALID_CITY_2)
+        self.assertEqual(td.EXPECTED_DISTANCE, distance)
+
     # To implement when Truck class is ready due to missing truck.id
     def test_str_returnsCorrectly_ifAssignedTruck(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
