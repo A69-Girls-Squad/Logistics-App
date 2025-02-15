@@ -4,9 +4,6 @@ import os
 import uuid
 
 from skeleton.errors.application_error import ApplicationError
-from models.location import Location
-
-from commands.application_error_temp import ApplicationError
 from skeleton.models.package import Package
 from skeleton.models.truck import Truck
 
@@ -45,11 +42,12 @@ class Route:
         self.departure_time = departure_time
 
         self._id = uuid.uuid1().hex[:6]
-        self._assigned_truck: Truck
+        self._assigned_truck = None    # Removed TypeHint `:Truck` because at init no truck is assigned
         self._assigned_packages = []
         self._load = 0
         self._stops = {}
-        self.calculating_expected_arrival_times()
+        if isinstance(self.locations, list):
+            self.calculating_estimated_arrival_times()
 
     '''
     Manages the locations where the route will stop.
@@ -367,7 +365,7 @@ class Route:
     def calculating_estimated_arrival_times(self):
         self._stops[self.locations[0]] = self.departure_time
         estimated_arrival_time = self.departure_time
-        for i in range(1, len(self.locations)):
+        for i in range(len(self.locations)):
             previous_location = self.locations[i-1]
             location = self.locations[i]
 
@@ -409,23 +407,16 @@ class Route:
     Links the package to this route by updating its `assigned_route` attribute.
     '''
     def assign_package(self, package: Package):
-        if package in self._assigned_packages:
-            raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
-
-        if (self.load + package.weight) > self._assigned_truck.capacity:
-            raise ApplicationError(f"Truck with ID {self._assigned_truck.id} has no more capacity")
-
-        self._assigned_packages.append(package)
-        self._load += package.weight
-        package.assigned_route = self
         try:
             if not isinstance(package, Package):
                 raise ApplicationError("Invalid package")
+            if package in self._assigned_packages:
+                raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
             if self.assigned_truck and self.free_capacity < package.weight:
                 raise ApplicationError("No more capacity")
             self._assigned_packages.append(package)
             self._load += package.weight
-            package.assigned_route = self
+            package.route = self
 
         except ApplicationError as ae:
             print(ae.args[0])

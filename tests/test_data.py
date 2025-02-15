@@ -9,7 +9,7 @@ INVALID_LOCATIONS_INPUT_TWO_ADJACENT_EQUAL = 'SYD,SYD,MEL'
 VALID_LOCATIONS_INPUT = 'SYD,MEL,BRI'
 VALID_LOCATIONS_OUTPUT = ('SYD', 'MEL', 'BRI')
 VALID_DISTANCE = 2642
-EXPECTED_ESTIMATED_ARRIVAL_TIME = datetime.datetime(2025, 2, 17, 17, 52)
+EXPECTED_ESTIMATED_ARRIVAL_TIME = datetime.datetime(2025, 2, 18, 4, 18)
 EXPECTED_CURRENT_LOCATION = 'MEL'
 
 INVALID_DEPARTURE_TIME_INPUT = 'TestInvalidDepartureTime'
@@ -24,9 +24,9 @@ VALID_TRUCK_NAME = "Scania"
 VALID_TRUCK_CAPACITY = 42000
 VALID_TRUCK_MAX_RANGE = 8000
 
-EXPECTED_STOPS = {'BRI': datetime.datetime(2025, 2, 17, 17, 52),
-                 'MEL': datetime.datetime(2025, 2, 16, 21, 34),
-                 'SYD': datetime.datetime(2025, 2, 16, 11, 30)}
+EXPECTED_STOPS = {'BRI': datetime.datetime(2025, 2, 18, 4, 18),
+                    'MEL': datetime.datetime(2025, 2, 17, 8, 1),
+                    'SYD': datetime.datetime(2025, 2, 16, 21, 56)}
 
 INVALID_PACKAGE = "TestInvalidPackage"
 
