@@ -101,7 +101,7 @@ class Route_Should(unittest.TestCase):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         self.assertEqual(td.VALID_DISTANCE, route.distance)
 
-    def test_expected_arrival_time_returnsCorrectly(self):
+    def test_estimated_arrival_time_returnsCorrectly(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         self.assertEqual(td.EXPECTED_ESTIMATED_ARRIVAL_TIME, route.estimated_arrival_time)
 
@@ -157,7 +157,7 @@ class Route_Should(unittest.TestCase):
 
         expected_str = (f"Route Details:"
                         f"\nID: {route.id}"
-                        f"\nHubs:\nSYD: 2025-02-16 11:30:00 -> MEL: 2025-02-16 21:34:00 -> BRI: 2025-02-17 17:52:00"
+                        f"\nHubs:\nSYD: 2025-02-16 21:56:00 -> MEL: 2025-02-17 08:01:00 -> BRI: 2025-02-18 04:18:00"
                         f"\nDeparture Time: 16/02/2025 11:30"
                         f"\nNumber of Packages: 0"
                         f"\nCurrent Load: 0"
@@ -209,11 +209,11 @@ class Route_Should(unittest.TestCase):
         route.assign_package(package)
         mock_print.assert_called_with("No more capacity")
 
-    # To be further implemented when Package class is ready
+    # To be further implemented when Truck class is ready
     def test_assign_package(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck("Scania", 42000, 8000)
-        route.assign_truck(truck)
+        route.assigned_truck = truck
         package = Package("SYD", "MEL", 80, "abc@gmail.com")
         route.assign_package(package)
 
