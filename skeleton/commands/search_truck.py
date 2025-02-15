@@ -1,8 +1,7 @@
 import logging
-from models.package import Package
-from models.route import Route
-from models.truck import Truck
-from models.all_trucks import AllTrucks
+from skeleton.models.package import Package
+from skeleton.models.route import Route
+from skeleton.models.all_trucks import AllTrucks
 
 logger = logging.getLogger(__name__)
 class SearchTruckCommand:

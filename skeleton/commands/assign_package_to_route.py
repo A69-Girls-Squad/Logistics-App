@@ -1,7 +1,7 @@
-from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count, try_parse_int
-from core.application_data import ApplicationData
-from errors.application_error import ApplicationError
+from skeleton.commands.base_command import BaseCommand
+from skeleton.commands.validation_helpers import validate_params_count, try_parse_int
+from skeleton.core.application_data import ApplicationData
+from skeleton.errors.application_error import ApplicationError
 
 
 class AssignPackageToRoute(BaseCommand):

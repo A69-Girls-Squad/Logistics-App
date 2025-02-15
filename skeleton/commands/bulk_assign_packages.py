@@ -1,6 +1,6 @@
-from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count
-from core.application_data import ApplicationData
+from skeleton.commands.base_command import BaseCommand
+from skeleton.commands.validation_helpers import validate_params_count
+from skeleton.core.application_data import ApplicationData
 
 '''
 Assigns multiple packages to a route.

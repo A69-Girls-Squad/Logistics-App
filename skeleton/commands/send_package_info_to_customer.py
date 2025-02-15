@@ -1,7 +1,7 @@
 import smtplib
 import logging
-from models.package import Package
-from core.application_data import ApplicationData
+from skeleton.models.package import Package
+from skeleton.core.application_data import ApplicationData
 class SendPackageInfoToCustomerCommand:
     def __init__(self, package: Package, app_data: ApplicationData):
         self.package = package

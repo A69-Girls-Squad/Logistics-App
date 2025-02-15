@@ -1,7 +1,7 @@
-from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count
-from core.application_data import ApplicationData
-from models.package import Package
+from skeleton.commands.base_command import BaseCommand
+from skeleton.commands.validation_helpers import validate_params_count
+from skeleton.core.application_data import ApplicationData
+from skeleton.models.package import Package
 
 
 class ShowUnassignedPackagesCommand(BaseCommand):
