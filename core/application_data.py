@@ -5,6 +5,7 @@ from models.route import Route
 
 
 class ApplicationData:
+
     def __init__(self):
         self._trucks = []
         self._routes = []
