@@ -1,13 +1,10 @@
+from skeleton.commands.base_command import BaseCommand
 from skeleton.core.application_data import ApplicationData
 from skeleton.commands.validation_helpers import validate_params_count
-from base_command import BaseCommand
 
 class RemoveTruckFromRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
-        self.params = params
-        self._app_data = app_data
-        
 
     def execute(self):
         validate_params_count(self.params, 2)

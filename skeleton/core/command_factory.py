@@ -14,7 +14,6 @@ from skeleton.commands.show_packages import ShowPackagesCommand
 from skeleton.commands.show_route import ShowRouteCommand
 from skeleton.commands.show_routes_inprogress import ShowRoutesInProgressCommand
 from skeleton.commands.show_trucks import ShowTrucksCommand
-from skeleton.commands.show_unassigned_packages import ShowUnassignedPackagesCommand
 from skeleton.core.application_data import ApplicationData
 
 
@@ -58,7 +57,5 @@ class CommandFactory:
             return SendPackageInfoToCustomerCommand(params, self._app_data)
         if cmd.lower() == 'showroutesinprogress':
             return ShowRoutesInProgressCommand(params, self._app_data)
-        if cmd.lower() == 'showunassignedpackages':
-            return ShowUnassignedPackagesCommand(params, self._app_data)
 
         raise ValueError(f"Command {cmd} is not supported.")
