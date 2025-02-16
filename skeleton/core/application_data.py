@@ -1,4 +1,5 @@
-from datetime import datetime
+from errors.application_error import ApplicationError
+from models.employee import Employee
 from skeleton.models.truck import Truck
 from skeleton.models.package import Package
 from skeleton.models.route import Route
@@ -10,25 +11,69 @@ class ApplicationData:
         self._trucks = []
         self._routes = []
         self._packages = []
-        self._employee = []
-        self._logged_employee = None
+        self._employees = []
+        self._logged_in_employee = None
 
+    '''
+    Returns the entire truck park as an immutable tuple of truck objects.
+    '''
     @property
     def trucks(self):
-        return self._trucks
+        return tuple(self._trucks)
 
+    '''
+    Returns all created routes.
+    '''
     @property
     def routes(self):
-        return self._routes
+        return tuple(self._routes)
 
+    '''
+    Returns all created packages.
+    '''
     @property
     def packages(self):
-        return self._packages
+        return tuple(self._packages)
 
+    '''
+    Returns all created employees.
+    '''
     @property
     def employees(self):
-        return self._employee
+        return tuple(self._employees)
 
+    '''
+    Manages the currently logged-in employee.
+
+    Retrieves or updates the employee who is currently logged in.
+    Ensures only valid `Employee` objects can be assigned.
+    '''
+    @property
+    def logged_in_employee(self):
+        return self._logged_in_employee
+
+    @logged_in_employee.setter
+    def logged_in_employee(self, value: Employee):
+        try:
+            if not isinstance(value, Employee):
+                raise ApplicationError('Invalid employee')
+            self._logged_in_employee = value
+        except ApplicationError as ae:
+            print(ae.args[0])
+
+    '''
+    Indicates whether an employee is currently logged in.
+    
+    Checks if there is a logged-in employee.
+    Returns `True` if an employee is logged in, otherwise `False`.
+    '''
+    @property
+    def has_logged_in_employee(self):
+        return self.logged_in_employee is not None
+
+    '''
+    Retrieves a list of all packages that are not assigned to a route.
+    '''
     @property
     def not_assigned_packages(self):
         not_assigned_packages = []
@@ -37,64 +82,113 @@ class ApplicationData:
                 not_assigned_packages.append(package)
         return not_assigned_packages
 
-    @property
-    def logged_in_employee(self):
-        if self.has_logged_in_employee:
-            return self._logged_employee
-        else:
-            raise ValueError('There is no logged in employee.')
-
-    @property
-    def has_logged_in_employee(self):
-        return self._logged_employee is not None
-
+    '''
+    Creates a new package and adds it to the application's packages list.
+    Data validation is handled by the Package class __init__ constructor.
+    '''
     def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str) -> Package:
         package = Package(start_location, end_location, weight, customer_email)
         self._packages.append(package)
+
         return package
 
-    def create_route(self, id, locations: list[str], departure_time: datetime):
-        route = Route(id, locations, departure_time)
+    '''
+    Creates a new route and adds it to the application's routes list.
+    Data validation is handled by the Route class __init__ constructor.
+    '''
+    def create_route(self, locations: str, departure_time: str):
+        route = Route(locations, departure_time)
         self._routes.append(route)
 
+        return route
+
+    '''
+    Finds and returns the package associated with the provided ID.
+    If no match is found, returns `None`.
+    '''
     def find_package_by_id(self, id) -> Package:
         for package in self.packages:
             if package.id == id:
                 return package
 
+    '''
+    Finds and returns the route associated with the provided ID.
+    If no match is found, returns `None`.
+    '''
     def find_route_by_id(self, id) -> Route:
         for route in self.routes:
             if route.id == id:
                 return route
 
+    '''
+    Finds and returns the truck associated with the provided ID.
+    If no match is found, returns `None`.
+    '''
     def find_truck_by_id(self, id) -> Truck:
         for truck in self.trucks:
             if truck.id == id:
                 return truck
 
+    '''
+    Creates a new employee and adds them to the employee list.
+    Returns the newly created employee object.
+    Checks if an employee with the given `username` already exists.
+    '''
     def create_employee(self, username, firstname, lastname, password, employee_role) -> Employee:
-        if len([u for u in self._employee if u.username == username]) > 0:
-            raise ValueError(
-                f'Employee {username} already exist. Choose a different username!')
+        try:
+            if len([u for u in self._employees if u.username == username]) > 0:
+                raise ValueError(f'Employee {username} already exist. Choose a different username!')
 
-        employee = Employee(username, firstname, lastname, password, employee_role)
-        self._employee.append(employee)
+            employee = Employee(username, firstname, lastname, password, employee_role)
+            self._employees.append(employee)
 
-        return employee
+            return employee
 
+        except ApplicationError as ae:
+            print(ae.args[0])
+
+    '''
+    Finds and returns the employee associated with the provided username.
+    If no match is found, returns `None`.
+    '''
     def find_employee_by_username(self, username: str) -> Employee:
-        filtered = [employee for employee in self._employee if employee.username == username]
-        if not filtered:
-            raise ValueError(f'There is no employee with username {username}!')
+        try:
+            filtered = [employee for employee in self._employees if employee.username == username]
+            if not filtered:
+                raise ApplicationError(f'There is no employee with username {username}!')
 
-        return filtered[0]
+            return filtered[0]
 
+        except ApplicationError as ae:
+            print(ae.args[0])
+
+    '''
+    Logs in an employee by setting the provided employee as the currently logged-in user.
+    '''
     def login(self, employee: Employee):
-        self._logged_employee = employee
+        try:
+            if not isinstance(employee, Employee):
+                raise ApplicationError("Invalid employee")
+            self._logged_in_employee = employee
 
+        except ApplicationError as ae:
+            print(ae.args[0])
+
+    '''
+    Logs out the currently logged-in employee by setting the logged-in employee to `None`.
+    After calling this method, no employee will be considered logged in until a new `login` method is called.
+    '''
     def logout(self):
-        self._logged_employee = None
+        self._logged_in_employee = None
 
+    '''
+    Retrieves a list of packages that match the specified assignment status.
+
+    Parameters:
+    `is_assigned` (bool): The assignment status to filter by. 
+      - `True` returns packages that are assigned.
+      - `False` returns packages that are not assigned.
+    '''
     def get_packages_by_assigned_status(self, is_assigned: bool) -> list:
         result = []
         for package in self._packages:
