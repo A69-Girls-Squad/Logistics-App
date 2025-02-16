@@ -1,4 +1,6 @@
 from datetime import datetime
+
+from skeleton.models.employee import Employee
 from skeleton.models.truck import Truck
 from skeleton.models.package import Package
 from skeleton.models.route import Route
