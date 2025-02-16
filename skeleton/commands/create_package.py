@@ -8,16 +8,9 @@ class CreatePackageCommand(BaseCommand):
         validate_params_count(params, 4)
         super().__init__(params, app_data)
 
-    def execute(self):
-        '''
-        Assigns available truck to a route.
-        param: start_location: str
-        param: end_location: str
-        param: weight: float
-        param: customer_email: str
-        return: str
 
-        '''
+    def execute(self):
+
         start_location, end_location, weight_float, customer_email = self._params
         weight = try_parse_float(weight_float)
 

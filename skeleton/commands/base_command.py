@@ -6,7 +6,6 @@ class BaseCommand:
         self._app_data = app_data
         self._requires_login = True
         self._logged_employee = self._app_data.logged_in_employee
-        self._app_data =app_data
 
         self.logger = logging.getLogger(self.__class__.__name__)
 
