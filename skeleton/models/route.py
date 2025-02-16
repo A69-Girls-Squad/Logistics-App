@@ -37,7 +37,7 @@ class Route:
     STATUS_IN_PROGRESS = "In progress"
     STATUS_FINISHED = "Finished"
 
-    def __init__(self, locations: list[str], departure_time: str):
+    def __init__(self, locations: str, departure_time: str):
         self.locations = locations
         self.departure_time = departure_time
 

@@ -1,5 +1,7 @@
 import datetime
 
+from models.constants.employee_role import EmployeeRole
+
 # Route
 INVALID_LOCATIONS_INPUT_SEPARATOR = 'SYD;MEL;BRI'
 INVALID_LOCATIONS_INPUT_TOO_FEW_WITH_COMMA = 'SYD,'
@@ -17,6 +19,8 @@ INVALID_DEPARTURE_TIME_IN_THE_PAST = '16/02/1900-11:30'
 VALID_DEPARTURE_TIME_INPUT = '16/02/2025-11:30'
 VALID_DEPARTURE_TIME_OUTPUT = datetime.datetime(2025, 2, 16, 11, 30)
 
+INVALID_ROUTE_ID = "TestInvalidRouteID"
+
 VALID_ID_LEN = 6
 
 INVALID_TRUCK = "TestInvalidTruck"
@@ -28,10 +32,35 @@ EXPECTED_STOPS = {'BRI': datetime.datetime(2025, 2, 18, 4, 18),
                     'MEL': datetime.datetime(2025, 2, 17, 8, 1),
                     'SYD': datetime.datetime(2025, 2, 16, 21, 56)}
 
-INVALID_PACKAGE = "TestInvalidPackage"
-
-# Location
 VALID_CITY_1 = 'SYD'
 VALID_CITY_2 = 'MEL'
 INVALID_CITY = 'TestInvalidCity'
 EXPECTED_DISTANCE = 877
+
+# Employee
+INVALID_USERNAME = '.'
+VALID_USERNAME = 'myUsername'
+INVALID_FIRST_NAME = '.'
+VALID_FIRST_NAME = 'Pesho'
+INVALID_LAST_NAME = '.'
+VALID_LAST_NAME = 'Peshev'
+INVALID_PASSWORD = '.'
+VALID_PASSWORD = 'pass123'
+INVALID_EMPLOYEE_ROLE = 'TestEmployeeRole'
+VALID_EMPLOYEE_ROLE = EmployeeRole.REGULAR
+INVALID_EMPLOYEE = "TestInvalidEmployee"
+
+# Package
+INVALID_START_LOCATION = "TestInvalidStartLocation"
+VALID_START_LOCATION = "SYD"
+INVALID_END_LOCATION = "TestInvalidEndLocation"
+VALID_END_LOCATION = "MEL"
+INVALID_WEIGHT = "TestInvalidWeight"
+VALID_WEIGHT = 45
+INVALID_CUSTOMER_EMAIL = "TestInvalidCustomerEmail"
+VALID_CUSTOMER_EMAIL = "pesho@gmail.com"
+INVALID_PACKAGE_ID = "TestInvalidPackageID"
+INVALID_PACKAGE = "TestInvalidPackage"
+
+# Truck
+INVALID_TRUCK_ID = "TestInvalidTruckID"
