@@ -2,6 +2,6 @@ from enum import Enum
 
 
 class AssignStatus(Enum):
-    ASSIGNED = 'Assigned'
-    UNASSIGNED = 'Unassigned'
-    ALL = 'All'
+    ASSIGNED = 'assigned'
+    UNASSIGNED = 'unassigned'
+    ALL = 'all'
