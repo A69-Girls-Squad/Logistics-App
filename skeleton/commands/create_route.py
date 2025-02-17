@@ -13,6 +13,6 @@ class CreateRouteCommand(BaseCommand):
         id, locations, departure_time = self._params
         self._app_data.create_route(id, locations, departure_time)
         
-        self.logger.info(f"Route with id {id} was created!\nLocations: {locations}\nDeparture Time: {departure_time} | Executed by: username")
+        self.logger.info(f"Route with id {id} was created!\nLocations: {locations}\nDeparture Time: {departure_time} | Executed by: {self.app_data.logged_in_employee}")
         
         return f'Route with id {id} was created!\nLocations: {locations}\nDeparture Time: {departure_time}'

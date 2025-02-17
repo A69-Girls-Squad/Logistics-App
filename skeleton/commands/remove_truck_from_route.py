@@ -3,6 +3,11 @@ from skeleton.core.application_data import ApplicationData
 from skeleton.commands.validation_helpers import validate_params_count
 
 class RemoveTruckFromRouteCommand(BaseCommand):
+    """
+    Removes a truck from a route.
+    Truck status is changed back to free.
+    
+    """
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
 
