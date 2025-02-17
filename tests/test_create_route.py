@@ -1,6 +1,5 @@
 import unittest
 from unittest.mock import Mock
-
 from skeleton.commands.create_route import CreateRouteCommand
 
 
@@ -18,15 +17,15 @@ def _create_fake_params(
 def _create_mock(*, product_exists_return_value: bool):
     fake_data = Mock()
 
-    def product_exists(name):
-        return product_exists_return_value
+def product_exists(name):
+    return product_exists_return_value
 
-    def create_shampoo(name, brand, price, gender, usage_type, milliliters):
-        product = Mock()
-        product.name = name
-        fake_data.products.append(product)
+def create_shampoo(name, brand, price, gender, usage_type, milliliters):
+    product = Mock()
+    product.name = name
+    fake_data.products.append(product)
 
-        return product
+    return product
 
     fake_data.products = []
     fake_data.product_exists = product_exists
