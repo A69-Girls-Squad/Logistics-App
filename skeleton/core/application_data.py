@@ -1,5 +1,7 @@
-from errors.application_error import ApplicationError
-from models.employee import Employee
+from datetime import datetime
+
+from skeleton.errors.application_error import ApplicationError
+from skeleton.models.employee import Employee
 from skeleton.models.truck import Truck
 from skeleton.models.package import Package
 from skeleton.models.route import Route

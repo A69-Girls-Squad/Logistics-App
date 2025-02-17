@@ -3,6 +3,10 @@ import logging
 from skeleton.models.package import Package
 from skeleton.core.application_data import ApplicationData
 class SendPackageInfoToCustomerCommand:
+    """
+    Sends info regarding a package to the customer.
+    
+    """
     def __init__(self, package: Package, app_data: ApplicationData):
         self.package = package
         self.app_data = app_data

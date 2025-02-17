@@ -3,12 +3,6 @@ from skeleton.commands.validation_helpers import try_parse_float
 
 
 class Package:
-
-    # STATUS_NOT_ASSIGNED = "Not assigned"
-    # STATUS_ASSIGNED = "Assigned"  ..... - 15/02 >=< datetime.datetime.now()
-    # on delivery   16/02 - 18/02
-    # delivered     19/02 - .....  >=< datetime.datetime.now()
-
     _current_id = 0
 
     _email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+") #convert a regex pattern into a regex object
@@ -75,13 +69,24 @@ class Package:
         self._route = value
 
     def __str__(self):
+        if datetime.now() < self.departure_time:
+            status = "Awaiting Dispatch"
+        elif self.departure_time <= datetime.now() < self.estimated_arrival_time:
+            status = "In Transit"
+        else:
+            status = "Delivered"
+
         return (f"ID: {self._id}"
                 f"\nStart Location: {self._start_location})"
                 f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f}kg"
                 f"\nCustomer Email Address: {self._customer_email}"
                 f"\nDeparture time: {self._departure_time}"
-                f"\nEstimated arrival time: {self._estimated_arrival_time}")
+                f"\nEstimated arrival time: {self._estimated_arrival_time}"
+                f"\nPackage status: {status}")
+
+
+
 
 
 
