@@ -5,6 +5,11 @@ from skeleton.models.all_trucks import AllTrucks
 
 logger = logging.getLogger(__name__)
 class SearchTruckCommand:
+    """
+    Searches for available trucks based on truck status,
+    truck capacity and truck max range.
+    
+    """
     def __init__(self, all_trucks:AllTrucks):
         self.all_trucks = all_trucks
         

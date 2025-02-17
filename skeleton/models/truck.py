@@ -14,6 +14,10 @@ class Truck:
     
     @classmethod
     def from_json(cls, data):
+        """
+        Creates a truck instance from json dictionary.
+        
+        """
         return cls(
             truck_id=data["id"],
             name=data["name"],
@@ -22,6 +26,10 @@ class Truck:
         )
     
     def to_json(self):
+        """
+        Converts truck instance to a json-compatible dictionary.
+
+        """
         return {
             "id": self._id,
             "name": self._name,
@@ -74,10 +82,20 @@ class Truck:
                 and self.max_range >= route.distance)))
     
     def assign_to_route(self, route):
+        """
+        Assigns a truck to a route.
+        Updates truck status.
+
+        """
         self._assigned_route = route
         self._status = Truck.STATUS_BUSY
     
     def remove_from_route(self):
+        """
+        Removes a truck from a route.
+        Updates truck status.
+        
+        """
         self._assigned_route = None
         self._status = Truck.STATUS_FREE
 
