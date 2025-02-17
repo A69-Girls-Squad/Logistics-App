@@ -1,15 +1,16 @@
 import json
+from skeleton.errors.application_error import ApplicationError
 class Truck:
 
     STATUS_FREE = "Free"
     STATUS_BUSY = "Busy"
 
     def __init__(self, name: str, capacity: int, max_range: int):
-        self._name = name
-        self._capacity = capacity
-        self._max_range = max_range
+        self.name = name
+        self.capacity = capacity
+        self.max_range = max_range
         self._assigned_route = None
-        self._status = Truck.STATUS_FREE
+        self.status = Truck.STATUS_FREE
         self._location = None
     
     @classmethod
@@ -32,10 +33,10 @@ class Truck:
         """
         return {
             "id": self._id,
-            "name": self._name,
-            "capacity": self._capacity,
-            "max_range": self._max_range,
-            "status": self._status,
+            "name": self.name,
+            "capacity": self.capacity,
+            "max_range": self.max_range,
+            "status": self.status,
             "assigned_route": self._assigned_route
         }
 
@@ -47,17 +48,53 @@ class Truck:
     def name(self):
         return self._name
     
+    @name.setter
+    def name(self, value):
+        try:
+            if not value.strip():
+                raise ApplicationError("Truck name cannot be empty.")
+            self._name = value
+        except ApplicationError as e:
+            raise e
+        
     @property
     def capacity(self):
         return self._capacity
     
+    @capacity.setter
+    def capacity(self, value):
+        try:
+            if not isinstance(value, int) or value <=0:
+                raise ApplicationError("Truck capacity should be a positive number.")
+            self._capacity = value
+        except ApplicationError as e:
+            raise e
+        
     @property
     def max_range(self):
         return self._max_range
     
+    @max_range.setter
+    def max_range(self, value):
+        try:
+            if not isinstance(value, int) or value <=0:
+                raise ApplicationError("Truck max range should be a positive number.")
+            self._max_range = value
+        except ApplicationError as e:
+            raise e
+    
     @property
     def status(self):
         return self._status
+    
+    @status.setter
+    def status(self, value):
+        try:
+            if value not in [Truck.STATUS_FREE, Truck.STATUS_BUSY]:
+                raise ApplicationError("Truck status must be free or busy.")
+            self._status = value
+        except ValueError as e:
+            raise e
     
     @property
     def location(self):
