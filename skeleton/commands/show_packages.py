@@ -11,7 +11,7 @@ class ShowPackagesCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self):
-        status = self.params[0]
+        status = self.params[0].lower()
 
         if status == AssignStatus.ASSIGNED:
             packages = self.app_data.get_packages_by_assigned_status(True)
@@ -20,6 +20,9 @@ class ShowPackagesCommand(BaseCommand):
         else:
             packages = self.app_data.packages
 
-        return str(packages)
+        result = "\n".join([str(package) for package in packages])
+        self.logger.info(result)
+        return result
+
 
 
