@@ -1,0 +1,14 @@
+{
+    "_packages": [
+        {
+            "_id": 1,
+            "_start_location": "SYD",
+            "_end_location": "MEL",
+            "_weight": 4.0,
+            "_customer_email": "a@abv.bg",
+            "_departure_time": "2025-02-15T12:34:56.789123",
+            "_estimated_arrival_time": "2025-02-15T13:34:56.789123",
+            "_is_assigned": false
+        }
+    ]
+}
