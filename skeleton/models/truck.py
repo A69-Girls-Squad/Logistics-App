@@ -1,6 +1,5 @@
 import json
 from skeleton.errors.application_error import ApplicationError
-from skeleton.models.json import trucks
 class Truck:
 
     STATUS_FREE = "Free"
