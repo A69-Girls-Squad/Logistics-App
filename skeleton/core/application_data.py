@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from skeleton.errors.application_error import ApplicationError
 from skeleton.models.employee import Employee
 from skeleton.models.truck import Truck
@@ -8,6 +6,18 @@ from skeleton.models.route import Route
 
 
 class ApplicationData:
+
+    """
+    Converts a JSON into ApplicationData.
+    """
+    @classmethod
+    def from_json(cls, data):
+        app_data = cls()
+
+        app_data._packages = [Package.from_json(package_data) for package_data in
+                              data["_packages"]]
+
+        return app_data
 
     def __init__(self):
         self._trucks = []
@@ -198,3 +208,14 @@ class ApplicationData:
                 result.append(package)
 
         return result
+
+    '''
+    Converts the ApplicationData class into a JSON.
+    '''
+    def to_json(self):
+        return {
+            #"_trucks": [truck.to_json() for truck in self._trucks],
+            #"_routes": [route.to_json() for route in self._routes],
+            "_packages": [package.to_json() for package in self._packages]}
+            #"_employees": [employee.to_json() for employee in self._employees]}
+
