@@ -156,20 +156,36 @@ class Package:
         """Returns the departure time of the package."""
         return self._departure_time
 
+    @departure_time.setter
+    def departure_time(self, value):
+        self._departure_time = value
+
     @property
     def estimated_arrival_time(self) -> datetime:
         """Returns the estimated arrival time of the package."""
         return self._estimated_arrival_time
+
+    @estimated_arrival_time.setter
+    def estimated_arrival_time(self, value):
+        self._estimated_arrival_time = value
 
     @property
     def is_assigned(self) -> bool:
         """Returns whether the package is assigned to a route."""
         return self._is_assigned
 
+    @is_assigned.setter
+    def is_assigned(self, value):
+        self._is_assigned = value
+
     @property
-    def route_id(self) -> int:
+    def route_id(self):
         """Returns the route ID associated with the package."""
         return self._route_id
+
+    @route_id.setter
+    def route_id(self, value):
+        self._route_id = value
 
     def to_json(self) -> dict:
         """

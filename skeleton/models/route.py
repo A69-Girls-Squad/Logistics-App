@@ -4,7 +4,6 @@ import os
 import uuid
 
 from skeleton.errors.application_error import ApplicationError
-from skeleton.models.package import Package
 from skeleton.models.truck import Truck
 
 
@@ -43,7 +42,7 @@ class Route:
 
         self._id = uuid.uuid1().hex[:6]
         self._assigned_truck = None    # Removed TypeHint `:Truck` because at init no truck is assigned
-        self._assigned_packages = []
+        self._assigned_package_ids = []
         self._load = 0
         self._stops = {}
         if isinstance(self.locations, list):
@@ -125,6 +124,7 @@ class Route:
             if formatted_date < datetime.datetime.now():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
+            # datetime.fromisoformat(value)
 
         except ValueError:
             print(f'Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}')
@@ -183,8 +183,8 @@ class Route:
         tuple: A tuple containing all assigned packages.
     '''
     @property
-    def assigned_packages(self):
-        return tuple(self._assigned_packages)
+    def assigned_package_ids(self):
+        return tuple(self._assigned_package_ids)
 
     '''
     Represents the total load weight of the route.
@@ -198,6 +198,10 @@ class Route:
     @property
     def load(self):
         return self._load
+
+    @load.setter
+    def load(self, value):
+        self._load = value
 
     '''
     Represents the estimated arrival times for each stop along the route.
@@ -342,7 +346,7 @@ class Route:
             f"\nID: {self.id}"
             f"\nHubs:\n{' -> '.join(f'{key}: {value}' for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.strftime("%d/%m/%Y %H:%M")}"
-            f"\nNumber of Packages: {len(self.assigned_packages)}"
+            f"\nNumber of Packages: {len(self._assigned_package_ids)}"
             f"\nCurrent Load: {self.load}"
             f"{truck_info}"
             f"\nStatus: {self.status}"
@@ -398,58 +402,3 @@ class Route:
 
         except ApplicationError as ae:
             print(ae.args[0])
-
-    '''
-    Assigns a package to the route and updates relevant attributes.
-
-    Adds the given `package` to the list of assigned packages.
-    Increases the total route load by the package's weight.
-    Links the package to this route by updating its `assigned_route` attribute.
-    '''
-    def assign_package(self, package: Package):
-        try:
-            if not isinstance(package, Package):
-                raise ApplicationError("Invalid package")
-            if package in self._assigned_packages:
-                raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
-            if self.assigned_truck and self.free_capacity < package.weight:
-                raise ApplicationError("No more capacity")
-            self._assigned_packages.append(package)
-            self._load += package.weight
-            package.route = self #self.route_id
-
-        except ApplicationError as ae:
-            print(ae.args[0])
-
-    def find_assigned_package_by_id(self, package_id: int) -> Package:
-        """
-           Finds and returns a package assigned to the route by its ID.
-
-           Args:
-               package_id (int): The unique identifier of the package.
-
-           Returns:
-               Package: The package object with the matching ID.
-
-           Raises:
-               ApplicationError: If the package with the given ID is not found in the assigned packages.
-           """
-        for package in self._assigned_packages:
-            if package_id == package.id:
-                return package
-        raise ApplicationError(f"Package with ID {package_id} does not exist in this Route")
-
-    def unassign_package(self, package: Package):
-        """
-        Unassigns a package from the route and updates the load weight.
-
-        Args:
-            package (Package): The package object to be unassigned.
-
-        Raises:
-            ApplicationError: If the package is not assigned to the route.
-        """
-        if package not in self._assigned_packages:
-            raise ApplicationError(f"Package with ID {package.id} is not assigned to Route with ID {self._id}")
-        self._assigned_packages.remove(package)
-        self._load -= package.weight
