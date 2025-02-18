@@ -102,11 +102,11 @@ class Package:
         """
         self._id = Package.next_id()
 
-        if not start_location in Route.CITIES:
+        if start_location not in Route.CITIES:
             raise ValueError("Location does not exists")
         self._start_location = start_location
 
-        if not start_location in Route.CITIES:
+        if start_location not in Route.CITIES:
             raise ValueError("Location does not exists")
         if start_location == end_location:
             raise ApplicationError("Start location can not be the same as End location")
@@ -115,9 +115,11 @@ class Package:
         if weight < 0:
             raise ValueError("Weight can not be negative number")
         self._weight = try_parse_float(weight)
+
         if not Package._email_regex.fullmatch(customer_email):
             raise ValueError(f"Invalid email address: {customer_email}")
         self._customer_email = customer_email
+
         self._departure_time = None
         self._estimated_arrival_time = None
         self._is_assigned = False
@@ -125,51 +127,67 @@ class Package:
 
 
     @property
-    def id(self):
+    def id(self) -> int:
         """Returns the unique package ID."""
         return self._id
 
     @property
-    def start_location(self):
+    def start_location(self) -> str:
         """Returns the start location of the package."""
         return self._start_location
 
     @property
-    def end_location(self):
+    def end_location(self) -> str:
         """Returns the end location of the package."""
         return self._end_location
 
     @property
-    def weight(self):
+    def weight(self) -> float:
         """Returns the weight of the package."""
         return self._weight
 
     @property
-    def customer_email(self):
+    def customer_email(self) -> str:
         """Returns the customer's email address."""
         return self._customer_email
 
     @property
-    def departure_time(self):
+    def departure_time(self) -> datetime:
         """Returns the departure time of the package."""
         return self._departure_time
 
+    @departure_time.setter
+    def departure_time(self, value):
+        self._departure_time = value
+
     @property
-    def estimated_arrival_time(self):
+    def estimated_arrival_time(self) -> datetime:
         """Returns the estimated arrival time of the package."""
         return self._estimated_arrival_time
 
+    @estimated_arrival_time.setter
+    def estimated_arrival_time(self, value):
+        self._estimated_arrival_time = value
+
     @property
-    def is_assigned(self):
+    def is_assigned(self) -> bool:
         """Returns whether the package is assigned to a route."""
         return self._is_assigned
+
+    @is_assigned.setter
+    def is_assigned(self, value):
+        self._is_assigned = value
 
     @property
     def route_id(self):
         """Returns the route ID associated with the package."""
         return self._route_id
 
-    def to_json(self):
+    @route_id.setter
+    def route_id(self, value):
+        self._route_id = value
+
+    def to_json(self) -> dict:
         """
         Converts the package object into a JSON dictionary.
 
@@ -184,10 +202,11 @@ class Package:
             "_customer_email": self._customer_email,
             "_departure_time": self._departure_time.isoformat() if self._departure_time else None,
             "_estimated_arrival_time": self._estimated_arrival_time.isoformat() if self._estimated_arrival_time else None,
-            "_is_assigned": self._is_assigned }
-            # Route ID
+            "_is_assigned": self._is_assigned,
+            "_route_id": self._route_id
+            }
 
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Returns a readable string representation of the package, including
         its status based on the current time.
@@ -210,4 +229,3 @@ class Package:
                 f"\nDeparture time: {self._departure_time}"
                 f"\nEstimated arrival time: {self._estimated_arrival_time}"
                 f"\nPackage status: {status}")
-

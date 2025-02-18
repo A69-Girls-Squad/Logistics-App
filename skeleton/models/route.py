@@ -4,7 +4,6 @@ import os
 import uuid
 
 from skeleton.errors.application_error import ApplicationError
-from skeleton.models.package import Package
 from skeleton.models.truck import Truck
 
 
@@ -43,7 +42,7 @@ class Route:
 
         self._id = uuid.uuid1().hex[:6]
         self._assigned_truck = None    # Removed TypeHint `:Truck` because at init no truck is assigned
-        self._assigned_packages = []
+        self._assigned_package_ids = []
         self._load = 0
         self._stops = {}
         if isinstance(self.locations, list):
@@ -125,6 +124,7 @@ class Route:
             if formatted_date < datetime.datetime.now():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
+            # datetime.fromisoformat(value)
 
         except ValueError:
             print(f'Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}')
@@ -183,8 +183,8 @@ class Route:
         tuple: A tuple containing all assigned packages.
     '''
     @property
-    def assigned_packages(self):
-        return tuple(self._assigned_packages)
+    def assigned_package_ids(self):
+        return tuple(self._assigned_package_ids)
 
     '''
     Represents the total load weight of the route.
@@ -198,6 +198,10 @@ class Route:
     @property
     def load(self):
         return self._load
+
+    @load.setter
+    def load(self, value):
+        self._load = value
 
     '''
     Represents the estimated arrival times for each stop along the route.
@@ -342,7 +346,7 @@ class Route:
             f"\nID: {self.id}"
             f"\nHubs:\n{' -> '.join(f'{key}: {value}' for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.strftime("%d/%m/%Y %H:%M")}"
-            f"\nNumber of Packages: {len(self.assigned_packages)}"
+            f"\nNumber of Packages: {len(self._assigned_package_ids)}"
             f"\nCurrent Load: {self.load}"
             f"{truck_info}"
             f"\nStatus: {self.status}"
@@ -395,28 +399,6 @@ class Route:
             if not self.assigned_truck:
                 raise ApplicationError("No truck assigned to this route!")
             self.assigned_truck = None
-
-        except ApplicationError as ae:
-            print(ae.args[0])
-
-    '''
-    Assigns a package to the route and updates relevant attributes.
-
-    Adds the given `package` to the list of assigned packages.
-    Increases the total route load by the package's weight.
-    Links the package to this route by updating its `assigned_route` attribute.
-    '''
-    def assign_package(self, package: Package):
-        try:
-            if not isinstance(package, Package):
-                raise ApplicationError("Invalid package")
-            if package in self._assigned_packages:
-                raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
-            if self.assigned_truck and self.free_capacity < package.weight:
-                raise ApplicationError("No more capacity")
-            self._assigned_packages.append(package)
-            self._load += package.weight
-            package.route = self #self.route_id
 
         except ApplicationError as ae:
             print(ae.args[0])
