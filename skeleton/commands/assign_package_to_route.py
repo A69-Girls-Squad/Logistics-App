@@ -4,7 +4,7 @@ from skeleton.core.application_data import ApplicationData
 from skeleton.errors.application_error import ApplicationError
 
 
-class AssignPackageToRoute(BaseCommand):
+class AssignPackageToRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         validate_params_count(params, 2)
         super().__init__(params, app_data)

@@ -209,6 +209,8 @@ class ApplicationData:
 
         return result
 
+    
+
     '''
     Converts the ApplicationData class into a JSON.
     '''

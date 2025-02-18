@@ -420,3 +420,36 @@ class Route:
 
         except ApplicationError as ae:
             print(ae.args[0])
+
+    def find_assigned_package_by_id(self, package_id: int) -> Package:
+        """
+           Finds and returns a package assigned to the route by its ID.
+
+           Args:
+               package_id (int): The unique identifier of the package.
+
+           Returns:
+               Package: The package object with the matching ID.
+
+           Raises:
+               ApplicationError: If the package with the given ID is not found in the assigned packages.
+           """
+        for package in self._assigned_packages:
+            if package_id == package.id:
+                return package
+        raise ApplicationError(f"Package with ID {package_id} does not exist in this Route")
+
+    def unassign_package(self, package: Package):
+        """
+        Unassigns a package from the route and updates the load weight.
+
+        Args:
+            package (Package): The package object to be unassigned.
+
+        Raises:
+            ApplicationError: If the package is not assigned to the route.
+        """
+        if package not in self._assigned_packages:
+            raise ApplicationError(f"Package with ID {package.id} is not assigned to Route with ID {self._id}")
+        self._assigned_packages.remove(package)
+        self._load -= package.weight
