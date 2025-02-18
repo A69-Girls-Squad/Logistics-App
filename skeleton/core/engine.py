@@ -1,3 +1,4 @@
+from core.application_state import ApplicationState
 from skeleton.core.command_factory import CommandFactory
 
 
@@ -7,15 +8,17 @@ class Engine:
 
     def start(self):
         output = []
+
         while True:
             try:
                 input_line = input()
                 if input_line.lower() == 'exit':
                     break
                 command = self._command_factory.create(input_line)
-                result = command.execute()
-                output.append(result)
-                print(result)
+                output.append(command.execute())
+
             except ValueError as err:
                 output.append(err.args[0])
+                print(err.args[0])
+
         print('\n'.join(output))

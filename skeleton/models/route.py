@@ -416,7 +416,7 @@ class Route:
                 raise ApplicationError("No more capacity")
             self._assigned_packages.append(package)
             self._load += package.weight
-            package.route = self
+            package.route = self #self.route_id
 
         except ApplicationError as ae:
             print(ae.args[0])
