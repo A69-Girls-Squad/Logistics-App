@@ -82,12 +82,10 @@ class Truck:
     
     @status.setter
     def status(self, value):
-        try:
-            if value not in [Truck.STATUS_FREE, Truck.STATUS_BUSY]:
-                raise ApplicationError("Truck status must be free or busy.")
-            self._status = value
-        except ValueError as e:
-            raise e
+        if value not in [Truck.STATUS_FREE, Truck.STATUS_BUSY]:
+            raise ApplicationError("Truck status must be free or busy.")
+        self._status = value
+
     
     @property
     def location(self):
