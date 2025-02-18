@@ -28,23 +28,27 @@ class SendPackageInfoToCustomerCommand:
         )
         return package_info
     
-    def send_email(self, subject, body, customer_email):
-        employee = self._app_data.logged_in_employee 
+
+    def send_email(self, subject: str, body: str, customer_email: str):
+        """
+        Sends an email with the package information.
+        
+        """
+        employee = self.app_data.logged_in_employee
         sender_email = employee.email
-        sender_password = employee.password # can be skipped if the employee is already logged in?  
-        smtp_server = "smtp.logistics.com"  
-        smtp_port = 587 
+        sender_password = employee.password  # to do - take info from app data
 
-        message = f'Subject:{subject}\n\n{body}'
+        smtp_server = "smtp.logistics.com"
+        smtp_port = 587
 
-        try:
-            with smtplib.SMTP(smtp_server, smtp_port) as server:
-                server.starttls()  
-                server.login(sender_email, sender_password)
-                server.sendmail(sender_email, customer_email, message)
-                print(f"Email sent to {customer_email}")
-        except Exception as e:
-            print(f"Error sending email: {e}")
+        message = f"Subject: {subject}\n\n{body}"
+
+        with smtplib.SMTP(smtp_server, smtp_port) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, customer_email, message)
+
+        self.logger.info(f"Email successfully sent to {customer_email}")
 
     def execute(self):
         customer_email = self.package.customer_email
