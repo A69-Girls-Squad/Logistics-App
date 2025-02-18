@@ -36,15 +36,11 @@ class SendPackageInfoToCustomerCommand:
         smtp_port = 587 
 
         message = f'Subject:{subject}\n\n{body}'
-
-        try:
-            with smtplib.SMTP(smtp_server, smtp_port) as server:
-                server.starttls()  
-                server.login(sender_email, sender_password)
-                server.sendmail(sender_email, customer_email, message)
-                print(f"Email sent to {customer_email}")
-        except Exception as e:
-            print(f"Error sending email: {e}")
+        smtplib.SMTP(smtp_server, smtp_port) as server:
+        server.starttls()  
+        server.login(sender_email, sender_password)
+        server.sendmail(sender_email, customer_email, message)
+        print(f"Email sent to {customer_email}")
 
     def execute(self):
         customer_email = self.package.customer_email

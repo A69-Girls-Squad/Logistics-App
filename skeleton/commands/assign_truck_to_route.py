@@ -17,26 +17,23 @@ class AssignTruckToRouteCommand(BaseCommand):
         
         truck = self.app_data.find_truck_by_id(truck_id)
         route = self._app_data.find_route_by_id(route_id)
-        try:
-            if not truck.is_free():
-                raise ApplicationError(f"The selected truck is not free.")
 
-            if route.load > truck.capacity:
-                raise ApplicationError(f"Not enough capacity.")
+        if not truck.is_free():
+            raise ApplicationError(f"The selected truck is not free.")
 
-            if route.distance > truck.max_range:
-                raise ApplicationError(f"Truck max range exceeded.")
+        if route.load > truck.capacity:
+            raise ApplicationError(f"Not enough capacity.")
 
-            route.assign_truck(truck)
-            truck.assign_to_route(route)
+        if route.distance > truck.max_range:
+            raise ApplicationError(f"Truck max range exceeded.")
 
-            username = self._app_data.logged_in_employee
+        route.assign_truck(truck)
+        truck.assign_to_route(route)
 
-            self.logger.info(f"Truck with id {truck_id} assigned to route {route_id} | Executed by: {username} ")
+        username = self._app_data.logged_in_employee
 
-            return f"Truck with id {truck_id} assigned to route {route_id}"
-        
-        except ApplicationError as e:
-            self.logger.error(f"Application Error: {str(e)}")
-            raise e
+        self.logger.info(f"Truck with id {truck_id} assigned to route {route_id} | Executed by: {username} ")
+
+        return f"Truck with id {truck_id} assigned to route {route_id}"
+
     

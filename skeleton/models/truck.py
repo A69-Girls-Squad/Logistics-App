@@ -50,12 +50,10 @@ class Truck:
     
     @name.setter
     def name(self, value):
-        try:
-            if not value.strip():
-                raise ApplicationError("Truck name cannot be empty.")
-            self._name = value
-        except ApplicationError as e:
-            raise e
+        if not value.strip():
+            raise ApplicationError("Truck name cannot be empty.")
+        self._name = value
+
         
     @property
     def capacity(self):
@@ -63,12 +61,10 @@ class Truck:
     
     @capacity.setter
     def capacity(self, value):
-        try:
-            if not isinstance(value, int) or value <=0:
-                raise ApplicationError("Truck capacity should be a positive number.")
-            self._capacity = value
-        except ApplicationError as e:
-            raise e
+        if not isinstance(value, int) or value <= 0:
+            raise ApplicationError("Truck capacity should be a positive number.")
+        self._capacity = value
+
         
     @property
     def max_range(self):
@@ -76,12 +72,9 @@ class Truck:
     
     @max_range.setter
     def max_range(self, value):
-        try:
-            if not isinstance(value, int) or value <=0:
-                raise ApplicationError("Truck max range should be a positive number.")
-            self._max_range = value
-        except ApplicationError as e:
-            raise e
+        if not isinstance(value, int) or value <= 0:
+            raise ApplicationError("Truck max range should be a positive number.")
+        self._max_range = value
     
     @property
     def status(self):
