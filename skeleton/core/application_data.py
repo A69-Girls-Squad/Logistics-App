@@ -13,6 +13,9 @@ class ApplicationData:
     """
     @classmethod
     def from_json(cls, data):
+        """
+        Converts a JSON into ApplicationData.
+        """
         app_data = cls()
 
         app_data._packages = [Package.from_json(package_data) for package_data in
@@ -246,9 +249,21 @@ class ApplicationData:
 
     def unassign_package_from_route(self, package_id: int, route_id: str):
         package = self.find_package_by_id(package_id)
-        route = self.find_route_by_id(route_id)
-        # to be continued
+        if package is None:
+            raise ApplicationError(f"Package with ID {package_id} does not exist")
 
+        route = self.find_route_by_id(route_id)
+        if route is None:
+            raise ApplicationError(f"Route with ID {route_id} does not exist")
+        if route.departure_time > datetime.now():
+            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+
+        package.departure_time = None
+        package.estimated_arrival_time = None
+        package.route_id = None
+        package.is_assigned = False
+        route.assigned_package_ids.remove(package.id)
+        route.load -= package.weight
 
     def to_json(self):
         """
