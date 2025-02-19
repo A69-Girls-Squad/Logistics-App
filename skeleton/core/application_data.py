@@ -1,5 +1,4 @@
 from datetime import datetime
-
 from skeleton.errors.application_error import ApplicationError
 from skeleton.models.employee import Employee
 from skeleton.models.truck import Truck
@@ -8,6 +7,18 @@ from skeleton.models.route import Route
 
 
 class ApplicationData:
+
+    """
+    Converts a JSON into ApplicationData.
+    """
+    @classmethod
+    def from_json(cls, data):
+        app_data = cls()
+
+        app_data._packages = [Package.from_json(package_data) for package_data in
+                              data["_packages"]]
+
+        return app_data
 
     def __init__(self):
         self._trucks = []
@@ -104,6 +115,11 @@ class ApplicationData:
 
         return route
 
+    '''
+    Finds and returns the package associated with the provided ID.
+    If no match is found, returns `None`.
+    '''
+    def find_package_by_id(self, id: int) -> Package:
     def find_package_by_id(self, id) -> Package:
         """
         Finds and returns the package associated with the provided ID.
@@ -198,3 +214,50 @@ class ApplicationData:
                 result.append(package)
 
         return result
+
+    def assign_package_to_route(self, package_id: int, route_id: str):
+        package = self.find_package_by_id(package_id)
+        if package is None:
+            raise ApplicationError(f"Package with ID {package_id} does not exist")
+        route = self.find_route_by_id(route_id)
+        if route is None:
+            raise ApplicationError(f"Route with ID {route_id} does not exist")
+
+        if package.is_assigned:
+            raise ApplicationError(f"Package with ID {package_id} is already assigned")
+        if package.route_id == route_id or package_id in route.assigned_package_ids:
+            raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
+
+        if route.assigned_truck:
+            raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
+        if route.free_capacity < package.weight:
+            raise ApplicationError(f"Route with ID {route_id} has no more capacity")
+        if route.departure_time > datetime.now():
+            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+        if package.start_location not in route.locations:
+            raise ApplicationError(f"Package with ID {package_id} start location does not exists in Route with ID {route_id}")
+        # end location check error
+
+        package.departure_time = route.departure_time
+        package.estimated_arrival_time = route.stops[package.end_location]
+        package.route_id = route.id
+        package.is_assigned = True
+        route.assigned_package_ids.append(package.id)
+        route.load += package.weight
+
+    def unassign_package_from_route(self, package_id: int, route_id: str):
+        package = self.find_package_by_id(package_id)
+        route = self.find_route_by_id(route_id)
+        # to be continued
+
+
+    def to_json(self):
+        """
+        Converts the ApplicationData class into a JSON.
+        """
+        return {
+            #"_trucks": [truck.to_json() for truck in self._trucks],
+            #"_routes": [route.to_json() for route in self._routes],
+            "_packages": [package.to_json() for package in self._packages]}
+            #"_employees": [employee.to_json() for employee in self._employees]}
+
