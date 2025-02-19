@@ -37,13 +37,11 @@ class Engine:
         while True:
             try:
                 input_line = input()
-                if input_line.lower() == 'exit':
+                if input_line.lower() == "exit":
                     break
                 command = self._command_factory.create(input_line)
                 output.append(command.execute())
-
+                print("\n".join(output))
             except ValueError as err:
                 output.append(err.args[0])
                 print(err.args[0])
-
-        print('\n'.join(output))

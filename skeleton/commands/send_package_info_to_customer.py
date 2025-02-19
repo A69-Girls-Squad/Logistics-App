@@ -5,7 +5,6 @@ from skeleton.core.application_data import ApplicationData
 class SendPackageInfoToCustomerCommand:
     """
     Sends info regarding a package to the customer.
-    
     """
     def __init__(self, package: Package, app_data: ApplicationData):
         self.package = package
@@ -20,11 +19,11 @@ class SendPackageInfoToCustomerCommand:
 
     def package_info(self):
         package_info = (
-            f'Package ID: {self.package._id}\n'
-            f'Start Location: {self.package.start_location}\n'
-            f'End Location: {self.package.end_location}\n'
-            f'Departure Time: {self.package.departure_time}\n'
-            f'Estimated Arrival Time: {self.package.estimated_arrival_time}\n'
+            f"Package ID: {self.package._id}\n"
+            f"Start Location: {self.package.start_location}\n"
+            f"End Location: {self.package.end_location}\n"
+            f"Departure Time: {self.package.departure_time}\n"
+            f"Estimated Arrival Time: {self.package.estimated_arrival_time}\n"
         )
         return package_info
     
@@ -32,7 +31,7 @@ class SendPackageInfoToCustomerCommand:
     def send_email(self, subject: str, body: str, customer_email: str):
         """
         Sends an email with the package information.
-        
+
         """
         employee = self.app_data.logged_in_employee
         sender_email = employee.email
@@ -42,6 +41,7 @@ class SendPackageInfoToCustomerCommand:
         smtp_port = 587
 
         message = f"Subject: {subject}\n\n{body}"
+        message = f"Subject:{subject}\n\n{body}"
 
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()
@@ -55,6 +55,6 @@ class SendPackageInfoToCustomerCommand:
         package_details = self.package_info()
         subject = f"Package Details: {self.package._id}"
 
-        self.logger.info(f'Package info sent to customer: {customer_email}')
+        self.logger.info(f"Package info sent to customer: {customer_email}")
         
         self.send_email(subject, package_details, customer_email)

@@ -59,37 +59,39 @@ class CommandFactory:
         """
         cmd, *params = input_line.split()
 
-        if cmd.lower() == 'login':
+        if cmd.lower() == "login":
             return LoginCommand(params, self._app_data)
-        if cmd.lower() == 'logout':
+        if cmd.lower() == "logout":
             return LogoutCommand(params, self._app_data)
-        if cmd.lower() == 'registeremployee':
+        if cmd.lower() == "registeremployee":
             return RegisterEmployeeCommand(params, self._app_data)
-        if cmd.lower() == 'createroute':
+        if cmd.lower() == "createroute":
             return CreateRouteCommand(params, self._app_data)
-        if cmd.lower() == 'createpackage':
+        if cmd.lower() == "createpackage":
             return CreatePackageCommand(params, self._app_data)
-        if cmd.lower() == 'searchroute':
+        if cmd.lower() == "searchroute":
             return SearchRouteCommand(params, self._app_data)
-        if cmd.lower() == 'searchtruck':
+        if cmd.lower() == "searchtruck":
             return SearchTruckCommand(params, self._app_data)
-        if cmd.lower() == 'showpackages':
+        if cmd.lower() == "showpackages":
             return ShowPackagesCommand(params, self._app_data)
-        if cmd.lower() == 'showroute':
+        if cmd.lower() == "showroute":
             return ShowRouteCommand(params, self._app_data)
-        if cmd.lower() == 'showtrucks':
+        if cmd.lower() == "showtrucks":
             return ShowTrucksCommand(params, self._app_data)
         if cmd.lower() == 'assignpackagetoroute':
             return AssignPackageToRouteCommand(params, self._app_data)
-        if cmd.lower() == 'assigntrucktoroute':
+        if cmd.lower() == "assignpackagetoroute":
+            return AssignPackageToRouteCommand(params, self._app_data)
+        if cmd.lower() == "assigntrucktoroute":
             return AssignTruckToRouteCommand(params, self._app_data)
-        if cmd.lower() == 'bulkassignpackages':
+        if cmd.lower() == "bulkassignpackages":
             return BulkAssignPackagesCommand(params, self._app_data)
-        if cmd.lower() == 'removetruckfromroute':
+        if cmd.lower() == "removetruckfromroute":
             return RemoveTruckFromRouteCommand(params, self._app_data)
-        if cmd.lower() == 'sendpackageinfotocustomer':
+        if cmd.lower() == "sendpackageinfotocustomer":
             return SendPackageInfoToCustomerCommand(params, self._app_data)
-        if cmd.lower() == 'showroutesinprogress':
+        if cmd.lower() == "showroutesinprogress":
             return ShowRoutesInProgressCommand(params, self._app_data)
         if cmd.lower() == 'unassignpackagetoroute':
             return UnassignPackageToRouteCommand(params, self._app_data)

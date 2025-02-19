@@ -17,10 +17,10 @@ class LoginCommand(BaseCommand):
         username, password = self._params
         employee = self._app_data.find_employee_by_username(username)
         if employee.password != password:
-            raise ValueError('Wrong username or password!')
+            raise ValueError("Wrong username or password!")
         else:
             self._app_data.login(employee)
 
-            self.logger.info('User {employee.username} successfully logged in!')
+            self.logger.info("User {employee.username} successfully logged in!")
             
-            return f'Employee {employee.username} successfully logged in!'
+            return f"Employee {employee.username} successfully logged in!"

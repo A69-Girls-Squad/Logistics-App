@@ -8,10 +8,10 @@ class AssignTruckToRouteCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self):
-        '''
+        """
         Assigns available truck to a route.
 
-        '''
+        """
         validate_params_count(self.params, 2)
         truck_id, route_id = self.params
         

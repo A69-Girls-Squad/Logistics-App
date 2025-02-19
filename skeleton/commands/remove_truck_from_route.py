@@ -19,7 +19,7 @@ class RemoveTruckFromRouteCommand(BaseCommand):
         route = self._app_data.find_route_by_id(route_id)
 
         if truck.assigned_route != route:
-                raise ValueError(f'The selected truck is not assigned to the specified route')
+                raise ValueError(f"The selected truck is not assigned to the specified route")
         
         truck.remove_from_route()
 
