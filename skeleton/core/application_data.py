@@ -8,9 +8,6 @@ from skeleton.models.route import Route
 
 class ApplicationData:
 
-    """
-    Converts a JSON into ApplicationData.
-    """
     @classmethod
     def from_json(cls, data):
         """
@@ -118,10 +115,10 @@ class ApplicationData:
 
         return route
 
-    '''
-    Finds and returns the package associated with the provided ID.
-    If no match is found, returns `None`.
-    '''
+    def create_truck(self, name: str, capacity: int, max_range: int):
+        truck = Truck(name, capacity, max_range)
+        self._trucks.append(truck)
+
     def find_package_by_id(self, id: int) -> Package:
         """
         Finds and returns the package associated with the provided ID.

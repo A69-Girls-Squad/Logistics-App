@@ -3,7 +3,6 @@ import json
 import os
 import uuid
 
-from models.package import Package
 from skeleton.errors.application_error import ApplicationError
 from skeleton.models.truck import Truck
 
@@ -402,28 +401,6 @@ class Route:
             if not self.assigned_truck:
                 raise ApplicationError("No truck assigned to this route!")
             self.assigned_truck = None
-
-        except ApplicationError as ae:
-            print(ae.args[0])
-
-    def assign_package(self, package: Package):
-        """
-        Assigns a package to the route and updates relevant attributes.
-
-        Adds the given `package` to the list of assigned packages.
-        Increases the total route load by the package"s weight.
-        Links the package to this route by updating its `assigned_route` attribute.
-        """
-        try:
-            if not isinstance(package, Package):
-                raise ApplicationError("Invalid package")
-            if package in self._assigned_package_ids:
-                raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
-            if self.assigned_truck and self.free_capacity < package.weight:
-                raise ApplicationError("No more capacity")
-            self._assigned_package_ids.append(package)
-            self._load += package.weight
-            package.route = self
 
         except ApplicationError as ae:
             print(ae.args[0])
