@@ -8,11 +8,11 @@ from skeleton.models.route import Route
 
 class ApplicationData:
 
-    """
-    Converts a JSON into ApplicationData.
-    """
     @classmethod
     def from_json(cls, data):
+        """
+        Converts a JSON into ApplicationData.
+        """
         app_data = cls()
 
         app_data._packages = [Package.from_json(package_data) for package_data in
@@ -95,11 +95,19 @@ class ApplicationData:
                 not_assigned_packages.append(package)
         return not_assigned_packages
 
-    '''
-    Creates a new package and adds it to the application's packages list.
-    Data validation is handled by the Package class __init__ constructor.
-    '''
     def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str) -> Package:
+        """
+         Creates a new Package instance and adds it to the list of packages.
+
+         Args:
+             start_location (str): The starting location of the package.
+             end_location (str): The destination location of the package.
+             weight (float): The weight of the package.
+             customer_email (str): The email address of the customer associated with the package.
+
+         Returns:
+             Package: The newly created Package instance.
+         """
         package = Package(start_location, end_location, weight, customer_email)
         self._packages.append(package)
 
@@ -242,9 +250,21 @@ class ApplicationData:
 
     def unassign_package_from_route(self, package_id: int, route_id: str):
         package = self.find_package_by_id(package_id)
-        route = self.find_route_by_id(route_id)
-        # to be continued
+        if package is None:
+            raise ApplicationError(f"Package with ID {package_id} does not exist")
 
+        route = self.find_route_by_id(route_id)
+        if route is None:
+            raise ApplicationError(f"Route with ID {route_id} does not exist")
+        if route.departure_time > datetime.now():
+            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+
+        package.departure_time = None
+        package.estimated_arrival_time = None
+        package.route_id = None
+        package.is_assigned = False
+        route.assigned_package_ids.remove(package.id)
+        route.load -= package.weight
 
     def to_json(self):
         """

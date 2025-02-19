@@ -4,23 +4,36 @@ class Truck:
 
     STATUS_FREE = "Free"
     STATUS_BUSY = "Busy"
+    _current_id = 1000
+
+    @classmethod
+    def next_id(cls) -> int:
+        """
+         Generates and returns the next unique package ID.
+
+         Returns:
+             int: The next unique ID.
+         """
+        cls._current_id += 1
+        return cls._current_id
 
     def __init__(self, name: str, capacity: int, max_range: int):
-        self.name = name
+        self._id = Truck.next_id()
+        if not name.strip():
+            raise ApplicationError("Truck name cannot be empty.")
+        self._name = name
         self.capacity = capacity
         self.max_range = max_range
-        self._assigned_route = None
         self.status = Truck.STATUS_FREE
         self._location = None
+        self._assigned_route = None
     
     @classmethod
     def from_json(cls, data):
         """
         Creates a truck instance from json dictionary.
-        
         """
         return cls(
-            truck_id=data["id"],
             name=data["name"],
             capacity=data["capacity"],
             max_range=data["max_range"],
@@ -29,7 +42,6 @@ class Truck:
     def to_json(self):
         """
         Converts truck instance to a json-compatible dictionary.
-
         """
         return {
             "id": self._id,
@@ -47,13 +59,6 @@ class Truck:
     @property
     def name(self):
         return self._name
-    
-    @name.setter
-    def name(self, value):
-        if not value.strip():
-            raise ApplicationError("Truck name cannot be empty.")
-        self._name = value
-
         
     @property
     def capacity(self):
@@ -64,7 +69,6 @@ class Truck:
         if not isinstance(value, int) or value <= 0:
             raise ApplicationError("Truck capacity should be a positive number.")
         self._capacity = value
-
         
     @property
     def max_range(self):
@@ -100,9 +104,9 @@ class Truck:
         return self._assigned_route
     
     def is_free(self, route) -> bool:
-        '''
+        """
         Checks if the route is free based on departure time, arrival time, truck capacity and truck max range.
-        '''
+        """
         return (not self.assigned_route
                 or ((self.assigned_route.departure_time > route.expected_arrival_time
                 or self.assigned_route.expected_arrival_time < route.departure_time)
@@ -113,7 +117,6 @@ class Truck:
         """
         Assigns a truck to a route.
         Updates truck status.
-
         """
         self._assigned_route = route
         self._status = Truck.STATUS_BUSY
@@ -122,7 +125,6 @@ class Truck:
         """
         Removes a truck from a route.
         Updates truck status.
-        
         """
         self._assigned_route = None
         self._status = Truck.STATUS_FREE
