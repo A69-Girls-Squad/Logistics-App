@@ -1,7 +1,7 @@
+from commands.validation_helpers import validate_params_count
 from skeleton.commands.base_command import BaseCommand
 from skeleton.models.package import Package
 from skeleton.models.route import Route
-from skeleton.models.all_trucks import AllTrucks
 from skeleton.core.application_data import ApplicationData
 
 class SearchTruckCommand(BaseCommand):
@@ -10,14 +10,22 @@ class SearchTruckCommand(BaseCommand):
     truck capacity and truck max range.
     
     """
-    def __init__(self, params, app_data: ApplicationData, all_trucks:AllTrucks):
+    def __init__(self, params, app_data: ApplicationData):
+        validate_params_count(params, 1)
         super().__init__(params, app_data)
-        self.all_trucks = all_trucks
-        
-    def execute(self, package: Package, route: Route):
+
+    def execute(self):
         self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}")
-        for truck in self.all_trucks.get_all_trucks():
-            if truck.is_free() and truck.capacity >= package.weight and truck.max_range >= route.distance:
-                return truck
-        return f"No available truck found"
+
+        suitable_trucks = []
+        route_id = self._params[0]
+        route = self.app_data.find_route_by_id(route_id)
+        for truck in self.app_data.trucks:
+            if truck.is_suitable(route):
+                suitable_trucks.append(truck)
+
+        if not suitable_trucks:
+            return "No available truck found"
+
+        return "\n".join([str(truck) for truck in suitable_trucks])
         

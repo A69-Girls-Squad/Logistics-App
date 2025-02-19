@@ -1,5 +1,9 @@
+from datetime import datetime
+from networkx.classes import freeze
 import json
 from skeleton.errors.application_error import ApplicationError
+
+
 class Truck:
 
     STATUS_FREE = "Free"
@@ -19,14 +23,11 @@ class Truck:
 
     def __init__(self, name: str, capacity: int, max_range: int):
         self._id = Truck.next_id()
-        if not name.strip():
-            raise ApplicationError("Truck name cannot be empty.")
         self._name = name
-        self.capacity = capacity
-        self.max_range = max_range
-        self.status = Truck.STATUS_FREE
+        self._capacity = capacity
+        self._max_range = max_range
         self._location = None
-        self._assigned_route = None
+        self._assigned_route_id = None
     
     @classmethod
     def from_json(cls, data):
@@ -48,8 +49,7 @@ class Truck:
             "name": self.name,
             "capacity": self.capacity,
             "max_range": self.max_range,
-            "status": self.status,
-            "assigned_route": self._assigned_route
+            "assigned_route": self._assigned_route_id
         }
 
     @property
@@ -63,75 +63,52 @@ class Truck:
     @property
     def capacity(self):
         return self._capacity
-    
-    @capacity.setter
-    def capacity(self, value):
-        if not isinstance(value, int) or value <= 0:
-            raise ApplicationError("Truck capacity should be a positive number.")
-        self._capacity = value
         
     @property
     def max_range(self):
         return self._max_range
-    
-    @max_range.setter
-    def max_range(self, value):
-        if not isinstance(value, int) or value <= 0:
-            raise ApplicationError("Truck max range should be a positive number.")
-        self._max_range = value
-    
-    @property
-    def status(self):
-        return self._status
-    
-    @status.setter
-    def status(self, value):
-        if value not in [Truck.STATUS_FREE, Truck.STATUS_BUSY]:
-            raise ApplicationError("Truck status must be free or busy.")
-        self._status = value
-
     
     @property
     def location(self):
         return self._location
     
     @location.setter
-    def location(self, new_location):
-        self._location = new_location
+    def location(self, value):
+        self._location = value
 
     @property
-    def assigned_route(self):
-        return self._assigned_route
-    
-    def is_free(self, route) -> bool:
+    def assigned_route_id(self):
+        return self._assigned_route_id
+
+    def is_suitable(self, route) -> bool:
         """
         Checks if the route is free based on departure time, arrival time, truck capacity and truck max range.
         """
-        return (not self.assigned_route
-                or ((self.assigned_route.departure_time > route.expected_arrival_time
-                or self.assigned_route.expected_arrival_time < route.departure_time)
+        return (not self.assigned_route_id
                 and (self.capacity >= route.load
-                and self.max_range >= route.distance)))
-    
-    def assign_to_route(self, route):
+                and self.max_range >= route.distance))
+
+    def assign_to_route(self, route_id):
         """
         Assigns a truck to a route.
-        Updates truck status.
         """
-        self._assigned_route = route
-        self._status = Truck.STATUS_BUSY
+        self._assigned_route_id = route_id
     
     def remove_from_route(self):
         """
         Removes a truck from a route.
-        Updates truck status.
         """
-        self._assigned_route = None
-        self._status = Truck.STATUS_FREE
+        self._assigned_route_id = None
+
+    def status(self) -> str:
+        assigned_route = app_data.find_route_by_id(self.assigned_route_id)
+        if not self.assigned_route_id or datetime.now() > assigned_route.estimated_arrival_time:
+            return Truck.STATUS_FREE
+        return Truck.STATUS_BUSY
 
     def __str__(self):
         return (f"Truck with ID: {self._id}"
                 f"\nName: {self.name}"
                 f"\nCapacity: {self.capacity}"
                 f"\nRange: {self.max_range} created"
-                f"\nStatus: {self.status}")
+                f"\nStatus: {app_data.status()}")

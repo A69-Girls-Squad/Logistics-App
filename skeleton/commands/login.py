@@ -6,8 +6,7 @@ from skeleton.core.application_data import ApplicationData
 class LoginCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         validate_params_count(params, 2)
-        super().__init__(app_data)
-        self._params = params
+        super().__init__(params, app_data)
         self._requires_login = False
 
 

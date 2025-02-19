@@ -11,8 +11,7 @@ class BulkAssignPackagesCommand(BaseCommand):
     """
     def __init__(self, params, app_data: ApplicationData):
         validate_params_count(params, 1)
-        super().__init__(app_data)
-        self._params = params
+        super().__init__(params, app_data)
 
     def execute(self):
 

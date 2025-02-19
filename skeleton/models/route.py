@@ -41,7 +41,7 @@ class Route:
         self.departure_time = departure_time
 
         self._id = uuid.uuid1().hex[:6]
-        self._assigned_truck = None    # Removed TypeHint `:Truck` because at init no truck is assigned
+        self._assigned_truck_id = None    # Removed TypeHint `:Truck` because at init no truck is assigned
         self._assigned_package_ids = []
         self._load = 0
         self._stops = {}
@@ -160,17 +160,17 @@ class Route:
         Truck | None: The currently assigned truck or `None` if no truck has been assigned.
     """
     @property
-    def assigned_truck(self):
-        return self._assigned_truck
+    def assigned_truck_id(self):
+        return self._assigned_truck_id
 
-    @assigned_truck.setter #Unnecessary to have setter. We have assign_truck method. Should do validations there
-    def assigned_truck(self, value: Truck):
+    @assigned_truck_id.setter #Unnecessary to have setter. We have assign_truck method. Should do validations there
+    def assigned_truck_id(self, value: int):
         try:
-            if not isinstance(value, Truck):
+            if not isinstance(value, int):
                 raise ApplicationError("Invalid truck!")
             if not value.status == Truck.STATUS_FREE:
                 raise ApplicationError("This truck is not free!")
-            self._assigned_truck = value
+            self._assigned_truck_id = value
 
         except ApplicationError as ae:
             print(ae.args[0])
@@ -202,7 +202,7 @@ class Route:
         return self._load
 
     @load.setter
-    def load(self, value):
+    def load(self, value: int):
         self._load = value
 
     """
@@ -238,9 +238,10 @@ class Route:
     @property
     def free_capacity(self):
         try:
-            if not self.assigned_truck:
+            if not self.assigned_truck_id:
                 raise ApplicationError("No truck assigned yet!")
-            return self.assigned_truck.capacity - self.load
+            #
+            return self.assigned_truck_id.capacity - self.load
         except ApplicationError as ae:
             print(ae.args[0])
 
@@ -339,8 +340,8 @@ class Route:
             print(ae.args[0])
 
     def __str__(self):
-        if self.assigned_truck:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck.id}"
+        if self.assigned_truck_id:
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
         else:
             truck_info = ""
         return (
@@ -388,7 +389,7 @@ class Route:
         Associates the provided `truck` object with the route.
         The assignment process is validated through the setter method.
         """
-        self.assigned_truck = truck
+        self.assigned_truck_id = truck
         # Add is_assigned to Truck so it is like Package, to know if the truck is assigned or not and check here
 
     def remove_truck(self):
@@ -396,11 +397,11 @@ class Route:
         Removes the currently assigned truck from the route.
         If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
         """
-        self.assigned_truck = None
+        self.assigned_truck_id = None
         try:
-            if not self.assigned_truck:
+            if not self.assigned_truck_id:
                 raise ApplicationError("No truck assigned to this route!")
-            self.assigned_truck = None
+            self.assigned_truck_id = None
 
         except ApplicationError as ae:
             print(ae.args[0])

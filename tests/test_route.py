@@ -16,7 +16,7 @@ class Route_Should(unittest.TestCase):
         self.assertIsInstance(route.departure_time, datetime)
         self.assertIsInstance(route.id, str)
         self.assertEqual(td.VALID_ID_LEN, len(route.id))
-        self.assertEqual(None, route.assigned_truck)
+        self.assertEqual(None, route.assigned_truck_id)
         self.assertIsInstance(route.assigned_packages, tuple)
         self.assertEqual(0, route.load)
         self.assertIsInstance(route.stops, dict)
@@ -72,7 +72,7 @@ class Route_Should(unittest.TestCase):
     @patch("builtins.print")
     def test_assigned_truck_invalidTruck(self, mock_print):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        route.assigned_truck = td.INVALID_TRUCK
+        route.assigned_truck_id = td.INVALID_TRUCK
         mock_print.assert_called_with("Invalid truck!")
 
     @patch("builtins.print")
@@ -81,14 +81,14 @@ class Route_Should(unittest.TestCase):
         route_2 = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         truck.assign_to_route(route_1)
-        route_2.assigned_truck = truck
+        route_2.assigned_truck_id = truck
         mock_print.assert_called_with("This truck is not free!")
 
     def test_assigned_truck_assignsCorrectly(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
-        route.assigned_truck = truck
-        self.assertEqual(truck, route.assigned_truck)
+        route.assigned_truck_id = truck
+        self.assertEqual(truck, route.assigned_truck_id)
 
     @patch("builtins.print")
     def test_free_capacity_raisesWhenNoAssignedTruck(self, mock_print):
@@ -204,7 +204,7 @@ class Route_Should(unittest.TestCase):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck("Scania", 42000, 8000)
         route.assign_truck(truck)
-        self.assertEqual(truck, route.assigned_truck)
+        self.assertEqual(truck, route.assigned_truck_id)
 
     @patch("builtins.print")
     def test_remove_truck_whenNoTruck(self, mock_print):
@@ -218,7 +218,7 @@ class Route_Should(unittest.TestCase):
         truck = Truck("Scania", 42000, 8000)
         route.assign_truck(truck)
         route.remove_truck()
-        self.assertIsNone(route.assigned_truck)
+        self.assertIsNone(route.assigned_truck_id)
 
     @patch("builtins.print")
     def test_assign_package_invalidPackage(self, mock_print):
@@ -240,7 +240,7 @@ class Route_Should(unittest.TestCase):
     def test_assign_package(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck("Scania", 42000, 8000)
-        route.assigned_truck = truck
+        route.assigned_truck_id = truck
         package = Package("SYD", "MEL", 80, "abc@gmail.com")
         route.assign_package(package)
 

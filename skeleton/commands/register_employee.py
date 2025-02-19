@@ -7,8 +7,7 @@ from skeleton.models.constants.employee_role import EmployeeRole
 class RegisterEmployeeCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         validate_params_count(params, 4)
-        super().__init__(app_data)
-        self._params = params
+        super().__init__(params, app_data)
         self._requires_login = False
 
     def execute(self):

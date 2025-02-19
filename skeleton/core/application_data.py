@@ -146,6 +146,12 @@ class ApplicationData:
             if truck.id == id:
                 return truck
 
+    def truck_status(self, truck: Truck) -> str:
+        assigned_route = self.find_route_by_id(truck.assigned_route_id)
+        if not truck.assigned_route_id or datetime.now() > assigned_route.estimated_arrival_time:
+            return Truck.STATUS_FREE
+        return Truck.STATUS_BUSY
+
     def create_employee(self, username, firstname, lastname, password, employee_role) -> Employee:
         """
         Creates a new employee and adds them to the employee list.
@@ -227,7 +233,7 @@ class ApplicationData:
         if package.route_id == route_id or package_id in route.assigned_package_ids:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
 
-        if route.assigned_truck:
+        if route.assigned_truck_id:
             raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
         if route.free_capacity < package.weight:
             raise ApplicationError(f"Route with ID {route_id} has no more capacity")
