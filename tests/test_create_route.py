@@ -32,14 +32,15 @@ def _create_mock():
 class CreateRouteCommandTest_Should(unittest.TestCase):
     def test_initializer_raisesError_tooFewParamsCount(self):
         with self.assertRaises(ApplicationError):
-            cmd = CreateRouteCommand(["a"] * 5, Mock())
+            CreateRouteCommand(["a" * 1], _create_mock())
 
     def test_initializer_raisesError_tooManyParamsCount(self):
         with self.assertRaises(ApplicationError):
-            cmd = CreateRouteCommand(["a"] * 7, Mock())
+            CreateRouteCommand(["a" * 3], _create_mock())
 
     def test_initializer_passes_validParamsCount(self):
-        CreateRouteCommand(["a"] * 6, Mock())
+        with self.assertRaises(ApplicationError):
+            CreateRouteCommand(["a" * 2], _create_mock())
 
     def test_execute_createsRoute_validParams(self):
         fake_params = _create_fake_params()
@@ -51,9 +52,7 @@ class CreateRouteCommandTest_Should(unittest.TestCase):
             f"Route with locations {fake_params[0]} was created!", output)
 
     def test_execute_raisesError_invalidLocations(self):
-        cmd = CreateRouteCommand(
-            _create_fake_params(locations="SYD"),
-            _create_mock())
+        cmd = CreateRouteCommand(_create_fake_params(locations="SYD"),_create_mock())
 
         with self.assertRaises(ApplicationError):
             cmd.execute()
