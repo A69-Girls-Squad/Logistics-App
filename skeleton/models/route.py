@@ -22,22 +22,22 @@ class Route:
 
     AVERAGE_SPEED = 87
 
-    LOCATIONS_SEPARATOR = ','
-    REQUIRED_DATE_FORMAT = '%d/%m/%Y-%H:%M'
-    REQUIRED_DATE_FORMAT_STRING = 'dd/mm/YYYY-HH:MM'
+    LOCATIONS_SEPARATOR = ","
+    REQUIRED_DATE_FORMAT = "%d/%m/%Y-%H:%M"
+    REQUIRED_DATE_FORMAT_STRING = "dd/mm/YYYY-HH:MM"
 
-    '''
+    """
     Defines the possible statuses of a route during its lifecycle:
     
     1. **Created** - Assigned to a route after creation but before departure.
     2. **In progress** - The route is in progress between departure and the estimated arrival time at the final location.
     3. **Finished** - The route has reached its final destination after the estimated arrival time.
-    '''
+    """
     STATUS_CREATED = "Created"
     STATUS_IN_PROGRESS = "In progress"
     STATUS_FINISHED = "Finished"
 
-    def __init__(self, locations: str, departure_time: str):                # SYD: 16/02, MEL: 17/02/2025 11:30, BRI:19/02
+    def __init__(self, locations: str, departure_time: str):        # SYD: 16/02, MEL: 17/02, BRI:19/02
         self.locations = locations
         self.departure_time = departure_time
 
@@ -49,7 +49,7 @@ class Route:
         if isinstance(self.locations, list):
             self.calculating_estimated_arrival_times()
 
-    '''
+    """
     Manages the locations where the route will stop.
 
     The user provides a string containing a list of locations, separated by commas. 
@@ -67,7 +67,7 @@ class Route:
         - If one or more provided locations are not found in `Location.CITIES`.
         - If the list contains fewer than two locations.
         - If consecutive duplicate locations are detected.
-    '''
+    """
     @property
     def locations(self):
         return tuple(self._locations)
@@ -75,8 +75,10 @@ class Route:
     @locations.setter
     def locations(self, value: str):
         try:
+            if not isinstance(value, str):
+                raise ApplicationError("Error")
             if self.LOCATIONS_SEPARATOR not in value:
-                raise ApplicationError(f"Locations should be separated by '{self.LOCATIONS_SEPARATOR}'")
+                raise ApplicationError(f"Locations should be separated by \"{self.LOCATIONS_SEPARATOR}\"")
             value = value.split(self.LOCATIONS_SEPARATOR)
 
             for location in value:
@@ -99,7 +101,7 @@ class Route:
         finally:
             self._locations = value
 
-    '''
+    """
     Gets and sets the departure time of the route.
 
     The user provides a string representing the departure time in the format: "dd/mm/YYYY-HH:MM".  
@@ -113,7 +115,7 @@ class Route:
         ApplicationError:
         - If the provided string is not in the requested format.
         - If the provided departure time is in the past.
-    '''
+    """
     @property
     def departure_time(self):
         return self._departure_time
@@ -127,24 +129,24 @@ class Route:
             self._departure_time = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
 
         except ValueError:
-            print(f'Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}')
+            print(f"Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}")
 
         except ApplicationError as ap:
             print(ap.args[0])
 
-    '''
+    """
     Returns the unique identifier (UUID) of the route.
 
     Each route is assigned a UUID upon initialization to ensure uniqueness.
 
     Returns:
         str: The unique identifier of the route.
-    '''
+    """
     @property
     def id(self):
         return self._id
 
-    '''
+    """
     Manages the truck assigned to the route.
     
     At initialization, the `assigned_truck` attribute is set to `None`.  
@@ -156,7 +158,7 @@ class Route:
     
     Returns:
         Truck | None: The currently assigned truck or `None` if no truck has been assigned.
-    '''
+    """
     @property
     def assigned_truck(self):
         return self._assigned_truck
@@ -173,7 +175,7 @@ class Route:
         except ApplicationError as ae:
             print(ae.args[0])
 
-    '''
+    """
     Manages the packages assigned to the route.
     
     At initialization, an empty list is created to store assigned packages.  
@@ -181,12 +183,12 @@ class Route:
     
     Returns:
         tuple: A tuple containing all assigned packages.
-    '''
+    """
     @property
     def assigned_packages(self):
         return tuple(self._assigned_packages)
 
-    '''
+    """
     Represents the total load weight of the route.
     
     The `load` attribute increases by the weight of each package when assigned to the route.  
@@ -194,12 +196,12 @@ class Route:
     
     Returns:
         float: The current total load weight of the route.
-    '''
+    """
     @property
     def load(self):
         return self._load
 
-    '''
+    """
     Represents the estimated arrival times for each stop along the route.
     
     This attribute converts the `locations` list into a dictionary,  where:
@@ -211,24 +213,24 @@ class Route:
     
     Returns:
         dict: A dictionary mapping location names (str) to estimated arrival times (datetime).
-    '''
+    """
     @property
     def stops(self):
         self.calculating_estimated_arrival_times()
         return self._stops
 
-    '''
+    """
     Calculates the remaining free capacity of the assigned truck.
 
     This value is determined by subtracting the total weight of all assigned packages (`load`)  
-    from the truck's capacity.
+    from the truck"s capacity.
 
     Raises:
         AttributeError: If no truck has been assigned to the route.
 
     Returns:
         float: The remaining capacity of the assigned truck.
-    '''
+    """
     @property
     def free_capacity(self):
         try:
@@ -238,7 +240,7 @@ class Route:
         except ApplicationError as ae:
             print(ae.args[0])
 
-    '''
+    """
     Calculates the total distance of the route.
 
     The total distance is computed by summing the distances between consecutive locations  
@@ -246,7 +248,7 @@ class Route:
 
     Returns:
         float: The total distance of the route in kilometers.
-    '''
+    """
     @property
     def distance(self):
         distance = 0
@@ -254,19 +256,19 @@ class Route:
             distance += Route.get_distance(self.locations[i], self.locations[i + 1])
         return distance
 
-    '''
+    """
     Gets the estimated arrival time of the truck at the final destination.
 
     The arrival time is determined based on the calculated stop times along the route.
 
     Returns:
         datetime: The estimated arrival time at the last stop.
-    '''
+    """
     @property
     def estimated_arrival_time(self):
         return self.stops[self.locations[-1]]
 
-    '''
+    """
     Determines the current status of the route based on the current time.
 
     The status can be one of the following:  
@@ -276,7 +278,7 @@ class Route:
 
     Returns:
         str: The current status of the route.
-    '''
+    """
     @property
     def status(self):
         if datetime.datetime.now() < self.departure_time:
@@ -286,10 +288,10 @@ class Route:
         else:
             return self.STATUS_IN_PROGRESS
 
-    '''
-    Returns the truck's estimated last known location based on the current time.
+    """
+    Returns the truck"s estimated last known location based on the current time.
     If no stops have been reached yet, the start location is returned by default
-    '''
+    """
     @property
     def current_location(self):    # To be tested further - not sure if it works correctly
         last_stop = None
@@ -300,7 +302,9 @@ class Route:
                 break
         return last_stop
 
-    '''
+    @staticmethod
+    def get_distance(city_1, city_2):
+        """
         Retrieves the distance between two cities from a pre-defined JSON file.
 
         Parameters:
@@ -312,9 +316,7 @@ class Route:
 
         Loads distance data from `json/distances.json`.
         Extracts the distance value using the provided city names.
-        '''
-    @staticmethod
-    def get_distance(city_1, city_2):
+        """
         try:
             if city_1 not in Route.CITIES:
                 raise ApplicationError(f"Invalid city: {city_1}")
@@ -340,7 +342,7 @@ class Route:
         return (
             f"Route Details:"
             f"\nID: {self.id}"
-            f"\nHubs:\n{' -> '.join(f'{key}: {value}' for key, value in self.stops.items())}"
+            f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.strftime("%d/%m/%Y %H:%M")}"
             f"\nNumber of Packages: {len(self.assigned_packages)}"
             f"\nCurrent Load: {self.load}"
@@ -350,19 +352,19 @@ class Route:
             f"\n============"
         )
 
-    '''
-    Calculates the expected arrival times for each stop along the route.
-
-    Assigns the departure time to the first location in `self.locations`.
-    Iterates through each subsequent location, estimating the arrival time based on:
-      - The distance between consecutive locations (retrieved via `Location.get_distance`).
-      - The average speed defined by `Route.AVERAGE_SPEED`.
-    Updates `self._stops` with the computed arrival times, rounded to the nearest minute.
-
-    Uses `replace(second=0, microsecond=0)` to ensure arrival times do not include seconds or microseconds.
-    The method does not return anything; it updates `self._stops` in place.
-    '''
     def calculating_estimated_arrival_times(self):
+        """
+        Calculates the expected arrival times for each stop along the route.
+
+        Assigns the departure time to the first location in `self.locations`.
+        Iterates through each subsequent location, estimating the arrival time based on:
+          - The distance between consecutive locations (retrieved via `Location.get_distance`).
+          - The average speed defined by `Route.AVERAGE_SPEED`.
+        Updates `self._stops` with the computed arrival times, rounded to the nearest minute.
+
+        Uses `replace(second=0, microsecond=0)` to ensure arrival times do not include seconds or microseconds.
+        The method does not return anything; it updates `self._stops` in place.
+        """
         self._stops[self.locations[0]] = self.departure_time
         estimated_arrival_time = self.departure_time
         for i in range(len(self.locations)):
@@ -375,21 +377,21 @@ class Route:
 
             self._stops[location] = estimated_arrival_time.replace(second=0, microsecond=0)
 
-    '''
-    Assigns a truck to the route.
-
-    Associates the provided `truck` object with the route.
-    The assignment process is validated through the setter method.
-    '''
     def assign_truck(self, truck: Truck):
+        """
+        Assigns a truck to the route.
+
+        Associates the provided `truck` object with the route.
+        The assignment process is validated through the setter method.
+        """
         self.assigned_truck = truck
         # Add is_assigned to Truck so it is like Package, to know if the truck is assigned or not and check here
 
-    '''
-    Removes the currently assigned truck from the route.
-    If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
-    '''
     def remove_truck(self):
+        """
+        Removes the currently assigned truck from the route.
+        If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
+        """
         self.assigned_truck = None
         try:
             if not self.assigned_truck:
@@ -399,14 +401,14 @@ class Route:
         except ApplicationError as ae:
             print(ae.args[0])
 
-    '''
-    Assigns a package to the route and updates relevant attributes.
-
-    Adds the given `package` to the list of assigned packages.
-    Increases the total route load by the package's weight.
-    Links the package to this route by updating its `assigned_route` attribute.
-    '''
     def assign_package(self, package: Package):
+        """
+        Assigns a package to the route and updates relevant attributes.
+
+        Adds the given `package` to the list of assigned packages.
+        Increases the total route load by the package"s weight.
+        Links the package to this route by updating its `assigned_route` attribute.
+        """
         try:
             if not isinstance(package, Package):
                 raise ApplicationError("Invalid package")

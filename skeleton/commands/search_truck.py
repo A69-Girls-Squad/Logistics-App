@@ -15,7 +15,7 @@ class SearchTruckCommand(BaseCommand):
         self.all_trucks = all_trucks
         
     def execute(self, package: Package, route: Route):
-        self.logger.info(f'{self.__class__.__name__} executed by user: {self._logged_employee}')
+        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}")
         for truck in self.all_trucks.get_all_trucks():
             if truck.is_free() and truck.capacity >= package.weight and truck.max_range >= route.distance:
                 return truck

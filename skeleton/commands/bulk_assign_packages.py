@@ -2,13 +2,13 @@ from skeleton.commands.base_command import BaseCommand
 from skeleton.commands.validation_helpers import validate_params_count
 from skeleton.core.application_data import ApplicationData
 
-'''
-Assigns multiple packages to a route.
-param: route: int
-return: str
 
-'''
 class BulkAssignPackagesCommand(BaseCommand):
+    """
+    Assigns multiple packages to a route.
+    param: route: int
+    return: str
+    """
     def __init__(self, params, app_data: ApplicationData):
         validate_params_count(params, 1)
         super().__init__(app_data)

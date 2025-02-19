@@ -24,7 +24,7 @@ class ApplicationData_Should(unittest.TestCase):
         app_data = ApplicationData()
         app_data.logged_in_employee = td.INVALID_EMPLOYEE
         self.assertFalse(app_data.has_logged_in_employee)
-        mock_print.assert_called_with('Invalid employee')
+        mock_print.assert_called_with("Invalid employee")
 
     def test_logged_in_employee_returnsCorrectly(self):
         app_data = ApplicationData()
@@ -123,7 +123,7 @@ class ApplicationData_Should(unittest.TestCase):
                                  td.VALID_EMPLOYEE_ROLE)
         app_data.create_employee(td.VALID_USERNAME, td.VALID_FIRST_NAME, td.VALID_LAST_NAME, td.VALID_PASSWORD,
                                  td.VALID_EMPLOYEE_ROLE)
-        mock_print.assert_called_with(f'Employee {td.VALID_USERNAME} already exist. Choose a different username!')
+        mock_print.assert_called_with(f"Employee {td.VALID_USERNAME} already exist. Choose a different username!")
 
     def test_create_employee_appendsAndReturnsCorrectly(self):
         app_data = ApplicationData()
@@ -136,7 +136,7 @@ class ApplicationData_Should(unittest.TestCase):
     def test_find_employee_by_username_whenNoEmployees(self, mock_print):
         app_data = ApplicationData()
         found_employee = app_data.find_employee_by_username(td.VALID_USERNAME)
-        mock_print.assert_called_with(f'There is no employee with username {td.VALID_USERNAME}!')
+        mock_print.assert_called_with(f"There is no employee with username {td.VALID_USERNAME}!")
         self.assertIsNone(found_employee)
 
     @patch("builtins.print")
@@ -145,7 +145,7 @@ class ApplicationData_Should(unittest.TestCase):
         app_data.create_employee(td.VALID_USERNAME, td.VALID_FIRST_NAME, td.VALID_LAST_NAME, td.VALID_PASSWORD,
                                  td.VALID_EMPLOYEE_ROLE)
         found_employee = app_data.find_employee_by_username(td.INVALID_USERNAME)
-        mock_print.assert_called_with(f'There is no employee with username {td.INVALID_USERNAME}!')
+        mock_print.assert_called_with(f"There is no employee with username {td.INVALID_USERNAME}!")
         self.assertIsNone(found_employee)
 
     def test_find_employee_by_username_returnsCorrectly(self):

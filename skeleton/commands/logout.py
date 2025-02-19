@@ -12,6 +12,6 @@ class LogoutCommand(BaseCommand):
     def execute(self):
         self._app_data.logout()
 
-        self.logger.info('User {employee.username} successfully logged out!')
+        self.logger.info("User {employee.username} successfully logged out!")
 
-        return 'You logged out!'
+        return "You logged out!"

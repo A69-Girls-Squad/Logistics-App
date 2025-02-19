@@ -24,7 +24,7 @@ class Route_Should(unittest.TestCase):
     @patch("builtins.print")
     def test_locations_invalidSeparator(self, mock_print):
         Route(td.INVALID_LOCATIONS_INPUT_SEPARATOR, td.VALID_DEPARTURE_TIME_INPUT)
-        mock_print.assert_called_with(f"Locations should be separated by '{Route.LOCATIONS_SEPARATOR}'")
+        mock_print.assert_called_with(f"Locations should be separated by \"{Route.LOCATIONS_SEPARATOR}\"")
 
     @patch("builtins.print")
     def test_locations_invalidLocation(self, mock_print):
@@ -34,7 +34,7 @@ class Route_Should(unittest.TestCase):
     @patch("builtins.print")
     def test_locations_invalidLocationsCount_noComma(self, mock_print):
         Route(td.INVALID_LOCATIONS_INPUT_TOO_FEW_WITHOUT_COMMA, td.VALID_DEPARTURE_TIME_INPUT)
-        mock_print.assert_called_with(f"Locations should be separated by '{Route.LOCATIONS_SEPARATOR}'")
+        mock_print.assert_called_with(f"Locations should be separated by \"{Route.LOCATIONS_SEPARATOR}\"")
 
     @patch("builtins.print")
     def test_locations_invalidLocationsCount_withComma(self, mock_print):
@@ -53,8 +53,8 @@ class Route_Should(unittest.TestCase):
     @patch("builtins.print")
     def test_departure_time_invalidString(self, mock_print):
         Route(td.VALID_LOCATIONS_INPUT, td.INVALID_DEPARTURE_TIME_INPUT)
-        mock_print.assert_called_with(f'Departure time TestInvalidDepartureTime does not match '
-                                                    f'the format dd/mm/YYYY-HH:MM')
+        mock_print.assert_called_with(f"Departure time TestInvalidDepartureTime does not match "
+                                                    f"the format dd/mm/YYYY-HH:MM")
 
     @patch("builtins.print")
     def test_departure_time_inThePast(self, mock_print):
@@ -107,32 +107,40 @@ class Route_Should(unittest.TestCase):
 
     def test_status_returnsCorrectly_Created(self):
         current_time_plus_two_days = datetime.now() + timedelta(days=2)
-        formatted_time = current_time_plus_two_days.strftime('%d/%m/%Y-%H:%M')
+        formatted_time = current_time_plus_two_days.strftime("%d/%m/%Y-%H:%M")
         route = Route(td.VALID_LOCATIONS_INPUT, formatted_time)
         self.assertEqual(Route.STATUS_CREATED, route.status)
 
+    def my_now():
+        if _my_custom_now is None:
+            return datetime.datetime.now()
+        else:
+            return _my_custom_now
+# @patch
+
+
     def test_status_returnsCorrectly_Finished(self):
         depart_time = datetime.now() + timedelta(days=2)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime('%d/%m/%Y-%H:%M'))
+        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime("%d/%m/%Y-%H:%M"))
 
-        with patch('datetime.datetime'):
-            with patch('datetime.datetime.now', return_value=depart_time+timedelta(days=365*5)):
+        with patch("datetime.datetime"):
+            with patch("datetime.datetime.now", return_value=depart_time+timedelta(days=365*5)):
                 self.assertEqual(Route.STATUS_FINISHED, route.status)
 
     def test_status_returnsCorrectly_InProgress(self):
         depart_time = datetime.now() + timedelta(days=2)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime('%d/%m/%Y-%H:%M'))
+        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime("%d/%m/%Y-%H:%M"))
 
-        with patch('datetime.datetime'):
-            with patch('datetime.datetime.now', return_value=depart_time+timedelta(days=1)):
+        with patch("datetime.datetime"):
+            with patch("datetime.datetime.now", return_value=depart_time+timedelta(days=1)):
                 self.assertEqual(Route.STATUS_IN_PROGRESS, route.status)
 
     def test_current_location_returnsCorrectly(self):
         depart_time = datetime.now() + timedelta(days=1)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime('%d/%m/%Y-%H:%M'))
+        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime("%d/%m/%Y-%H:%M"))
 
-        with patch('datetime.datetime'):
-            with patch('datetime.datetime.now', return_value=route.departure_time+timedelta(days=1)):
+        with patch("datetime.datetime"):
+            with patch("datetime.datetime.now", return_value=route.departure_time+timedelta(days=1)):
                 self.assertEqual(td.EXPECTED_CURRENT_LOCATION, route.current_location)
 
     @patch("builtins.print")
@@ -161,7 +169,7 @@ class Route_Should(unittest.TestCase):
         route.assign_truck(truck)
         EXPECTED_STR = f"Route Details:"
         f"\nID: {route.id}"
-        f"\nHubs:\n{' -> '.join(f'{key}: {value}' for key, value in route.stops.items())}"
+        f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in route.stops.items())}"
         f"\nDeparture Time: {route.departure_time.strftime("%d/%m/%Y %H:%M")}"
         f"\nNumber of Packages: {len(route.assigned_packages)}"
         f"\nCurrent Load: {route.load}"

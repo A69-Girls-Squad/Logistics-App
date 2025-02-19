@@ -42,7 +42,7 @@ class ShowTrucksCommand(BaseCommand):
         elif status_param == "all":
             status = "all"
         else:
-            raise ValueError('Invalid status. Enter "all", "free", or "busy".')
+            raise ValueError("Invalid status. Enter \"all\", \"free\", or \"busy\".")
 
         self.show_trucks(status=status)
 
