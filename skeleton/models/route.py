@@ -3,6 +3,7 @@ import json
 import os
 import uuid
 
+from models.package import Package
 from skeleton.errors.application_error import ApplicationError
 from skeleton.models.truck import Truck
 
@@ -201,12 +202,11 @@ class Route:
     def load(self):
         return self._load
 
-    """
     @load.setter
     def load(self, value):
         self._load = value
 
-    '''
+    """
     Represents the estimated arrival times for each stop along the route.
     
     This attribute converts the `locations` list into a dictionary,  where:
@@ -417,11 +417,11 @@ class Route:
         try:
             if not isinstance(package, Package):
                 raise ApplicationError("Invalid package")
-            if package in self._assigned_packages:
+            if package in self._assigned_package_ids:
                 raise ApplicationError(f"Package with ID {package.id} already assigned to Route with ID {self._id}")
             if self.assigned_truck and self.free_capacity < package.weight:
                 raise ApplicationError("No more capacity")
-            self._assigned_packages.append(package)
+            self._assigned_package_ids.append(package)
             self._load += package.weight
             package.route = self
 

@@ -81,9 +81,8 @@ class CommandFactory:
             return ShowTrucksCommand(params, self._app_data)
         if cmd.lower() == 'assignpackagetoroute':
             return AssignPackageToRouteCommand(params, self._app_data)
-        if cmd.lower() == 'assigntrucktoroute':
         if cmd.lower() == "assignpackagetoroute":
-            return AssignPackageToRoute(params, self._app_data)
+            return AssignPackageToRouteCommand(params, self._app_data)
         if cmd.lower() == "assigntrucktoroute":
             return AssignTruckToRouteCommand(params, self._app_data)
         if cmd.lower() == "bulkassignpackages":

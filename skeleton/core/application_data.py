@@ -120,7 +120,6 @@ class ApplicationData:
     If no match is found, returns `None`.
     '''
     def find_package_by_id(self, id: int) -> Package:
-    def find_package_by_id(self, id) -> Package:
         """
         Finds and returns the package associated with the provided ID.
         If no match is found, returns `None`.
