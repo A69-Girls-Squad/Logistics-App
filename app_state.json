@@ -1,14 +1,327 @@
 {
-    "_packages": [
+    "trucks": [
         {
-            "_id": 1,
-            "_start_location": "SYD",
-            "_end_location": "MEL",
-            "_weight": 4.0,
-            "_customer_email": "a@abv.bg",
-            "_departure_time": "2025-02-15T12:34:56.789123",
-            "_estimated_arrival_time": "2025-02-15T13:34:56.789123",
-            "_is_assigned": false
+            "id": 1001,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1002,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1003,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1004,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1005,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1006,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1007,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1008,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1009,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1010,
+            "name": "Scania",
+            "capacity": 42000,
+            "max_range": 8000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1011,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1012,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1013,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1014,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1015,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1016,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1017,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1018,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1019,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1020,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1021,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1022,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1023,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1024,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1025,
+            "name": "Man",
+            "capacity": 37000,
+            "max_range": 10000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1026,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1027,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1028,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1029,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1030,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1031,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1032,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1033,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1034,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1035,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1036,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1037,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1038,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1039,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
+        },
+        {
+            "id": 1040,
+            "name": "Actros",
+            "capacity": 26000,
+            "max_range": 13000,
+            "location": null,
+            "assigned_route_id": null
         }
-    ]
+    ],
+    "routes": [],
+    "packages": [],
+    "employees": []
 }

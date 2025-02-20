@@ -28,39 +28,6 @@ class Package:
         cls._current_id += 1
         return cls._current_id
 
-    @classmethod
-    def from_json(cls, data):
-        """
-          Creates a Package instance from a dictionary representation.
-
-          Args:
-              data (dict): A dictionary containing package details, including:
-                  - _start_location (str): The starting location of the package.
-                  - _end_location (str): The destination location of the package.
-                  - _weight (float): The weight of the package.
-                  - _customer_email (str): The email address of the customer.
-                  - _departure_time (str or None): The departure time in ISO format.
-                  - _estimated_arrival_time (str or None): The estimated arrival time in ISO format.
-                  - _is_assigned (bool): Whether the package is assigned to a route.
-
-          Returns:
-              Package: An instance of the Package class.
-          """
-        package = cls(
-            start_location=data["_start_location"],
-            end_location=data["_end_location"],
-            weight=data["_weight"],
-            customer_email=data["_customer_email"]
-        )
-        package._departure_time = (
-            datetime.fromisoformat(data["_departure_time"]) if data["_departure_time"] else None
-        )
-        package._estimated_arrival_time = (
-            datetime.fromisoformat(data["_estimated_arrival_time"]) if data["_estimated_arrival_time"] else None
-        )
-        package._is_assigned = data["_is_assigned"]
-
-        return package
 
     def __init__(self, start_location: str, end_location: str, weight: float, customer_email: str):
         """
@@ -101,6 +68,68 @@ class Package:
         self._is_assigned = False
         self._route_id = None
 
+
+    @classmethod
+    def from_json(cls, data):
+        """
+          Creates a Package instance from a dictionary representation.
+
+          Args:
+              data (dict): A dictionary containing package details, including:
+                  - _start_location (str): The starting location of the package.
+                  - _end_location (str): The destination location of the package.
+                  - _weight (float): The weight of the package.
+                  - _customer_email (str): The email address of the customer.
+                  - _departure_time (str or None): The departure time in ISO format.
+                  - _estimated_arrival_time (str or None): The estimated arrival time in ISO format.
+                  - _is_assigned (bool): Whether the package is assigned to a route.
+
+          Returns:
+              Package: An instance of the Package class.
+          """
+        package = cls(
+            start_location=data["start_location"],
+            end_location=data["end_location"],
+            weight=data["weight"],
+            customer_email=data["customer_email"]
+        )
+        package._departure_time = (
+            datetime.fromisoformat(data["departure_time"]) if data["departure_time"] else None
+        )
+        package._estimated_arrival_time = (
+            datetime.fromisoformat(data["estimated_arrival_time"]) if data["estimated_arrival_time"] else None
+        )
+        package._is_assigned = data["is_assigned"]
+
+        return package
+
+    def to_json(self) -> dict:
+        """
+        Converts the package object into a JSON-compatible dictionary.
+
+        Returns:
+            dict: A dictionary representation of the package, including:
+                - _id (int): The package ID.
+                - _start_location (str): The start location.
+                - _end_location (str): The end location.
+                - _weight (float): The weight of the package.
+                - _customer_email (str): The customer's email address.
+                - _departure_time (str or None): The departure time in ISO format.
+                - _estimated_arrival_time (str or None): The estimated arrival time in ISO format.
+                - _is_assigned (bool): Whether the package is assigned.
+                - _route_id (int or None): The associated route ID.
+        """
+        return {
+            "id": self._id,
+            "start_location": self._start_location,
+            "end_location": self._end_location,
+            "weight": self._weight,
+            "customer_email": self._customer_email,
+            "departure_time": self._departure_time.isoformat() if self._departure_time else None,
+            "estimated_arrival_time": self._estimated_arrival_time.isoformat() if self._estimated_arrival_time else None,
+            "is_assigned": self._is_assigned,
+            "route_id": self._route_id
+            }
 
     @property
     def id(self) -> int:
@@ -231,34 +260,6 @@ class Package:
             value (int): The route ID to set.
         """
         self._route_id = value
-
-    def to_json(self) -> dict:
-        """
-        Converts the package object into a JSON-compatible dictionary.
-
-        Returns:
-            dict: A dictionary representation of the package, including:
-                - _id (int): The package ID.
-                - _start_location (str): The start location.
-                - _end_location (str): The end location.
-                - _weight (float): The weight of the package.
-                - _customer_email (str): The customer's email address.
-                - _departure_time (str or None): The departure time in ISO format.
-                - _estimated_arrival_time (str or None): The estimated arrival time in ISO format.
-                - _is_assigned (bool): Whether the package is assigned.
-                - _route_id (int or None): The associated route ID.
-        """
-        return {
-            "_id": self._id,
-            "_start_location": self._start_location,
-            "_end_location": self._end_location,
-            "_weight": self._weight,
-            "_customer_email": self._customer_email,
-            "_departure_time": self._departure_time.isoformat() if self._departure_time else None,
-            "_estimated_arrival_time": self._estimated_arrival_time.isoformat() if self._estimated_arrival_time else None,
-            "_is_assigned": self._is_assigned,
-            "_route_id": self._route_id
-            }
 
     def __str__(self) -> str:
         """

@@ -26,16 +26,34 @@ class ApplicationState:
         Returns:
             ApplicationData: An instance of ApplicationData populated with the loaded data.
         """
-        with open(FILE_NAME, 'r') as f:
-            data = json.load(f)
-        return ApplicationData.from_json(data)
+        try:
+            with open(FILE_NAME, 'r') as f:
+                data = json.load(f)
+                return ApplicationData.from_json(data)
+        except FileNotFoundError:
+            return
 
     @classmethod
-    def seed_data(cls,app_data: ApplicationData):
-        for first_vehicle in range(10):
+    def seed_data(cls, app_data: ApplicationData):
+        """
+        Seeds the given ApplicationData object with sample truck data.
+
+        This method adds a set number of trucks of different types (Scania, Man, Actros) to the provided app_data instance.
+        Specifically, it adds 10 Scania trucks, 15 Man trucks, and 15 Actros trucks with pre-defined weights and capacities.
+        This is useful for initializing `app_data` with test data, typically for development or testing purposes.
+
+        Args:
+            app_data (ApplicationData): An instance of the ApplicationData class where the trucks will be added.
+
+        Returns:
+            None: This method modifies the app_data instance in place and does not return a value.
+        """
+        for i in range(10):
             app_data.create_truck("Scania", 42000, 8000)
-        for second_vehicle in range(15):
+        for i in range(15):
             app_data.create_truck("Man", 37000, 10000)
-        for third_vehicle in range(15):
+        for i in range(15):
             app_data.create_truck("Actros", 26000, 13000)
+
+
 

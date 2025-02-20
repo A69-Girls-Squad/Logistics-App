@@ -1,7 +1,3 @@
-from datetime import datetime
-from networkx.classes import freeze
-import json
-from skeleton.errors.application_error import ApplicationError
 
 
 class Truck:
@@ -21,6 +17,30 @@ class Truck:
         cls._current_id += 1
         return cls._current_id
 
+    @classmethod
+    def from_json(cls, data):
+
+        truck = cls(
+            name=data["name"],
+            capacity=data["capacity"],
+            max_range=data["max_range"]
+        )
+        truck._id = data["id"]
+        truck._location = data["location"]
+        truck._assigned_route_id = data["assigned_route_id"]
+
+        return truck
+
+    def to_json(self) -> dict:
+        return {
+            "id": self._id,
+            "name": self._name,
+            "capacity": self._capacity,
+            "max_range": self._max_range,
+            "location": self._location,
+            "assigned_route_id": self._assigned_route_id
+        }
+
     def __init__(self, name: str, capacity: int, max_range: int):
         self._id = Truck.next_id()
         self._name = name
@@ -28,29 +48,6 @@ class Truck:
         self._max_range = max_range
         self._location = None
         self._assigned_route_id = None
-    
-    @classmethod
-    def from_json(cls, data):
-        """
-        Creates a truck instance from json dictionary.
-        """
-        return cls(
-            name=data["name"],
-            capacity=data["capacity"],
-            max_range=data["max_range"],
-        )
-    
-    def to_json(self):
-        """
-        Converts truck instance to a json-compatible dictionary.
-        """
-        return {
-            "id": self._id,
-            "name": self.name,
-            "capacity": self.capacity,
-            "max_range": self.max_range,
-            "assigned_route": self._assigned_route_id
-        }
 
     @property
     def id(self):
@@ -100,15 +97,16 @@ class Truck:
         """
         self._assigned_route_id = None
 
-    def status(self) -> str:
-        assigned_route = app_data.find_route_by_id(self.assigned_route_id)
-        if not self.assigned_route_id or datetime.now() > assigned_route.estimated_arrival_time:
-            return Truck.STATUS_FREE
-        return Truck.STATUS_BUSY
 
     def __str__(self):
+        if self._assigned_route_id:
+            truck_status = (f"Busy"
+                            f"\nRoute ID: {self._assigned_route_id}")
+        else:
+            truck_status = "Free"
+
         return (f"Truck with ID: {self._id}"
                 f"\nName: {self.name}"
                 f"\nCapacity: {self.capacity}"
                 f"\nRange: {self.max_range} created"
-                f"\nStatus: {app_data.status()}")
+                f"\nStatus: {truck_status}")

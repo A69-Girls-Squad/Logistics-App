@@ -67,26 +67,36 @@ class Employee:
         self._employee_role = employee_role
 
 
+    @classmethod
+    def from_json(cls, data: dict):
+        employee = cls(
+            username=data["username"],
+            firstname=data["firstname"],
+            lastname=data["lastname"],
+            password=data["password"],
+            employee_role=EmployeeRole(data["employee_role"])
+        )
+
+        return employee
+
+    def to_json(self) ->dict:
+        return {
+            "username": self._username,
+            "firstname": self._firstname,
+            "lastname": self._lastname,
+            "password": self._password,
+            "employee_role": self._employee_role
+        }
+
     @property
     def username(self):
         """Returns the employee's username."""
         return self._username
 
-    def firstname(self):
-        """Returns the employee's first name."""
-        return self._firstname
-
-    def lastname(self):
-        """Returns the employee's last name."""
-        return self._lastname
-
+    @property
     def password(self):
         """Returns the employee's password."""
         return self._password
-
-    def employee_role(self):
-        """Returns the employee's role."""
-        return self._employee_role
 
     def __str__(self):
         """Returns a string representation of the employee."""
@@ -95,3 +105,4 @@ class Employee:
                 f"\n firstname={self._firstname}"
                 f"\n lastname={self._lastname}"
                 f"\n role={self._employee_role})")
+
