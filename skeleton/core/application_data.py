@@ -7,6 +7,12 @@ from skeleton.models.route import Route
 
 
 class ApplicationData:
+    def __init__(self):
+        self._trucks = []
+        self._routes = []
+        self._packages = []
+        self._employees = []
+        self._logged_in_employee = None
 
     @classmethod
     def from_json(cls, data):
@@ -14,18 +20,22 @@ class ApplicationData:
         Converts a JSON into ApplicationData.
         """
         app_data = cls()
-
-        app_data._packages = [Package.from_json(package_data) for package_data in
-                              data["_packages"]]
+        app_data._packages = [Package.from_json(package_data) for package_data in data["packages"]]
+        app_data._employees = [Employee.from_json(employees_data) for employees_data in data["employees"]]
+        app_data._trucks = [Truck.from_json(trucks_data) for trucks_data in data["trucks"]]
+        app_data._routes = [Route.from_json(routes_data) for routes_data in data["routes"]]
 
         return app_data
 
-    def __init__(self):
-        self._trucks = []
-        self._routes = []
-        self._packages = []
-        self._employees = []
-        self._logged_in_employee = None
+    def to_json(self):
+        """
+        Converts the ApplicationData class into a JSON.
+        """
+        return {
+            "trucks": [truck.to_json() for truck in self._trucks],
+            "routes": [route.to_json() for route in self._routes],
+            "packages": [package.to_json() for package in self._packages],
+            "employees": [employee.to_json() for employee in self._employees]}
 
     """
     Returns the entire truck park as an immutable tuple of truck objects.
@@ -206,19 +216,17 @@ class ApplicationData:
 
     def get_packages_by_assigned_status(self, is_assigned: bool) -> list:
         """
-        Retrieves a list of packages that match the specified assignment status.
+        Returns a list of packages based on their assigned status.
 
-        Parameters:
-        `is_assigned` (bool): The assignment status to filter by.
-          - `True` returns packages that are assigned.
-          - `False` returns packages that are not assigned.
+        Args:
+            is_assigned (bool): The status to filter packages by.
+                                If True, returns packages that are assigned.
+                                If False, returns packages that are not assigned.
+
+        Returns:
+            list: A list of packages that match the specified assigned status.
         """
-        result = []
-        for package in self._packages:
-            if package.is_assigned == is_assigned:
-                result.append(package)
-
-        return result
+        return [package for package in self._packages if package.is_assigned == is_assigned]
 
     def assign_package_to_route(self, package_id: int, route_id: str):
         package = self.find_package_by_id(package_id)
@@ -268,13 +276,5 @@ class ApplicationData:
         route.assigned_package_ids.remove(package.id)
         route.load -= package.weight
 
-    def to_json(self):
-        """
-        Converts the ApplicationData class into a JSON.
-        """
-        return {
-            #"_trucks": [truck.to_json() for truck in self._trucks],
-            #"_routes": [route.to_json() for route in self._routes],
-            "_packages": [package.to_json() for package in self._packages]}
-            #"_employees": [employee.to_json() for employee in self._employees]}
+
 

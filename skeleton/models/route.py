@@ -1,8 +1,6 @@
 import datetime
-import json
-import os
 import uuid
-
+from models.constants.distances import Distance
 from skeleton.errors.application_error import ApplicationError
 from skeleton.models.truck import Truck
 
@@ -17,7 +15,7 @@ class Route:
         "BRI",
         "DAR",
         "PER",
-    ]
+    ] # to be connected with class distance
 
     AVERAGE_SPEED = 87
 
@@ -47,6 +45,62 @@ class Route:
         self._stops = {}
         if isinstance(self.locations, list):
             self.calculating_estimated_arrival_times()
+
+    @classmethod
+    def from_json(cls, data: dict):
+        """
+        Creates a Route instance from a JSON-compatible dictionary.
+
+        Args:
+            data (dict): A dictionary containing route details, including:
+                - locations (str): A string of locations separated by commas.
+                - departure_time (str): The departure time in the REQUIRED_DATE_FORMAT.
+                - _id (str): The route's unique identifier.
+                - _assigned_truck_id (int or None): The ID of the assigned truck.
+                - _assigned_package_ids (list): A list of assigned package IDs.
+                - _load (float): The total load weight.
+                - _stops (dict): A dictionary mapping locations to estimated arrival times.
+
+        Returns:
+            Route: An instance of the Route class.
+        """
+        route = cls(
+            locations=data["locations"],
+            departure_time=data["departure_time"]
+        )
+        route._id = data.get("id", route._id)
+        route._assigned_truck_id = data.get("assigned_truck_id", None)
+        route._assigned_package_ids = data.get("assigned_package_ids", [])
+        route._load = data.get("load", 0)
+        stops_data = data.get("stops", {})
+        route._stops = {loc: datetime.datetime.fromisoformat(time) if time else None
+                        for loc, time in stops_data.items()}
+
+        return route
+
+    def to_json(self) -> dict:
+        """
+        Converts the Route object into a JSON dictionary.
+
+        Returns:
+            dict: A dictionary representation of the route, including:
+                - locations (str): The locations string.
+                - departure_time (str): The departure time in REQUIRED_DATE_FORMAT.
+                - _id (str): The route's unique identifier.
+                - _assigned_truck_id (int or None): The ID of the assigned truck.
+                - _assigned_package_ids (list): The list of assigned package IDs.
+                - _load (float): The total load weight.
+                - _stops (dict): A dictionary mapping locations to estimated arrival times (as ISO strings).
+        """
+        return {
+            "locations": self.LOCATIONS_SEPARATOR.join(self.locations),
+            "departure_time": self._departure_time.isoformat() if self._departure_time else None,
+            "id": self._id,
+            "assigned_truck_id": self._assigned_truck_id,
+            "assigned_package_ids": self._assigned_package_ids,
+            "load": self._load,
+            "stops": {loc: time.isoformat() if time else None for loc, time in self._stops.items()}
+        }
 
     """
     Manages the locations where the route will stop.
@@ -163,7 +217,7 @@ class Route:
     def assigned_truck_id(self):
         return self._assigned_truck_id
 
-    @assigned_truck_id.setter #Unnecessary to have setter. We have assign_truck method. Should do validations there
+    @assigned_truck_id.setter
     def assigned_truck_id(self, value: int):
         try:
             if not isinstance(value, int):
@@ -258,7 +312,7 @@ class Route:
     def distance(self):
         distance = 0
         for i in range(len(self.locations)-1):
-            distance += Route.get_distance(self.locations[i], self.locations[i + 1])
+            distance += Distance.get_distance(self.locations[i], self.locations[i + 1])
         return distance
 
     """
@@ -307,38 +361,6 @@ class Route:
                 break
         return last_stop
 
-    @staticmethod
-    def get_distance(city_1, city_2):
-        """
-        Retrieves the distance between two cities from a pre-defined JSON file.
-
-        Parameters:
-        - `city_1` (str): The name of the starting city.
-        - `city_2` (str): The name of the destination city.
-
-        Returns:
-        - `float | int`: The distance between `city_1` and `city_2` as stored in the JSON file.
-
-        Loads distance data from `json/distances.json`.
-        Extracts the distance value using the provided city names.
-        """
-        try:
-            if city_1 not in Route.CITIES:
-                raise ApplicationError(f"Invalid city: {city_1}")
-            if city_2 not in Route.CITIES:
-                raise ApplicationError(f"Invalid city: {city_2}")
-            if city_1 == city_2:
-                raise ApplicationError("Cities cannot be the same!")
-
-            file_path = os.path.join(os.path.dirname(__file__), "json/distances.json")
-
-            with open(file_path, "r") as distances:
-                distance_data = json.loads(distances.read())
-            return distance_data[city_1][0][city_2]
-
-        except ApplicationError as ae:
-            print(ae.args[0])
-
     def __str__(self):
         if self.assigned_truck_id:
             truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
@@ -376,7 +398,7 @@ class Route:
             previous_location = self.locations[i-1]
             location = self.locations[i]
 
-            distance = Route.get_distance(previous_location, location)
+            distance = Distance.get_distance(previous_location, location)
             time_needed = datetime.timedelta(hours=distance/Route.AVERAGE_SPEED)
             estimated_arrival_time += time_needed
 

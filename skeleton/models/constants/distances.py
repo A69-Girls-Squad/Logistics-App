@@ -64,24 +64,14 @@ class Distance:
     @classmethod
     def get_distance(cls, city_1: str, city_2: str) -> int:
         """
-        Returns the distance between two cities.
+        Retrieves the distance between two cities from a pre-defined JSON file.
 
-        Args:
-            city_1 (str): The first city's code.
-            city_2 (str): The second city's code.
+        Parameters:
+        - `city_1` (str): The name of the starting city.
+        - `city_2` (str): The name of the destination city.
 
         Returns:
-            int: The distance between the two cities.
-
-        Raises:
-            ApplicationError: If cities are the same or not found in the dataset.
+        - `float | int`: The distance between `city_1` and `city_2` as stored in the JSON file.
         """
-        if city_1 == city_2:
-            raise ApplicationError("Cities cannot be the same!")
-        if city_1 not in cls.DISTANCES:
-            raise ApplicationError(f"Invalid city: {city_1}")
-        if city_2 not in cls.DISTANCES[city_1]:
-            raise ApplicationError(f"Invalid city: {city_2}")
-
         return cls.DISTANCES[city_1][city_2]
 
