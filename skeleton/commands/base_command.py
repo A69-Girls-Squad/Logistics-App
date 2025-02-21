@@ -1,5 +1,7 @@
 import logging
-from skeleton.core.application_data import ApplicationData
+from core.application_data import ApplicationData
+
+
 class BaseCommand:
     def __init__(self, params, app_data: ApplicationData):
         self._params = params

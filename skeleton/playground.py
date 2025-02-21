@@ -1,3 +1,4 @@
-from skeleton.models.route import Route
+from datetime import datetime
 
-route = Route("SYD,MEL ", '02/03/2025-10:30')
+print(datetime.now())
+print(datetime.now().isoformat(sep=' ', timespec='minutes'))

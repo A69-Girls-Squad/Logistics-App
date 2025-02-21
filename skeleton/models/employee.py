@@ -1,5 +1,5 @@
 import re
-from skeleton.models.constants.employee_role import EmployeeRole
+from models.constants.employee_role import EmployeeRole
 
 
 class Employee:

@@ -1,8 +1,8 @@
 from commands.validation_helpers import validate_params_count
-from skeleton.commands.base_command import BaseCommand
-from skeleton.models.package import Package
-from skeleton.models.route import Route
-from skeleton.core.application_data import ApplicationData
+from commands.base_command import BaseCommand
+from models.package import Package
+from models.route import Route
+from core.application_data import ApplicationData
 
 class SearchTruckCommand(BaseCommand):
     """

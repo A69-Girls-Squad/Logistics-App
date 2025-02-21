@@ -3,8 +3,8 @@ import json
 import os
 import uuid
 from models.constants.distances import Distance
-from skeleton.errors.application_error import ApplicationError
-from skeleton.models.truck import Truck
+from errors.application_error import ApplicationError
+from models.truck import Truck
 
 
 class Route:

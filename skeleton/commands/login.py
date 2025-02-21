@@ -1,6 +1,7 @@
-from skeleton.commands.base_command import BaseCommand
-from skeleton.commands.validation_helpers import validate_params_count
-from skeleton.core.application_data import ApplicationData
+from errors.application_error import ApplicationError
+from commands.base_command import BaseCommand
+from commands.validation_helpers import validate_params_count
+from core.application_data import ApplicationData
 
 
 class LoginCommand(BaseCommand):
@@ -16,7 +17,7 @@ class LoginCommand(BaseCommand):
         username, password = self._params
         employee = self._app_data.find_employee_by_username(username)
         if employee.password != password:
-            raise ValueError("Wrong username or password!")
+            raise ApplicationError("Wrong username or password!")
         else:
             self._app_data.login(employee)
 

@@ -2,8 +2,8 @@ import smtplib
 import logging
 
 from commands.base_command import BaseCommand
-from skeleton.models.package import Package
-from skeleton.core.application_data import ApplicationData
+from models.package import Package
+from core.application_data import ApplicationData
 
 
 """

@@ -1,8 +1,8 @@
 from datetime import datetime
 import re
 from errors.application_error import ApplicationError
-from skeleton.models.route import Route
-from skeleton.commands.validation_helpers import try_parse_float
+from models.route import Route
+from commands.validation_helpers import try_parse_float
 
 
 class Package:
