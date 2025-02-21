@@ -126,31 +126,53 @@ class ApplicationData:
         truck = Truck(name, capacity, max_range)
         self._trucks.append(truck)
 
-    def find_package_by_id(self, id: int) -> Package:
+    def assign_truck_to_route(self, truck_id: int, route_id: int):
+        truck = self.find_truck_by_id(truck_id)
+        if truck is None:
+            raise ApplicationError(f"Truck with ID {truck_id} does not exist")
+
+        route = self.find_route_by_id(route_id)
+        if route is None:
+            raise ApplicationError(f"Route with ID {route_id} does not exist")
+
+        if truck.assigned_route_id:
+            raise ApplicationError(f"Truck with ID {truck_id} is already assigned")
+        if route.assigned_truck:
+            raise ApplicationError(f"Route with ID {route_id} already has a Truck assigned")
+
+        if route.load > truck.capacity:
+            raise ApplicationError("Not enough capacity.")
+        if route.distance > truck.max_range:
+            raise ApplicationError("Truck max range exceeded.")
+
+        truck.assigned_route_id = route.id
+        route.assigned_truck = truck
+
+    def find_package_by_id(self, package_id: int) -> Package:
         """
         Finds and returns the package associated with the provided ID.
         If no match is found, returns `None`.
         """
         for package in self.packages:
-            if package.id == id:
+            if package.id == package_id:
                 return package
 
-    def find_route_by_id(self, id) -> Route:
+    def find_route_by_id(self, route_id) -> Route:
         """
         Finds and returns the route associated with the provided ID.
         If no match is found, returns `None`.
         """
         for route in self.routes:
-            if route.id == id:
+            if route.id == route_id:
                 return route
 
-    def find_truck_by_id(self, id) -> Truck:
+    def find_truck_by_id(self, truck_id: int) -> Truck:
         """
         Finds and returns the truck associated with the provided ID.
         If no match is found, returns `None`.
         """
         for truck in self.trucks:
-            if truck.id == id:
+            if truck.id == truck_id:
                 return truck
 
     def truck_status(self, truck: Truck) -> str:

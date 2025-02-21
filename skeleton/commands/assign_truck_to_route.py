@@ -1,7 +1,7 @@
 from models.truck import Truck
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
-from commands.validation_helpers import validate_params_count
+from commands.validation_helpers import validate_params_count, try_parse_int
 from errors.application_error import ApplicationError
 
 class AssignTruckToRouteCommand(BaseCommand):
@@ -14,22 +14,10 @@ class AssignTruckToRouteCommand(BaseCommand):
 
         """
         validate_params_count(self.params, 2)
-        truck_id, route_id = self.params
+        truck_id = try_parse_int(self.params[0])
+        route_id = try_parse_int(self.params[1])
         
-        truck = self.app_data.find_truck_by_id(truck_id)
-        route = self._app_data.find_route_by_id(route_id)
-
-        if truck.status() == Truck.STATUS_BUSY:
-            raise ApplicationError("The selected truck is not free.")
-
-        if route.load > truck.capacity:
-            raise ApplicationError("Not enough capacity.")
-
-        if route.distance > truck.max_range:
-            raise ApplicationError("Truck max range exceeded.")
-
-        route.assign_truck(truck)
-        truck.assign_to_route(route.id)
+        self.app_data.assign_truck_to_route(truck_id, route_id)
 
         username = self._app_data.logged_in_employee
 

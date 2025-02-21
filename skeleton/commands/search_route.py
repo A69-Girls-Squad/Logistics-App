@@ -1,5 +1,5 @@
 from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count
+from commands.validation_helpers import validate_params_count, try_parse_int
 from core.application_data import ApplicationData
 from models.route import Route
 
@@ -11,7 +11,7 @@ class SearchRouteCommand(BaseCommand):
 
     def execute(self):
         suitable_routes = []
-        package_id = self._params[0]
+        package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)
         for route in self._app_data.routes:
             truck = self._app_data.find_truck_by_id(route.truck_id)

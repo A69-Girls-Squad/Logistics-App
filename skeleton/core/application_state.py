@@ -2,7 +2,7 @@ from core.application_data import ApplicationData
 import json
 
 
-FILE_NAME = '../../app_state.json'
+FILE_NAME = 'app_state.json'
 
 class ApplicationState:
 

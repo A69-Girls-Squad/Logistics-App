@@ -321,7 +321,36 @@
             "assigned_route_id": null
         }
     ],
-    "routes": [],
-    "packages": [],
+    "routes": [
+        {
+            "locations": "BRI,SYD,MEL",
+            "departure_time": "2025-02-22T18:30:00",
+            "id": 1,
+            "assigned_package_ids": [],
+            "load": 0,
+            "stops": {}
+        },
+        {
+            "locations": "SYD,MEL,ADL",
+            "departure_time": "2025-02-24T06:00:00",
+            "id": 2,
+            "assigned_package_ids": [],
+            "load": 0,
+            "stops": {}
+        }
+    ],
+    "packages": [
+        {
+            "id": 1,
+            "start_location": "SYD",
+            "end_location": "MEL",
+            "weight": 10.0,
+            "customer_email": "aa@aa.com",
+            "departure_time": null,
+            "estimated_arrival_time": null,
+            "is_assigned": false,
+            "route_id": null
+        }
+    ],
     "employees": []
 }

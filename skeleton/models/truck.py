@@ -17,6 +17,14 @@ class Truck:
         cls._current_id += 1
         return cls._current_id
 
+    def __init__(self, name: str, capacity: int, max_range: int):
+        self._id = Truck.next_id()
+        self._name = name
+        self._capacity = capacity
+        self._max_range = max_range
+        self._location = None
+        self._assigned_route_id = None
+
     @classmethod
     def from_json(cls, data):
 
@@ -40,14 +48,6 @@ class Truck:
             "location": self._location,
             "assigned_route_id": self._assigned_route_id
         }
-
-    def __init__(self, name: str, capacity: int, max_range: int):
-        self._id = Truck.next_id()
-        self._name = name
-        self._capacity = capacity
-        self._max_range = max_range
-        self._location = None
-        self._assigned_route_id = None
 
     @property
     def id(self):
@@ -77,6 +77,10 @@ class Truck:
     def assigned_route_id(self):
         return self._assigned_route_id
 
+    @assigned_route_id.setter
+    def assigned_route_id(self, value):
+        self._assigned_route_id = value
+
     def is_suitable(self, route) -> bool:
         """
         Checks if the route is free based on departure time, arrival time, truck capacity and truck max range.
@@ -84,19 +88,6 @@ class Truck:
         return (not self.assigned_route_id
                 and (self.capacity >= route.load
                 and self.max_range >= route.distance))
-
-    def assign_to_route(self, route_id):
-        """
-        Assigns a truck to a route.
-        """
-        self._assigned_route_id = route_id
-    
-    def remove_from_route(self):
-        """
-        Removes a truck from a route.
-        """
-        self._assigned_route_id = None
-
 
     def __str__(self):
         if self._assigned_route_id:

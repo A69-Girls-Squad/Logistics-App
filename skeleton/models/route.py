@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timedelta
 import json
 import os
 from models.constants.distances import Distance
@@ -21,8 +21,6 @@ class Route:
     AVERAGE_SPEED = 87
 
     LOCATIONS_SEPARATOR = ","
-    REQUIRED_DATE_FORMAT = "%d/%m/%Y %H:%M"
-    REQUIRED_DATE_FORMAT_STRING = "dd/mm/YYYY HH:MM"
 
     """
     Defines the possible statuses of a route during its lifecycle:
@@ -54,7 +52,7 @@ class Route:
 
         self._id = Route.next_id()
         self._assigned_truck = None
-        self._assigned_packages = []
+        self._assigned_package_ids = []
         self._load = 0
         self._stops = {}
         if isinstance(self.locations, list):
@@ -83,11 +81,11 @@ class Route:
             departure_time=data["departure_time"]
         )
         route._id = data.get("id", route._id)
-        route._assigned_truck_id = data.get("assigned_truck_id", None)
+        # route._assigned_truck_id = data.get("assigned_truck_id", None)
         route._assigned_package_ids = data.get("assigned_package_ids", [])
         route._load = data.get("load", 0)
         stops_data = data.get("stops", {})
-        route._stops = {loc: datetime.datetime.fromisoformat(time) if time else None
+        route._stops = {loc: datetime.fromisoformat(time) if time else None
                         for loc, time in stops_data.items()}
 
         return route
@@ -110,8 +108,8 @@ class Route:
             "locations": self.LOCATIONS_SEPARATOR.join(self.locations),
             "departure_time": self._departure_time.isoformat() if self._departure_time else None,
             "id": self._id,
-            "assigned_truck_id": self._assigned_truck,
-            "assigned_package_ids": self._assigned_packages,
+            # "assigned_truck_id": self._assigned_truck_id,
+            "assigned_package_ids": self._assigned_package_ids,
             "load": self._load,
             "stops": {loc: time.isoformat() if time else None for loc, time in self._stops.items()}
         }
@@ -181,10 +179,11 @@ class Route:
 
     @departure_time.setter
     def departure_time(self, value: str):
-        formatted_date = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
-        if formatted_date < datetime.datetime.now():
+        departure_time_str = datetime.strptime(value, '%Y-%m-%d %H:%M')
+        departure_time = datetime.fromisoformat(departure_time_str)
+        if departure_time < datetime.now():
             raise ApplicationError("Departure time must be in the future!")
-        self._departure_time = formatted_date
+        self._departure_time = departure_time
 
         # except ValueError:
         #     print(f"Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}")
@@ -216,11 +215,11 @@ class Route:
         Truck | None: The currently assigned truck or `None` if no truck has been assigned.
     """
     @property
-    def assigned_truck(self):
+    def assigned_truck_id(self):
         return self._assigned_truck
 
-    @assigned_truck.setter
-    def assigned_truck(self, value: Truck):
+    @assigned_truck_id.setter
+    def assigned_truck_id(self, value: Truck):
         self._assigned_truck = value
 
     """
@@ -233,8 +232,8 @@ class Route:
         tuple: A tuple containing all assigned packages.
     """
     @property
-    def assigned_packages(self):
-        return tuple(self._assigned_packages)
+    def assigned_package_ids(self):
+        return tuple(self._assigned_package_ids)
 
     """
     Represents the total load weight of the route.
@@ -285,10 +284,10 @@ class Route:
     """
     @property
     def free_capacity(self):
-        if not self.assigned_truck:
+        if not self.assigned_truck_id:
             raise ApplicationError("No truck assigned yet!")
 
-        return self.assigned_truck.capacity - self.load
+        return self.assigned_truck_id.capacity - self.load
 
     """
     Calculates the total distance of the route.
@@ -331,9 +330,9 @@ class Route:
     """
     @property
     def status(self):
-        if datetime.datetime.now() < self.departure_time:
+        if datetime.now() < self.departure_time:
             return self.STATUS_CREATED
-        if datetime.datetime.now() > self.estimated_arrival_time:
+        if datetime.now() > self.estimated_arrival_time:
             return self.STATUS_FINISHED
         else:
             return self.STATUS_IN_PROGRESS
@@ -346,7 +345,7 @@ class Route:
     def current_location(self):    # To be tested further - not sure if it works correctly
         last_stop = None
         for stop in self.stops:
-            if datetime.datetime.now() > self.stops[stop]:
+            if datetime.now() > self.stops[stop]:
                 last_stop = stop
             else:
                 break
@@ -382,8 +381,8 @@ class Route:
 
 
     def __str__(self):
-        if self.assigned_truck:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck.id}"
+        if self.assigned_truck_id:
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
         else:
             truck_info = ""
         return (
@@ -391,7 +390,7 @@ class Route:
             f"\nID: {self.id}"
             f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.strftime("%d/%m/%Y %H:%M")}"
-            f"\nNumber of Packages: {len(self._assigned_packages)}"
+            f"\nNumber of Packages: {len(self._assigned_package_ids)}"
             f"\nCurrent Load: {self.load}"
             f"{truck_info}"
             f"\nStatus: {self.status}"
@@ -419,7 +418,7 @@ class Route:
             location = self.locations[i]
 
             distance = Distance.get_distance(previous_location, location)
-            time_needed = datetime.timedelta(hours=distance/Route.AVERAGE_SPEED)
+            time_needed = timedelta(hours=distance/Route.AVERAGE_SPEED)
             estimated_arrival_time += time_needed
 
             self._stops[location] = estimated_arrival_time.replace(second=0, microsecond=0)
@@ -439,7 +438,7 @@ class Route:
         Removes the currently assigned truck from the route.
         If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
         """
-        if not self.assigned_truck:
+        if not self.assigned_truck_id:
             raise ApplicationError("No truck assigned to this route!")
 
-        self.assigned_truck = None
+        self.assigned_truck_id = None
