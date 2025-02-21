@@ -19,8 +19,10 @@ class BulkAssignPackagesCommand(BaseCommand):
         no_more_capacity_message = ""
         route_id = self._params[0]
         route = self._app_data.find_route_by_id(route_id)
+        truck = self._app_data.find_truck_by_id(route.truck_id)
+        free_capacity = truck.capacity - route.load
         for package in self._app_data.not_assigned_packages:
-            if package.weight < route.free_capacity:
+            if package.weight < free_capacity:
                 route.assign_package(package)
                 bulk_assigned_packages.append(package.id)
             else:

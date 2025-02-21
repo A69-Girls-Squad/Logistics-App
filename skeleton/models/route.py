@@ -289,7 +289,6 @@ class Route:
 
         return self.assigned_truck_id.capacity - self.load
 
-
     """
     Calculates the total distance of the route.
 
