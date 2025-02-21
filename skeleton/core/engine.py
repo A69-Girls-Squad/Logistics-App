@@ -1,5 +1,5 @@
 from core.application_state import ApplicationState
-from skeleton.core.command_factory import CommandFactory
+from core.command_factory import CommandFactory
 
 
 class Engine:

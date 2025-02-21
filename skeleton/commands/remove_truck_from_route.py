@@ -1,6 +1,6 @@
-from skeleton.commands.base_command import BaseCommand
-from skeleton.core.application_data import ApplicationData
-from skeleton.commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
+from commands.validation_helpers import validate_params_count
 
 class RemoveTruckFromRouteCommand(BaseCommand):
     """

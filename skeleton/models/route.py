@@ -1,8 +1,10 @@
 import datetime
+import json
+import os
 import uuid
 from models.constants.distances import Distance
-from skeleton.errors.application_error import ApplicationError
-from skeleton.models.truck import Truck
+from errors.application_error import ApplicationError
+from models.truck import Truck
 
 
 class Route:
@@ -34,13 +36,26 @@ class Route:
     STATUS_IN_PROGRESS = "In progress"
     STATUS_FINISHED = "Finished"
 
-    def __init__(self, locations: str, departure_time: str):        # SYD: 16/02, MEL: 17/02, BRI:19/02
+    _current_id = 0
+
+    @classmethod
+    def next_id(cls) -> int:
+        """
+         Generates and returns the next unique package ID.
+
+         Returns:
+             int: The next unique ID.
+         """
+        cls._current_id += 1
+        return cls._current_id
+
+    def __init__(self, locations: str, departure_time: str):
         self.locations = locations
         self.departure_time = departure_time
 
-        self._id = uuid.uuid1().hex[:6]
-        self._assigned_truck_id = None    # Removed TypeHint `:Truck` because at init no truck is assigned
-        self._assigned_package_ids = []
+        self._id = Route.next_id()
+        self._assigned_truck = None
+        self._assigned_packages = []
         self._load = 0
         self._stops = {}
         if isinstance(self.locations, list):
@@ -97,7 +112,7 @@ class Route:
             "departure_time": self._departure_time.isoformat() if self._departure_time else None,
             "id": self._id,
             "assigned_truck_id": self._assigned_truck_id,
-            "assigned_package_ids": self._assigned_package_ids,
+            "assigned_package_ids": self._assigned_packages,
             "load": self._load,
             "stops": {loc: time.isoformat() if time else None for loc, time in self._stops.items()}
         }
@@ -127,32 +142,24 @@ class Route:
 
     @locations.setter
     def locations(self, value: str):
-        try:
-            if not isinstance(value, str):
-                raise ApplicationError("Error")
-            if self.LOCATIONS_SEPARATOR not in value:
-                raise ApplicationError(f"Locations should be separated by \"{self.LOCATIONS_SEPARATOR}\"")
-            value = value.split(self.LOCATIONS_SEPARATOR)
+        if not isinstance(value, str):
+            raise ApplicationError("Invalid locations")
+        if self.LOCATIONS_SEPARATOR not in value:
+            raise ApplicationError(f"Locations should be separated by \"{self.LOCATIONS_SEPARATOR}\"")
+        value = value.split(self.LOCATIONS_SEPARATOR)
 
-            for location in value:
-                if location not in self.CITIES:
-                    raise ApplicationError(f"Invalid location: {location}.")
+        for location in value:
+            if location not in self.CITIES:
+                raise ApplicationError(f"Invalid location: {location}.")
 
-            for i in range(len(value)-1):
-                if value[i] == value[i+1]:
-                    raise ApplicationError("Consecutive duplicate locations not allowed!")
+        for i in range(len(value)-1):
+            if value[i] == value[i+1]:
+                raise ApplicationError("Consecutive duplicate locations not allowed!")
 
-            if len(value) < 2:
-                raise ApplicationError("Too few locations!")
+        if len(value) < 2:
+            raise ApplicationError("Too few locations!")
 
-        except ValueError as v:
-            print(v.args[0])
-
-        except ApplicationError as ap:
-            print(ap.args[0])
-
-        finally:
-            self._locations = value
+        self._locations = value
 
     """
     Gets and sets the departure time of the route.
@@ -175,18 +182,14 @@ class Route:
 
     @departure_time.setter
     def departure_time(self, value: str):
-        try:
-            formatted_date = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
-            if formatted_date < datetime.datetime.now():
-                raise ApplicationError("Departure time must be in the future!")
-            self._departure_time = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
-            # datetime.fromisoformat(value)
+        formatted_date = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
+        if formatted_date < datetime.datetime.now():
+            raise ApplicationError("Departure time must be in the future!")
+        self._departure_time = formatted_date.isoformat()
 
-        except ValueError:
-            print(f"Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}")
+        # except ValueError:
+        #     print(f"Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}")
 
-        except ApplicationError as ap:
-            print(ap.args[0])
 
     """
     Returns the unique identifier (UUID) of the route.
@@ -215,19 +218,16 @@ class Route:
     """
     @property
     def assigned_truck_id(self):
-        return self._assigned_truck_id
+        return self._assigned_truck
 
     @assigned_truck_id.setter
-    def assigned_truck_id(self, value: int):
-        try:
-            if not isinstance(value, int):
-                raise ApplicationError("Invalid truck!")
-            if not value.status == Truck.STATUS_FREE:
-                raise ApplicationError("This truck is not free!")
-            self._assigned_truck_id = value
+    def assigned_truck_id(self, value: Truck):
+        if not isinstance(value, int):
+            raise ApplicationError("Invalid truck!")
+        if value.assigned_route:
+            raise ApplicationError("This truck is not free!")
+        self._assigned_truck = value
 
-        except ApplicationError as ae:
-            print(ae.args[0])
 
     """
     Manages the packages assigned to the route.
@@ -240,7 +240,7 @@ class Route:
     """
     @property
     def assigned_package_ids(self):
-        return tuple(self._assigned_package_ids)
+        return tuple(self._assigned_packages)
 
     """
     Represents the total load weight of the route.
@@ -291,13 +291,11 @@ class Route:
     """
     @property
     def free_capacity(self):
-        try:
-            if not self.assigned_truck_id:
-                raise ApplicationError("No truck assigned yet!")
-            #
-            return self.assigned_truck_id.capacity - self.load
-        except ApplicationError as ae:
-            print(ae.args[0])
+        if not self.assigned_truck_id:
+            raise ApplicationError("No truck assigned yet!")
+
+        return self.assigned_truck_id.capacity - self.load
+
 
     """
     Calculates the total distance of the route.
@@ -361,6 +359,35 @@ class Route:
                 break
         return last_stop
 
+    @staticmethod
+    def get_distance(city_1, city_2):
+        """
+        Retrieves the distance between two cities from a pre-defined JSON file.
+
+        Parameters:
+        - `city_1` (str): The name of the starting city.
+        - `city_2` (str): The name of the destination city.
+
+        Returns:
+        - `float | int`: The distance between `city_1` and `city_2` as stored in the JSON file.
+
+        Loads distance data from `json/distances.json`.
+        Extracts the distance value using the provided city names.
+        """
+        if city_1 not in Route.CITIES:
+            raise ApplicationError(f"Invalid city: {city_1}")
+        if city_2 not in Route.CITIES:
+            raise ApplicationError(f"Invalid city: {city_2}")
+        if city_1 == city_2:
+            raise ApplicationError("Cities cannot be the same!")
+
+        file_path = os.path.join(os.path.dirname(__file__), "json/distances.json")
+
+        with open(file_path, "r") as distances:
+            distance_data = json.loads(distances.read())
+        return distance_data[city_1][0][city_2]
+
+
     def __str__(self):
         if self.assigned_truck_id:
             truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
@@ -371,7 +398,7 @@ class Route:
             f"\nID: {self.id}"
             f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.strftime("%d/%m/%Y %H:%M")}"
-            f"\nNumber of Packages: {len(self._assigned_package_ids)}"
+            f"\nNumber of Packages: {len(self._assigned_packages)}"
             f"\nCurrent Load: {self.load}"
             f"{truck_info}"
             f"\nStatus: {self.status}"
@@ -411,7 +438,7 @@ class Route:
         Associates the provided `truck` object with the route.
         The assignment process is validated through the setter method.
         """
-        self.assigned_truck_id = truck
+        self._assigned_truck = truck
         # Add is_assigned to Truck so it is like Package, to know if the truck is assigned or not and check here
 
     def remove_truck(self):
@@ -419,11 +446,7 @@ class Route:
         Removes the currently assigned truck from the route.
         If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
         """
-        self.assigned_truck_id = None
-        try:
-            if not self.assigned_truck_id:
-                raise ApplicationError("No truck assigned to this route!")
-            self.assigned_truck_id = None
+        self.assigned_truck = None
 
-        except ApplicationError as ae:
-            print(ae.args[0])
+        if not self.assigned_truck_id:
+            raise ApplicationError("No truck assigned to this route!")

@@ -1,6 +1,7 @@
-from skeleton.commands.base_command import BaseCommand
-from skeleton.commands.validation_helpers import validate_params_count
-from skeleton.core.application_data import ApplicationData
+from errors.application_error import ApplicationError
+from commands.base_command import BaseCommand
+from commands.validation_helpers import validate_params_count
+from core.application_data import ApplicationData
 
 
 class ShowEmployeesCommand(BaseCommand):
@@ -17,4 +18,4 @@ class ShowEmployeesCommand(BaseCommand):
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
                 return "\n".join(["--EMPLOYEES--"] + employees)
         else:
-            raise ValueError(self.ONLY_ADMIN_CAN_SHOW_EMPLOYEES)
+            raise ApplicationError(self.ONLY_ADMIN_CAN_SHOW_EMPLOYEES)

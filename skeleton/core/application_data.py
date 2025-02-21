@@ -1,9 +1,9 @@
 from datetime import datetime
-from skeleton.errors.application_error import ApplicationError
-from skeleton.models.employee import Employee
-from skeleton.models.truck import Truck
-from skeleton.models.package import Package
-from skeleton.models.route import Route
+from errors.application_error import ApplicationError
+from models.employee import Employee
+from models.truck import Truck
+from models.package import Package
+from models.route import Route
 
 
 class ApplicationData:
@@ -77,12 +77,9 @@ class ApplicationData:
 
     @logged_in_employee.setter
     def logged_in_employee(self, value: Employee):
-        try:
-            if not isinstance(value, Employee):
-                raise ApplicationError("Invalid employee")
-            self._logged_in_employee = value
-        except ApplicationError as ae:
-            print(ae.args[0])
+        if not isinstance(value, Employee):
+            raise ApplicationError("Invalid employee")
+        self._logged_in_employee = value
 
     """
     Indicates whether an employee is currently logged in.
@@ -168,44 +165,32 @@ class ApplicationData:
         Returns the newly created employee object.
         Checks if an employee with the given `username` already exists.
         """
-        try:
-            if len([u for u in self._employees if u.username == username]) > 0:
-                raise ValueError(f"Employee {username} already exist. Choose a different username!")
+        if len([u for u in self._employees if u.username == username]) > 0:
+            raise ValueError(f"Employee {username} already exist. Choose a different username!")
 
-            employee = Employee(username, firstname, lastname, password, employee_role)
-            self._employees.append(employee)
+        employee = Employee(username, firstname, lastname, password, employee_role)
+        self._employees.append(employee)
 
-            return employee
-
-        except ApplicationError as ae:
-            print(ae.args[0])
+        return employee
 
     def find_employee_by_username(self, username: str) -> Employee:
         """
         Finds and returns the employee associated with the provided username.
         If no match is found, returns `None`.
         """
-        try:
-            filtered = [employee for employee in self._employees if employee.username == username]
-            if not filtered:
-                raise ApplicationError(f"There is no employee with username {username}!")
+        filtered = [employee for employee in self._employees if employee.username == username]
+        if not filtered:
+            raise ApplicationError(f"There is no employee with username {username}!")
 
-            return filtered[0]
-
-        except ApplicationError as ae:
-            print(ae.args[0])
+        return filtered[0]
 
     def login(self, employee: Employee):
         """
         Logs in an employee by setting the provided employee as the currently logged-in user.
         """
-        try:
-            if not isinstance(employee, Employee):
-                raise ApplicationError("Invalid employee")
-            self._logged_in_employee = employee
-
-        except ApplicationError as ae:
-            print(ae.args[0])
+        if not isinstance(employee, Employee):
+            raise ApplicationError("Invalid employee")
+        self._logged_in_employee = employee
 
     def logout(self):
         """

@@ -4,8 +4,8 @@ from unittest.mock import patch
 import test_data as td
 from core.application_data import ApplicationData
 from models.employee import Employee
-from skeleton.models.package import Package
-from skeleton.models.route import Route
+from models.package import Package
+from models.route import Route
 
 
 class ApplicationData_Should(unittest.TestCase):

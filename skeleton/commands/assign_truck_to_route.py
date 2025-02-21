@@ -1,8 +1,8 @@
 from models.truck import Truck
-from skeleton.commands.base_command import BaseCommand
-from skeleton.core.application_data import ApplicationData
-from skeleton.commands.validation_helpers import validate_params_count
-from skeleton.errors.application_error import ApplicationError
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
+from commands.validation_helpers import validate_params_count
+from errors.application_error import ApplicationError
 
 class AssignTruckToRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):

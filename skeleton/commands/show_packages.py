@@ -1,8 +1,7 @@
-
-from skeleton.commands.base_command import BaseCommand
-from skeleton.commands.validation_helpers import validate_params_count
-from skeleton.core.application_data import ApplicationData
-from skeleton.models.constants.assign_status import AssignStatus
+from commands.base_command import BaseCommand
+from commands.validation_helpers import validate_params_count
+from core.application_data import ApplicationData
+from models.constants.assign_status import AssignStatus
 
 
 class ShowPackagesCommand(BaseCommand):

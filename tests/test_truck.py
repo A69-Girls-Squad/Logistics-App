@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
-from skeleton.models.truck import Truck
-from skeleton.errors.application_error import ApplicationError
+from models.truck import Truck
+from errors.application_error import ApplicationError
 
 class Truck_Should(unittest.TestCase):
 

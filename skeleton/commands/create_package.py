@@ -1,6 +1,6 @@
-from skeleton.core.application_data import ApplicationData
-from skeleton.commands.base_command import BaseCommand
-from skeleton.commands.validation_helpers import validate_params_count, try_parse_float
+from core.application_data import ApplicationData
+from commands.base_command import BaseCommand
+from commands.validation_helpers import validate_params_count, try_parse_float
 
 
 class CreatePackageCommand(BaseCommand):
