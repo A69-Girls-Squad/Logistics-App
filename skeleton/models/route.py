@@ -179,7 +179,8 @@ class Route:
 
     @departure_time.setter
     def departure_time(self, value: str):
-        departure_time = datetime.fromisoformat(value)
+        departure_time_str = datetime.strptime(value, '%Y-%m-%d %H:%M')
+        departure_time = datetime.fromisoformat(departure_time_str)
         if departure_time < datetime.now():
             raise ApplicationError("Departure time must be in the future!")
         self._departure_time = departure_time
@@ -214,11 +215,11 @@ class Route:
         Truck | None: The currently assigned truck or `None` if no truck has been assigned.
     """
     @property
-    def assigned_truck(self):
+    def assigned_truck_id(self):
         return self._assigned_truck
 
-    @assigned_truck.setter
-    def assigned_truck(self, value: Truck):
+    @assigned_truck_id.setter
+    def assigned_truck_id(self, value: Truck):
         self._assigned_truck = value
 
     """
@@ -283,10 +284,10 @@ class Route:
     """
     @property
     def free_capacity(self):
-        if not self.assigned_truck:
+        if not self.assigned_truck_id:
             raise ApplicationError("No truck assigned yet!")
 
-        return self.assigned_truck.capacity - self.load
+        return self.assigned_truck_id.capacity - self.load
 
 
     """
@@ -381,8 +382,8 @@ class Route:
 
 
     def __str__(self):
-        if self.assigned_truck:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck.id}"
+        if self.assigned_truck_id:
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
         else:
             truck_info = ""
         return (
@@ -438,7 +439,7 @@ class Route:
         Removes the currently assigned truck from the route.
         If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
         """
-        self.assigned_truck = None
-
-        if not self.assigned_truck:
+        if not self.assigned_truck_id:
             raise ApplicationError("No truck assigned to this route!")
+
+        self.assigned_truck_id = None
