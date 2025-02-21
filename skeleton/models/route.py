@@ -1,7 +1,6 @@
 import datetime
 import json
 import os
-import uuid
 from models.constants.distances import Distance
 from errors.application_error import ApplicationError
 from models.truck import Truck
@@ -22,8 +21,8 @@ class Route:
     AVERAGE_SPEED = 87
 
     LOCATIONS_SEPARATOR = ","
-    REQUIRED_DATE_FORMAT = "%d/%m/%Y-%H:%M"
-    REQUIRED_DATE_FORMAT_STRING = "dd/mm/YYYY-HH:MM"
+    REQUIRED_DATE_FORMAT = "%d/%m/%Y %H:%M"
+    REQUIRED_DATE_FORMAT_STRING = "dd/mm/YYYY HH:MM"
 
     """
     Defines the possible statuses of a route during its lifecycle:
@@ -111,7 +110,7 @@ class Route:
             "locations": self.LOCATIONS_SEPARATOR.join(self.locations),
             "departure_time": self._departure_time.isoformat() if self._departure_time else None,
             "id": self._id,
-            "assigned_truck_id": self._assigned_truck_id,
+            "assigned_truck_id": self._assigned_truck,
             "assigned_package_ids": self._assigned_packages,
             "load": self._load,
             "stops": {loc: time.isoformat() if time else None for loc, time in self._stops.items()}
@@ -185,7 +184,7 @@ class Route:
         formatted_date = datetime.datetime.strptime(value, self.REQUIRED_DATE_FORMAT)
         if formatted_date < datetime.datetime.now():
             raise ApplicationError("Departure time must be in the future!")
-        self._departure_time = formatted_date.isoformat()
+        self._departure_time = formatted_date
 
         # except ValueError:
         #     print(f"Departure time {value} does not match the format {self.REQUIRED_DATE_FORMAT_STRING}")
@@ -217,14 +216,14 @@ class Route:
         Truck | None: The currently assigned truck or `None` if no truck has been assigned.
     """
     @property
-    def assigned_truck_id(self):
+    def assigned_truck(self):
         return self._assigned_truck
 
-    @assigned_truck_id.setter
-    def assigned_truck_id(self, value: Truck):
-        if not isinstance(value, int):
+    @assigned_truck.setter
+    def assigned_truck(self, value: Truck):
+        if value and not isinstance(value, Truck):
             raise ApplicationError("Invalid truck!")
-        if value.assigned_route:
+        if value and value.assigned_route_id:
             raise ApplicationError("This truck is not free!")
         self._assigned_truck = value
 
@@ -239,7 +238,7 @@ class Route:
         tuple: A tuple containing all assigned packages.
     """
     @property
-    def assigned_package_ids(self):
+    def assigned_packages(self):
         return tuple(self._assigned_packages)
 
     """
@@ -291,10 +290,10 @@ class Route:
     """
     @property
     def free_capacity(self):
-        if not self.assigned_truck_id:
+        if not self.assigned_truck:
             raise ApplicationError("No truck assigned yet!")
 
-        return self.assigned_truck_id.capacity - self.load
+        return self.assigned_truck.capacity - self.load
 
 
     """
@@ -389,8 +388,8 @@ class Route:
 
 
     def __str__(self):
-        if self.assigned_truck_id:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
+        if self.assigned_truck:
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck.id}"
         else:
             truck_info = ""
         return (
@@ -446,7 +445,7 @@ class Route:
         Removes the currently assigned truck from the route.
         If no truck is currently assigned, the method simply ensures `self.assigned_truck` remains `None`.
         """
-        self.assigned_truck = None
-
-        if not self.assigned_truck_id:
+        if not self.assigned_truck:
             raise ApplicationError("No truck assigned to this route!")
+
+        self.assigned_truck = None

@@ -1,8 +1,6 @@
 from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count, try_parse_int
 from core.application_data import ApplicationData
-from errors.application_error import ApplicationError
-
 
 class AssignPackageToRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):

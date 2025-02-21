@@ -2,6 +2,8 @@ import datetime
 
 from models.constants.employee_role import EmployeeRole
 
+
+VALID_DATETIME_FORMAT = "%d/%m/%Y %H:%M"
 # Route
 INVALID_LOCATIONS_INPUT_SEPARATOR = "SYD;MEL;BRI"
 INVALID_LOCATIONS_INPUT_TOO_FEW_WITH_COMMA = "SYD,"
@@ -11,13 +13,13 @@ INVALID_LOCATIONS_INPUT_TWO_ADJACENT_EQUAL = "SYD,SYD,MEL"
 VALID_LOCATIONS_INPUT = "SYD,MEL,BRI"
 VALID_LOCATIONS_OUTPUT = ("SYD", "MEL", "BRI")
 VALID_DISTANCE = 2642
-EXPECTED_ESTIMATED_ARRIVAL_TIME = datetime.datetime(2025, 2, 18, 4, 18)
+EXPECTED_ESTIMATED_ARRIVAL_TIME = datetime.datetime(2055, 2, 18, 4, 18)
 EXPECTED_CURRENT_LOCATION = "MEL"
 
 INVALID_DEPARTURE_TIME_INPUT = "TestInvalidDepartureTime"
-INVALID_DEPARTURE_TIME_IN_THE_PAST = "16/02/1900-11:30"
-VALID_DEPARTURE_TIME_INPUT = "16/02/2025-11:30"
-VALID_DEPARTURE_TIME_OUTPUT = datetime.datetime(2025, 2, 16, 11, 30)
+INVALID_DEPARTURE_TIME_IN_THE_PAST = "16/02/1900 11:30"
+VALID_DEPARTURE_TIME_INPUT = "16/02/2055 11:30"
+VALID_DEPARTURE_TIME_OUTPUT = datetime.datetime(2055, 2, 16, 11, 30)
 
 INVALID_ROUTE_ID = "TestInvalidRouteID"
 
@@ -28,9 +30,9 @@ VALID_TRUCK_NAME = "Scania"
 VALID_TRUCK_CAPACITY = 42000
 VALID_TRUCK_MAX_RANGE = 8000
 
-EXPECTED_STOPS = {"BRI": datetime.datetime(2025, 2, 18, 4, 18),
-                    "MEL": datetime.datetime(2025, 2, 17, 8, 1),
-                    "SYD": datetime.datetime(2025, 2, 16, 21, 56)}
+EXPECTED_STOPS = {"BRI": datetime.datetime(2055, 2, 18, 4, 18),
+                    "MEL": datetime.datetime(2055, 2, 17, 8, 1),
+                    "SYD": datetime.datetime(2055, 2, 16, 21, 56)}
 
 VALID_CITY_1 = "SYD"
 VALID_CITY_2 = "MEL"
@@ -45,7 +47,7 @@ VALID_FIRST_NAME = "Pesho"
 INVALID_LAST_NAME = "."
 VALID_LAST_NAME = "Peshev"
 INVALID_PASSWORD = "."
-VALID_PASSWORD = "pass123"
+VALID_PASSWORD = "password1234"
 INVALID_EMPLOYEE_ROLE = "TestEmployeeRole"
 VALID_EMPLOYEE_ROLE = EmployeeRole.REGULAR
 INVALID_EMPLOYEE = "TestInvalidEmployee"
@@ -64,3 +66,14 @@ INVALID_PACKAGE = "TestInvalidPackage"
 
 # Truck
 INVALID_TRUCK_ID = "TestInvalidTruckID"
+VALID_TRUCK_NAME = "Scania"
+VALID_CAPACITY = 42000
+VALID_MAX_RANGE = 8000
+
+
+    # def my_now():
+    #     if _my_custom_now is None:
+    #         return datetime.datetime.now()
+    #     else:
+    #         return _my_custom_now
+# @patch

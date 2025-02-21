@@ -166,7 +166,7 @@ class ApplicationData:
         Checks if an employee with the given `username` already exists.
         """
         if len([u for u in self._employees if u.username == username]) > 0:
-            raise ValueError(f"Employee {username} already exist. Choose a different username!")
+            raise ApplicationError(f"Employee {username} already exist. Choose a different username!")
 
         employee = Employee(username, firstname, lastname, password, employee_role)
         self._employees.append(employee)
@@ -223,14 +223,14 @@ class ApplicationData:
 
         if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
-        if package.route_id == route_id or package_id in route.assigned_package_ids:
+        if package.route_id == route_id or package_id in route.assigned_packages:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
 
-        if route.assigned_truck_id:
+        if route.assigned_truck:
             raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
-        if route.free_capacity < package.weight:
+        if route.assigned_truck and route.free_capacity < package.weight:
             raise ApplicationError(f"Route with ID {route_id} has no more capacity")
-        if route.departure_time > datetime.now():
+        if route.departure_time < datetime.now():
             raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
         if package.start_location not in route.locations:
             raise ApplicationError(f"Package with ID {package_id} start location does not exists in Route with ID {route_id}")
@@ -240,7 +240,8 @@ class ApplicationData:
         package.estimated_arrival_time = route.stops[package.end_location]
         package.route_id = route.id
         package.is_assigned = True
-        route.assigned_package_ids.append(package.id)
+        # route.assigned_packages is tuple and cannot append -> we have to use protected attribute which is not oK
+        route._assigned_packages.append(package)
         route.load += package.weight
 
     def unassign_package_from_route(self, package_id: int, route_id: str):
@@ -258,7 +259,7 @@ class ApplicationData:
         package.estimated_arrival_time = None
         package.route_id = None
         package.is_assigned = False
-        route.assigned_package_ids.remove(package.id)
+        route.assigned_packages.remove(package.id)
         route.load -= package.weight
 
 

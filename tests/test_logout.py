@@ -8,14 +8,11 @@ from errors.application_error import ApplicationError
 from models.constants.employee_role import EmployeeRole
 
 
-def _create_fake_params(
-        *,
-        username="username",
-        password="password1234"):
-    return [username, password]
+def _create_fake_params():
+    return []
 
 
-class LoginCommandTest_Should(unittest.TestCase):
+class LogoutCommandTest_Should(unittest.TestCase):
     def test_initializer_raisesError_tooManyParamsCount(self):
         with self.assertRaises(ApplicationError):
             LogoutCommand(["a"] * 3, Mock())
@@ -23,30 +20,12 @@ class LoginCommandTest_Should(unittest.TestCase):
     def test_initializer_passes_validParamsCount(self):
         LogoutCommand(["a"] * 0, Mock())
 
-    def test_execute_logsIn_validParams(self):
+    def test_execute_logsOut(self):
+        fake_params = ["username", "password1234"]
+        app_data = ApplicationData()
+        app_data.create_employee("username", "John", "Smith", "password1234", EmployeeRole.REGULAR)
+        LoginCommand(fake_params, app_data)
         fake_params = _create_fake_params()
-        app_data = ApplicationData()
-        app_data.create_employee("username", "John", "Smith", "password1234", EmployeeRole.REGULAR)
-        cmd = LogoutCommand(fake_params, app_data)
+        LogoutCommand(fake_params, app_data)
 
-        output = cmd.execute()
-
-        self.assertEqual(f"Employee username successfully logged in!", output)
-
-    def test_execute_raisesError_invalidUsername(self):
-        fake_params = _create_fake_params(username="invalidUsername")
-        app_data = ApplicationData()
-        app_data.create_employee("username", "John", "Smith", "password1234", EmployeeRole.REGULAR)
-        cmd = LoginCommand(fake_params, app_data)
-
-        with self.assertRaises(ApplicationError):
-            cmd.execute()
-
-    def test_execute_raisesError_invalidPassword(self):
-        fake_params = _create_fake_params(password="invalidPassword")
-        app_data = ApplicationData()
-        app_data.create_employee("username", "John", "Smith", "password1234", EmployeeRole.REGULAR)
-        cmd = LoginCommand(fake_params, app_data)
-
-        with self.assertRaises(ApplicationError):
-            cmd.execute()
+        self.assertIsNone(app_data.logged_in_employee)
