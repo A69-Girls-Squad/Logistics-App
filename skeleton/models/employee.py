@@ -42,27 +42,32 @@ class Employee:
         Raises:
             ValueError: If any of the attributes do not meet the specified validation rules.
                 """
-        if len(username) > 20 or len(username) < 3:
+        if len(username) > 20 or len(username) < 2:
             raise ValueError("Username must be between 3 and 30 characters.")
         if not re.match(r"^[A-Za-z0-9]+(_[A-Za-z0-9]+)*$", username):
             raise ValueError(
                 "Username can only contain letters, numbers, and underscores (but not start or end with one).")
         self._username = username
 
-        if len(firstname) > 30 or len(firstname) < 1:
+        if len(firstname) > 30 or len(firstname) < 2:
             raise ValueError("Name must be between 2 and 30 characters.")
         if not firstname.replace(" ", "").replace("-", "").isalpha():
             raise ValueError("First name an only contain letters, spaces, and hyphens.")
         self._firstname = firstname
 
-        if len(lastname) > 30 or len(lastname) < 1:
+        if len(lastname) > 30 or len(lastname) < 2:
             raise ValueError("Last name must be between 2 and 30 characters.")
         if not lastname.replace(" ", "").replace("-", "").isalpha():
             raise ValueError("Last name can only contain letters, spaces, and hyphens.")
         self._lastname = lastname
 
-        if len(password) > 64 or len(password) < 12:
-            raise ValueError("Password must be at least 12 characters and maximum 64 characters.")
+        special_char = ["@", "*", "-", "_"]
+        if len(password) > 28 or len(password) < 6:
+            raise ValueError("Password must be between 6 and 28 characters long.")
+        for char in password:
+            if char not in special_char and not char.isalnum():
+                raise ValueError("Invalid symbols! Password can only contains letters,"
+                                 " numbers and special symbols @, *, -, _")
         self._password = password
         self._employee_role = employee_role
 
