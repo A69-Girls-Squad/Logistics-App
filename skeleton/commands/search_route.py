@@ -14,7 +14,9 @@ class SearchRouteCommand(BaseCommand):
         package_id = self._params[0]
         package = self._app_data.find_package_by_id(package_id)
         for route in self._app_data.routes:
-            if route.status == Route.STATUS_CREATED and route.free_capacity > package.weight:
+            truck = self._app_data.find_truck_by_id(route.truck_id)
+            free_capacity = truck.capacity - route.load
+            if route.status == Route.STATUS_CREATED and free_capacity > package.weight:
                 locations = route.locations
                 if package.start_location in locations and package.end_location in locations:
                     if locations.index(package.start_location) < locations.index(package.end_location):

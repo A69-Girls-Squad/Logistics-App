@@ -221,12 +221,7 @@ class Route:
 
     @assigned_truck.setter
     def assigned_truck(self, value: Truck):
-        if value and not isinstance(value, Truck):
-            raise ApplicationError("Invalid truck!")
-        if value and value.assigned_route_id:
-            raise ApplicationError("This truck is not free!")
         self._assigned_truck = value
-
 
     """
     Manages the packages assigned to the route.
@@ -294,7 +289,6 @@ class Route:
             raise ApplicationError("No truck assigned yet!")
 
         return self.assigned_truck.capacity - self.load
-
 
     """
     Calculates the total distance of the route.

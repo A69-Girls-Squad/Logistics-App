@@ -226,10 +226,13 @@ class ApplicationData:
         if package.route_id == route_id or package_id in route.assigned_packages:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
 
-        if route.assigned_truck:
+        if not route.assigned_truck:
             raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
-        if route.assigned_truck and route.free_capacity < package.weight:
-            raise ApplicationError(f"Route with ID {route_id} has no more capacity")
+        if route.assigned_truck:
+            truck = self._app_data.find_truck_by_id(route.truck_id)
+            free_capacity = truck.capacity - route.load
+            if free_capacity < package.weight:
+                raise ApplicationError(f"Route with ID {route_id} has no more capacity")
         if route.departure_time < datetime.now():
             raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
         if package.start_location not in route.locations:
