@@ -22,6 +22,7 @@
 
 # update package estimated arrival time -> 11/10 18:00
 
+'''
 createroute BRI,SYD,MEL 2025-10-10T06:00
 createroute SYD,MEL,ADL 2025-10-12T06:00
 createpackage SYD MEL 45 johnsmith@gmail.com
@@ -29,7 +30,7 @@ searchroute 1
 assignpackagetoroute 1 1
 showpackages all
 exit
-
+'''
 
 
 # Use case #2
@@ -40,33 +41,38 @@ exit
 # based on a predefined average speed of 87km/h. The employee then finds a free truck that meets the required range and
 # capacity and proceeds to bulk assign the packages to the newly created route by using the route id and the packages’ ids.
 
+'''
 createroute ASP,ADL,MEL,SYD,BRI 2025-09-12T06:00
 searchtruck 3
 assigntrucktoroute 1001 3
 showpackages all
 bulkassignpackages 3 2 4
 exit
-
+'''
 
 # Use case #3
 # A manager at the company uses the system to find information about all delivery routes in progress. The system
 # responds with information that contains each route’s stops, delivery weight, and the expected current stop based on
 # the time of the day.
 
+'''
 createroute ASP,ADL,MEL,SYD,BRI 2025-02-23T00:17
 showroutesinprogress
-
+'''
 
 # Use case #4
 # A supervising employee uses the system to view information about each package that is not yet assigned to a delivery
 # route. The system responds with a list of packages containing their IDs and locations
 
+'''
 showpackages unassigned
-
+'''
 
 # Use case #5
 # A customer contacts the office to request information about their package. The customer provides the id that they
 # received when the package was created, and an employee enters the package id in the system. It responds with
 # detailed information which is then emailed to the customer.
 
+'''
 sendpackageinfotocustomer 1
+'''
