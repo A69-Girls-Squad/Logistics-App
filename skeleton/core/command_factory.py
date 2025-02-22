@@ -17,7 +17,7 @@ from commands.show_route import ShowRouteCommand
 from commands.show_routes_inprogress import ShowRoutesInProgressCommand
 from commands.show_trucks import ShowTrucksCommand
 from core.application_data import ApplicationData
-
+from errors.application_error import ApplicationError
 
 
 class CommandFactory:
@@ -98,4 +98,4 @@ class CommandFactory:
         if cmd.lower() == 'reassignpackage':
             return ReassignPackageCommand(params, self._app_data)
 
-        raise ValueError(f"Command {cmd} is not supported.")
+        raise ApplicationError(f"Command {cmd} is not supported.")
