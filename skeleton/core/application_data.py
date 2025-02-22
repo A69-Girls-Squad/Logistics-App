@@ -77,8 +77,6 @@ class ApplicationData:
 
     @logged_in_employee.setter
     def logged_in_employee(self, value: Employee):
-        if not isinstance(value, Employee):
-            raise ApplicationError("Invalid employee")
         self._logged_in_employee = value
 
     """
@@ -137,7 +135,7 @@ class ApplicationData:
 
         if truck.assigned_route_id:
             raise ApplicationError(f"Truck with ID {truck_id} is already assigned")
-        if route.assigned_truck:
+        if route.assigned_truck_id:
             raise ApplicationError(f"Route with ID {route_id} already has a Truck assigned")
 
         if route.load > truck.capacity:
@@ -146,7 +144,15 @@ class ApplicationData:
             raise ApplicationError("Truck max range exceeded.")
 
         truck.assigned_route_id = route.id
-        route.assigned_truck = truck
+        route.assigned_truck_id = truck.id
+        route.assigned_truck_capacity = truck.capacity
+
+    def unassign_truck_from_route(self, truck_id):
+        truck = self.find_truck_by_id(truck_id)
+        route = self.find_route_by_id(truck.assigned_route_id)
+        truck.assigned_route_id = None
+        route.assigned_truck_id = None
+        route.assigned_truck_capacity = None
 
     def find_package_by_id(self, package_id: int) -> Package:
         """
@@ -162,35 +168,27 @@ class ApplicationData:
         Finds and returns the route associated with the provided ID.
         If no match is found, returns `None`.
         """
-        for route in self.routes:
-            if route.id == route_id:
-                return route
+        result = [route for route in self._routes if route.id == route_id]
+        return result[0]
 
     def find_truck_by_id(self, truck_id: int) -> Truck:
         """
         Finds and returns the truck associated with the provided ID.
         If no match is found, returns `None`.
         """
-        for truck in self.trucks:
-            if truck.id == truck_id:
-                return truck
+        result = [truck for truck in self._trucks if truck.id == truck_id]
+        return result[0]
 
-    def truck_status(self, truck: Truck) -> str:
-        assigned_route = self.find_route_by_id(truck.assigned_route_id)
-        if not truck.assigned_route_id or datetime.now() > assigned_route.estimated_arrival_time:
-            return Truck.STATUS_FREE
-        return Truck.STATUS_BUSY
-
-    def create_employee(self, username, firstname, lastname, password, employee_role) -> Employee:
+    def create_employee(self, username, first_name, last_name, password, employee_role) -> Employee:
         """
         Creates a new employee and adds them to the employee list.
         Returns the newly created employee object.
         Checks if an employee with the given `username` already exists.
         """
-        if len([u for u in self._employees if u.username == username]) > 0:
+        if len([employee for employee in self._employees if employee.username == username]) > 0:
             raise ApplicationError(f"Employee {username} already exist. Choose a different username!")
 
-        employee = Employee(username, firstname, lastname, password, employee_role)
+        employee = Employee(username, first_name, last_name, password, employee_role)
         self._employees.append(employee)
 
         return employee
@@ -200,18 +198,13 @@ class ApplicationData:
         Finds and returns the employee associated with the provided username.
         If no match is found, returns `None`.
         """
-        filtered = [employee for employee in self._employees if employee.username == username]
-        if not filtered:
-            raise ApplicationError(f"There is no employee with username {username}!")
-
-        return filtered[0]
+        result = [employee for employee in self._employees if employee.username == username]
+        return result[0]
 
     def login(self, employee: Employee):
         """
         Logs in an employee by setting the provided employee as the currently logged-in user.
         """
-        if not isinstance(employee, Employee):
-            raise ApplicationError("Invalid employee")
         self._logged_in_employee = employee
 
     def logout(self):
@@ -245,13 +238,14 @@ class ApplicationData:
 
         if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
-        if package.route_id == route_id or package_id in route.assigned_packages:
+        if package.route_id == route_id or package_id in route.assigned_packages_ids:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
 
-        if not route.assigned_truck:
-            raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
-        if route.assigned_truck:
-            truck = self._app_data.find_truck_by_id(route.truck_id)
+        # redundant
+        # if not route.assigned_truck_id:
+        #     raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
+        if route.assigned_truck_id:
+            truck = self.find_truck_by_id(route.assigned_truck_id)
             free_capacity = truck.capacity - route.load
             if free_capacity < package.weight:
                 raise ApplicationError(f"Route with ID {route_id} has no more capacity")
@@ -266,7 +260,7 @@ class ApplicationData:
         package.route_id = route.id
         package.is_assigned = True
         # route.assigned_packages is tuple and cannot append -> we have to use protected attribute which is not oK
-        route._assigned_packages.append(package)
+        route._assigned_packages_ids.append(package)
         route.load += package.weight
 
     def unassign_package_from_route(self, package_id: int, route_id: str):
@@ -284,7 +278,7 @@ class ApplicationData:
         package.estimated_arrival_time = None
         package.route_id = None
         package.is_assigned = False
-        route.assigned_packages.remove(package.id)
+        route.assigned_packages_ids.remove(package.id)
         route.load -= package.weight
 
 

@@ -54,6 +54,3 @@ class ApplicationState:
             app_data.create_truck("Man", 37000, 10000)
         for i in range(15):
             app_data.create_truck("Actros", 26000, 13000)
-
-
-
