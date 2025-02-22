@@ -163,21 +163,27 @@ class ApplicationData:
             if package.id == package_id:
                 return package
 
-    def find_route_by_id(self, route_id) -> Route:
+    def find_route_by_id(self, route_id: int) -> Route:
         """
         Finds and returns the route associated with the provided ID.
         If no match is found, returns `None`.
         """
-        result = [route for route in self._routes if route.id == route_id]
-        return result[0]
+        return next((route for route in self.routes if route.id == route_id), None)
+
 
     def find_truck_by_id(self, truck_id: int) -> Truck:
         """
         Finds and returns the truck associated with the provided ID.
         If no match is found, returns `None`.
         """
-        result = [truck for truck in self._trucks if truck.id == truck_id]
-        return result[0]
+        return next((truck for truck in self.trucks if truck.id == truck_id), None)
+
+    def find_employee_by_username(self, username: str) -> Employee:
+        """
+        Finds and returns the employee associated with the provided username.
+        If no match is found, returns `None`.
+        """
+        return next((employee for employee in self.employees if employee.username == username), None)
 
     def create_employee(self, username, first_name, last_name, password, employee_role) -> Employee:
         """
@@ -193,13 +199,6 @@ class ApplicationData:
 
         return employee
 
-    def find_employee_by_username(self, username: str) -> Employee:
-        """
-        Finds and returns the employee associated with the provided username.
-        If no match is found, returns `None`.
-        """
-        result = [employee for employee in self._employees if employee.username == username]
-        return result[0]
 
     def login(self, employee: Employee):
         """
@@ -228,7 +227,7 @@ class ApplicationData:
         """
         return [package for package in self._packages if package.is_assigned == is_assigned]
 
-    def assign_package_to_route(self, package_id: int, route_id: str):
+    def assign_package_to_route(self, package_id: int, route_id: int):
         package = self.find_package_by_id(package_id)
         if package is None:
             raise ApplicationError(f"Package with ID {package_id} does not exist")
@@ -252,15 +251,13 @@ class ApplicationData:
         if route.departure_time < datetime.now():
             raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
         if package.start_location not in route.locations:
-            raise ApplicationError(f"Package with ID {package_id} start location does not exists in Route with ID {route_id}")
-        # end location check error
+            raise ApplicationError(f"Package with ID {package_id} start location "
+                                   f"does not exists in Route with ID {route_id}")
 
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]
         package.route_id = route.id
-        package.is_assigned = True
-        # route.assigned_packages is tuple and cannot append -> we have to use protected attribute which is not oK
-        route._assigned_packages_ids.append(package)
+        route.assign_package(package.id)
         route.load += package.weight
 
     def unassign_package_from_route(self, package_id: int, route_id: str):
@@ -277,8 +274,7 @@ class ApplicationData:
         package.departure_time = None
         package.estimated_arrival_time = None
         package.route_id = None
-        package.is_assigned = False
-        route.assigned_packages_ids.remove(package.id)
+        route.remove_package(package.id)
         route.load -= package.weight
 
 

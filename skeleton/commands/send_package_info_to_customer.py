@@ -2,6 +2,7 @@ import smtplib
 import logging
 
 from commands.base_command import BaseCommand
+from commands.validation_helpers import try_parse_int
 from models.package import Package
 from core.application_data import ApplicationData
 
@@ -21,7 +22,8 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
         )
 
     def package_info(self):
-        package = self._params[0]
+        package_id = try_parse_int(self._params[0])
+        package = self._app_data.find_package_by_id(package_id)
         package_info = (
             f"Package ID: {package.id}\n"
             f"Start Location: {package.start_location}\n"
@@ -45,7 +47,6 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
         smtp_port = 587
 
         message = f"Subject: {subject}\n\n{body}"
-        message = f"Subject:{subject}\n\n{body}"
 
         with smtplib.SMTP(smtp_server, smtp_port) as server:
             server.starttls()
@@ -55,7 +56,8 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
         self.logger.info(f"Email successfully sent to {customer_email}")
 
     def execute(self):
-        package = self._params[0]
+        package_id = try_parse_int(self._params[0])
+        package = self._app_data.find_package_by_id(package_id)
         customer_email = package.customer_email
         package_details = self.package_info()
         subject = f"Package Details: {package.id}"

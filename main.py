@@ -3,6 +3,8 @@ from core.application_state import ApplicationState
 from core.command_factory import CommandFactory
 from core.engine import Engine
 
+
+
 app_data = ApplicationState.load_data()
 
 if app_data is None:
@@ -14,3 +16,4 @@ engine = Engine(cmd_factory)
 
 engine.start()
 ApplicationState.save_data(app_data)
+

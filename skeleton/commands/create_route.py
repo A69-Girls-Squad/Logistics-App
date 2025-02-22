@@ -11,11 +11,14 @@ class CreateRouteCommand(BaseCommand):
 
     def execute(self):
         locations, departure_time = self._params
+
+
         route = self._app_data.create_route(locations, departure_time)
         
         self.logger.info(f"Route with id {route.id} was created!\n"
                          f"Locations: {locations}\n"
                          f"Departure Time: {departure_time} | Executed by: username")
-        self.logger.info(f"Route with id {id} was created!\nLocations: {locations}\nDeparture Time: {departure_time} | Executed by: {self.app_data.logged_in_employee}")
+        self.logger.info(f"Route with id {id} was created!\nLocations: {locations}"
+                         f"\nDeparture Time: {departure_time} | Executed by: {self.app_data.logged_in_employee}")
 
         return f'Route with id {route.id} was created!\nLocations: {locations}\nDeparture Time: {departure_time}'

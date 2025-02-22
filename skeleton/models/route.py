@@ -9,7 +9,7 @@ class Route:
     CITIES = list(Distance.DISTANCES)
     AVERAGE_SPEED = 87
     LOCATIONS_SEPARATOR = ","
-    REQUIRED_DATE_FORMAT = '%d-%m-%Y %H:%M'
+    REQUIRED_DATE_FORMAT = '%Y-%m-%d %H:%M'
 
     """
     Defines the possible statuses of a route during its lifecycle:
@@ -43,9 +43,9 @@ class Route:
         self._assigned_truck_id = None
         self.assigned_truck_capacity = None
         self._assigned_packages_ids = []
-        self._load = 0
+        self.load = 0
         self._stops = {}
-        if isinstance(self.locations, list):
+        if isinstance(self._locations, list):
             self.calculating_estimated_arrival_times()
 
     @classmethod
@@ -78,6 +78,7 @@ class Route:
         route._stops = {loc: datetime.fromisoformat(time) if time else None
                         for loc, time in stops_data.items()}
 
+
         return route
 
     def to_json(self) -> dict:
@@ -101,7 +102,7 @@ class Route:
             "assigned_truck_id": self._assigned_truck_id,
             "assigned_package_ids": self._assigned_packages_ids,
             "load": self._load,
-            "stops": {loc: time.isoformat() if time else None for loc, time in self._stops.items()}
+            "stops": {loc: time.isoformat() for loc, time in self._stops.items()}
         }
 
     """
@@ -172,8 +173,7 @@ class Route:
     @departure_time.setter
     def departure_time(self, value: str):
         try:
-            departure_time_str = str(datetime.strptime(value, self.REQUIRED_DATE_FORMAT))
-            departure_time = datetime.fromisoformat(departure_time_str)
+            departure_time = datetime.fromisoformat(value)
             if departure_time < datetime.now():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = departure_time
@@ -358,12 +358,21 @@ class Route:
         """
         self._stops[self.locations[0]] = self.departure_time
         estimated_arrival_time = self.departure_time
-        for i in range(len(self.locations)):
-            previous_location = self.locations[i-1]
-            location = self.locations[i]
+        for i in range(len(self.locations)-1):
+            previous_location = self.locations[i]
+            location = self.locations[i+1]
 
             distance = Distance.get_distance(previous_location, location)
             time_needed = timedelta(hours=distance/Route.AVERAGE_SPEED)
             estimated_arrival_time += time_needed
 
-            self._stops[location] = estimated_arrival_time.replace(second=0, microsecond=0)
+            self._stops[location] = estimated_arrival_time
+
+    def assign_package(self, package_id):
+        self._assigned_packages_ids.append(package_id)
+
+    def remove_package(self, package_id):
+        self._assigned_packages_ids.remove(package_id)
+
+    def assign_truck(self, truck_id):
+        self._assigned_truck_id = truck_id

@@ -16,6 +16,9 @@ class LoginCommand(BaseCommand):
 
         username, password = self._params
         employee = self._app_data.find_employee_by_username(username)
+        if not employee:
+            raise ApplicationError("No employee found!")
+
         if employee.password != password:
             raise ApplicationError("Wrong username or password!")
         else:

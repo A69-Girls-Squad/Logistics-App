@@ -1,4 +1,5 @@
 from core.command_factory import CommandFactory
+from errors.application_error import ApplicationError
 
 
 class Engine:
@@ -42,6 +43,10 @@ class Engine:
                 output.append(command.execute())
                 print("\n".join(output))
 
-            except ValueError as err:
+            except ApplicationError as err:
                 output.append(err.args[0])
                 print(err.args[0])
+
+
+
+

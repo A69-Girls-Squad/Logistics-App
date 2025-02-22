@@ -1,5 +1,6 @@
-from commands.validation_helpers import validate_params_count
+from commands.validation_helpers import validate_params_count, try_parse_int
 from commands.base_command import BaseCommand
+from errors.application_error import ApplicationError
 from models.package import Package
 from models.route import Route
 from core.application_data import ApplicationData
@@ -18,8 +19,11 @@ class SearchTruckCommand(BaseCommand):
         self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}")
 
         suitable_trucks = []
-        route_id = self._params[0]
+        route_id = try_parse_int(self._params[0])
         route = self.app_data.find_route_by_id(route_id)
+        if not route:
+            raise ApplicationError("No route found!")
+
         for truck in self.app_data.trucks:
             if truck.is_suitable(route):
                 suitable_trucks.append(truck)

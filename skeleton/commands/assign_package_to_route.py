@@ -10,7 +10,7 @@ class AssignPackageToRouteCommand(BaseCommand):
 
     def execute(self):
         package_id = try_parse_int(self.params[0])
-        route_id = str(self.params[1])
+        route_id = try_parse_int(self.params[1])
 
         self.app_data.assign_package_to_route(package_id, route_id)
 

@@ -1,6 +1,8 @@
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from commands.validation_helpers import validate_params_count
+from errors.application_error import ApplicationError
+
 
 class RemoveTruckFromRouteCommand(BaseCommand):
     """
@@ -16,7 +18,12 @@ class RemoveTruckFromRouteCommand(BaseCommand):
         truck_id, route_id = self.params
 
         truck = self.app_data.find_truck_by_id(truck_id)
+        if not truck:
+            raise ApplicationError("No truck found!")
+
         route = self._app_data.find_route_by_id(route_id)
+        if not route:
+            raise ApplicationError("No route found!")
 
         if truck.assigned_route != route:
                 raise ValueError(f"The selected truck is not assigned to the specified route")

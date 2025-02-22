@@ -57,7 +57,7 @@ class ApplicationData_Should(unittest.TestCase):
         app_data._routes.append(route)
         app_data.assign_package_to_route(package.id, route.id)
         self.assertEqual([], app_data.not_assigned_packages)
-        self.assertIn(package, route.assigned_packages)
+        self.assertIn(package, route.assigned_packages_ids)
 
     def test_not_assigned_packages_returnsCorrectly(self):
         app_data = ApplicationData()
@@ -230,13 +230,14 @@ class ApplicationData_Should(unittest.TestCase):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         app_data._routes.append(route)
         truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
-        route.assigned_truck_id = truck
+        app_data._trucks.append(truck)
+        route.assigned_truck_id = truck.id
         package = Package(td.VALID_START_LOCATION,td.VALID_END_LOCATION, td.VALID_WEIGHT, td.VALID_CUSTOMER_EMAIL)
         app_data._packages.append(package)
         app_data.assign_package_to_route(package.id, route.id)
 
-        self.assertIn(package, route.assigned_packages)
+        self.assertIn(package, route.assigned_packages_ids)
         self.assertEqual(route.id, package.route_id)
-        self.assertEqual(1, len(route.assigned_packages))
+        self.assertEqual(1, len(route.assigned_packages_ids))
 
 

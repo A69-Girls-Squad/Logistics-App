@@ -1,6 +1,7 @@
 from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
 from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 
 
 class ShowRouteCommand(BaseCommand):
@@ -11,4 +12,6 @@ class ShowRouteCommand(BaseCommand):
     def execute(self):
         route_id = self._params[0]
         route = self._app_data.find_route_by_id(route_id)
+        if not route:
+            raise ApplicationError("No route found!")
         return str(route)

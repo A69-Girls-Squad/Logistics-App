@@ -264,12 +264,15 @@ class Package:
                 - Departure and estimated arrival times
                 - Package status (Awaiting Dispatch, In Transit, or Delivered).
         """
-        if datetime.now() < self.departure_time:
-            status = "Awaiting Dispatch"
-        elif datetime.now() < self.estimated_arrival_time:
-            status = "In Transit"
+        if self.departure_time:
+            if datetime.now() < self.departure_time:
+                status = "Awaiting Dispatch"
+            elif datetime.now() < self.estimated_arrival_time:
+                status = "In Transit"
+            else:
+                status = "Delivered"
         else:
-            status = "Delivered"
+            status = "Not assigned"
 
         return (f"ID: {self._id}"
                 f"\nStart Location: {self._start_location})"

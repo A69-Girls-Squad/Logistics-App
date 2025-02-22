@@ -10,7 +10,7 @@ from errors.application_error import ApplicationError
 def _create_fake_params(
         *,
         locations="SYD,MEL,BRI",
-        departure_time="16/02/2055-11:30"):
+        departure_time="16-02-2055 11:30"):
     return [locations, departure_time]
 
 
@@ -39,7 +39,6 @@ class CreateRouteCommandTest_Should(unittest.TestCase):
             f"\nDeparture Time: {fake_params[1]}", output)
 
     def test_execute_raisesError_invalidLocations(self):
-        from errors.application_error import ApplicationError
         app_data = ApplicationData()
         cmd = CreateRouteCommand(_create_fake_params(locations="SYD"),app_data)
 
