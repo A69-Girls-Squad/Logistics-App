@@ -1,9 +1,8 @@
-
-
 class Truck:
 
     STATUS_FREE = "Free"
     STATUS_BUSY = "Busy"
+
     _current_id = 1000
 
     @classmethod
@@ -22,7 +21,6 @@ class Truck:
         self._name = name
         self._capacity = capacity
         self._max_range = max_range
-        self._location = None
         self._assigned_route_id = None
 
     @classmethod
@@ -34,7 +32,6 @@ class Truck:
             max_range=data["max_range"]
         )
         truck._id = data["id"]
-        truck._location = data["location"]
         truck._assigned_route_id = data["assigned_route_id"]
 
         return truck
@@ -45,17 +42,12 @@ class Truck:
             "name": self._name,
             "capacity": self._capacity,
             "max_range": self._max_range,
-            "location": self._location,
             "assigned_route_id": self._assigned_route_id
         }
 
     @property
     def id(self):
         return self._id
-    
-    @property
-    def name(self):
-        return self._name
         
     @property
     def capacity(self):
@@ -64,14 +56,6 @@ class Truck:
     @property
     def max_range(self):
         return self._max_range
-    
-    @property
-    def location(self):
-        return self._location
-    
-    @location.setter
-    def location(self, value):
-        self._location = value
 
     @property
     def assigned_route_id(self):
@@ -97,7 +81,7 @@ class Truck:
             truck_status = "Free"
 
         return (f"Truck with ID: {self._id}"
-                f"\nName: {self.name}"
+                f"\nName: {self._name}"
                 f"\nCapacity: {self.capacity}"
                 f"\nRange: {self.max_range} created"
                 f"\nStatus: {truck_status}")
