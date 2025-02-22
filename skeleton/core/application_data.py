@@ -100,15 +100,9 @@ class ApplicationData:
                 not_assigned_packages.append(package)
         return not_assigned_packages
 
-    def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str) -> Package:
-        """
-        Creates a new package and adds it to the application"s packages list.
-        Data validation is handled by the Package class __init__ constructor.
-        """
-        package = Package(start_location, end_location, weight, customer_email)
-        self._packages.append(package)
-
-        return package
+    def create_truck(self, name: str, capacity: int, max_range: int):
+        truck = Truck(name, capacity, max_range)
+        self._trucks.append(truck)
 
     def create_route(self, locations: str, departure_time: str):
         """
@@ -120,9 +114,29 @@ class ApplicationData:
 
         return route
 
-    def create_truck(self, name: str, capacity: int, max_range: int):
-        truck = Truck(name, capacity, max_range)
-        self._trucks.append(truck)
+    def create_package(self, start_location: str, end_location: str, weight: float, customer_email: str) -> Package:
+        """
+        Creates a new package and adds it to the application"s packages list.
+        Data validation is handled by the Package class __init__ constructor.
+        """
+        package = Package(start_location, end_location, weight, customer_email)
+        self._packages.append(package)
+
+        return package
+
+    def create_employee(self, username, first_name, last_name, password, employee_role) -> Employee:
+        """
+        Creates a new employee and adds them to the employee list.
+        Returns the newly created employee object.
+        Checks if an employee with the given `username` already exists.
+        """
+        if len([employee for employee in self._employees if employee.username == username]) > 0:
+            raise ApplicationError(f"Employee {username} already exist. Choose a different username!")
+
+        employee = Employee(username, first_name, last_name, password, employee_role)
+        self._employees.append(employee)
+
+        return employee
 
     def assign_truck_to_route(self, truck_id: int, route_id: int):
         truck = self.find_truck_by_id(truck_id)
@@ -153,79 +167,6 @@ class ApplicationData:
         truck.assigned_route_id = None
         route.assigned_truck_id = None
         route.assigned_truck_capacity = None
-
-    def find_package_by_id(self, package_id: int) -> Package:
-        """
-        Finds and returns the package associated with the provided ID.
-        If no match is found, returns `None`.
-        """
-        for package in self.packages:
-            if package.id == package_id:
-                return package
-
-    def find_route_by_id(self, route_id: int) -> Route:
-        """
-        Finds and returns the route associated with the provided ID.
-        If no match is found, returns `None`.
-        """
-        return next((route for route in self.routes if route.id == route_id), None)
-
-
-    def find_truck_by_id(self, truck_id: int) -> Truck:
-        """
-        Finds and returns the truck associated with the provided ID.
-        If no match is found, returns `None`.
-        """
-        return next((truck for truck in self.trucks if truck.id == truck_id), None)
-
-    def find_employee_by_username(self, username: str) -> Employee:
-        """
-        Finds and returns the employee associated with the provided username.
-        If no match is found, returns `None`.
-        """
-        return next((employee for employee in self.employees if employee.username == username), None)
-
-    def create_employee(self, username, first_name, last_name, password, employee_role) -> Employee:
-        """
-        Creates a new employee and adds them to the employee list.
-        Returns the newly created employee object.
-        Checks if an employee with the given `username` already exists.
-        """
-        if len([employee for employee in self._employees if employee.username == username]) > 0:
-            raise ApplicationError(f"Employee {username} already exist. Choose a different username!")
-
-        employee = Employee(username, first_name, last_name, password, employee_role)
-        self._employees.append(employee)
-
-        return employee
-
-
-    def login(self, employee: Employee):
-        """
-        Logs in an employee by setting the provided employee as the currently logged-in user.
-        """
-        self._logged_in_employee = employee
-
-    def logout(self):
-        """
-        Logs out the currently logged-in employee by setting the logged-in employee to `None`.
-        After calling this method, no employee will be considered logged in until a new `login` method is called.
-        """
-        self._logged_in_employee = None
-
-    def get_packages_by_assigned_status(self, is_assigned: bool) -> list:
-        """
-        Returns a list of packages based on their assigned status.
-
-        Args:
-            is_assigned (bool): The status to filter packages by.
-                                If True, returns packages that are assigned.
-                                If False, returns packages that are not assigned.
-
-        Returns:
-            list: A list of packages that match the specified assigned status.
-        """
-        return [package for package in self._packages if package.is_assigned == is_assigned]
 
     def assign_package_to_route(self, package_id: int, route_id: int):
         package = self.find_package_by_id(package_id)
@@ -260,7 +201,7 @@ class ApplicationData:
         route.assign_package(package.id)
         route.load += package.weight
 
-    def unassign_package_from_route(self, package_id: int, route_id: str):
+    def unassign_package_from_route(self, package_id: int, route_id: int):
         package = self.find_package_by_id(package_id)
         if package is None:
             raise ApplicationError(f"Package with ID {package_id} does not exist")
@@ -277,5 +218,59 @@ class ApplicationData:
         route.remove_package(package.id)
         route.load -= package.weight
 
+    def get_packages_by_assigned_status(self, is_assigned: bool) -> list:
+        """
+        Returns a list of packages based on their assigned status.
 
+        Args:
+            is_assigned (bool): The status to filter packages by.
+                                If True, returns packages that are assigned.
+                                If False, returns packages that are not assigned.
 
+        Returns:
+            list: A list of packages that match the specified assigned status.
+        """
+        return [package for package in self._packages if package.is_assigned == is_assigned]
+
+    def find_truck_by_id(self, truck_id: int) -> Truck:
+        """
+        Finds and returns the truck associated with the provided ID.
+        If no match is found, returns `None`.
+        """
+        return next((truck for truck in self.trucks if truck.id == truck_id), None)
+
+    def find_route_by_id(self, route_id: int) -> Route:
+        """
+        Finds and returns the route associated with the provided ID.
+        If no match is found, returns `None`.
+        """
+        return next((route for route in self.routes if route.id == route_id), None)
+
+    def find_package_by_id(self, package_id: int) -> Package:
+        """
+        Finds and returns the package associated with the provided ID.
+        If no match is found, returns `None`.
+        """
+        for package in self.packages:
+            if package.id == package_id:
+                return package
+
+    def find_employee_by_username(self, username: str) -> Employee:
+        """
+        Finds and returns the employee associated with the provided username.
+        If no match is found, returns `None`.
+        """
+        return next((employee for employee in self.employees if employee.username == username), None)
+
+    def login(self, employee: Employee):
+        """
+        Logs in an employee by setting the provided employee as the currently logged-in user.
+        """
+        self._logged_in_employee = employee
+
+    def logout(self):
+        """
+        Logs out the currently logged-in employee by setting the logged-in employee to `None`.
+        After calling this method, no employee will be considered logged in until a new `login` method is called.
+        """
+        self._logged_in_employee = None
