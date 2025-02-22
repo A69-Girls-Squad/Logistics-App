@@ -9,9 +9,9 @@ class Employee:
     Attributes:
         _username (str): The unique username of the employee. Must be 3-20 characters long
                          and can contain letters, numbers, and underscores (but not start or end with one).
-        _firstname (str): The first name of the employee. Must be 1-30 characters long and can contain
+        _first_name (str): The first name of the employee. Must be 1-30 characters long and can contain
                           letters, spaces, and hyphens.
-        _lastname (str): The last name of the employee. Must be 1-30 characters long and can contain
+        _last_name (str): The last name of the employee. Must be 1-30 characters long and can contain
                          letters, spaces, and hyphens.
         _password (str): The password of the employee. Must be between 12 and 64 characters.
         _employee_role (EmployeeRole): The role assigned to the employee.
@@ -28,14 +28,14 @@ class Employee:
         ValueError: If any attribute does not meet validation criteria.
     """
 
-    def __init__(self, username: str, firstname: str, lastname: str, password: str, employee_role: EmployeeRole):
+    def __init__(self, username: str, first_name: str, last_name: str, password: str, employee_role: EmployeeRole):
         """
         Initializes an Employee instance.
 
         Args:
             username (str): The unique username (3-20 characters, alphanumeric with optional underscores).
-            firstname (str): The first name (1-30 characters, only letters, spaces, and hyphens allowed).
-            lastname (str): The last name (1-30 characters, only letters, spaces, and hyphens allowed).
+            first_name (str): The first name (1-30 characters, only letters, spaces, and hyphens allowed).
+            last_name (str): The last name (1-30 characters, only letters, spaces, and hyphens allowed).
             password (str): The password (12-64 characters).
             employee_role (EmployeeRole): The role assigned to the employee.
 
@@ -49,17 +49,17 @@ class Employee:
                 "Username can only contain letters, numbers, and underscores (but not start or end with one).")
         self._username = username
 
-        if len(firstname) > 30 or len(firstname) < 2:
+        if len(first_name) > 30 or len(first_name) < 2:
             raise ValueError("Name must be between 2 and 30 characters.")
-        if not firstname.replace(" ", "").replace("-", "").isalpha():
+        if not first_name.replace(" ", "").replace("-", "").isalpha():
             raise ValueError("First name an only contain letters, spaces, and hyphens.")
-        self._firstname = firstname
+        self._first_name = first_name
 
-        if len(lastname) > 30 or len(lastname) < 2:
+        if len(last_name) > 30 or len(last_name) < 2:
             raise ValueError("Last name must be between 2 and 30 characters.")
-        if not lastname.replace(" ", "").replace("-", "").isalpha():
+        if not last_name.replace(" ", "").replace("-", "").isalpha():
             raise ValueError("Last name can only contain letters, spaces, and hyphens.")
-        self._lastname = lastname
+        self._last_name = last_name
 
         special_char = ["@", "*", "-", "_"]
         if len(password) > 28 or len(password) < 6:
@@ -76,8 +76,8 @@ class Employee:
     def from_json(cls, data: dict):
         employee = cls(
             username=data["username"],
-            firstname=data["firstname"],
-            lastname=data["lastname"],
+            first_name=data["first_name"],
+            last_name=data["last_name"],
             password=data["password"],
             employee_role=EmployeeRole(data["employee_role"])
         )
@@ -87,8 +87,8 @@ class Employee:
     def to_json(self) ->dict:
         return {
             "username": self._username,
-            "firstname": self._firstname,
-            "lastname": self._lastname,
+            "first_name": self._first_name,
+            "last_name": self._last_name,
             "password": self._password,
             "employee_role": self._employee_role
         }
@@ -106,8 +106,8 @@ class Employee:
     def __str__(self):
         """Returns a string representation of the employee."""
         return (f"Employee:"
-                f"\n username={self._username}"
-                f"\n firstname={self._firstname}"
-                f"\n lastname={self._lastname}"
-                f"\n role={self._employee_role})")
+                f"\n Username: {self._username}"
+                f"\n First name: {self._first_name}"
+                f"\n Last name: {self._last_name}"
+                f"\n Role: {self._employee_role}")
 

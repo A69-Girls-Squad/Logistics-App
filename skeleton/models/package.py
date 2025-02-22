@@ -49,7 +49,7 @@ class Package:
             raise ValueError("Location does not exists")
         self._start_location = start_location
 
-        if start_location not in Route.CITIES:
+        if end_location not in Route.CITIES:
             raise ValueError("Location does not exists")
         if start_location == end_location:
             raise ApplicationError("Start location can not be the same as End location")
@@ -229,17 +229,7 @@ class Package:
         Returns:
             bool: True if the package is assigned, False otherwise.
         """
-        return self._is_assigned
-
-    @is_assigned.setter
-    def is_assigned(self, value: bool):
-        """
-        Sets whether the package is assigned to a route.
-
-        Args:
-            value (bool): True if the package is assigned, False otherwise.
-        """
-        self._is_assigned = value
+        return self.route_id is not None
 
     @property
     def route_id(self):
@@ -276,7 +266,7 @@ class Package:
         """
         if datetime.now() < self.departure_time:
             status = "Awaiting Dispatch"
-        elif self.departure_time <= datetime.now() < self.estimated_arrival_time:
+        elif datetime.now() < self.estimated_arrival_time:
             status = "In Transit"
         else:
             status = "Delivered"
@@ -284,7 +274,7 @@ class Package:
         return (f"ID: {self._id}"
                 f"\nStart Location: {self._start_location})"
                 f"\nEnd Location: {self._end_location}"
-                f"\nWeight: {self._weight:.2f}kg"
+                f"\nWeight: {self._weight:.2f} kg"
                 f"\nCustomer Email Address: {self._customer_email}"
                 f"\nDeparture time: {self._departure_time}"
                 f"\nEstimated arrival time: {self._estimated_arrival_time}"
