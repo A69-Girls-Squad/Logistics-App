@@ -1,6 +1,3 @@
-from errors.application_error import ApplicationError
-
-
 class Distance:
     DISTANCES = {
         "SYD": {
