@@ -1,4 +1,3 @@
-from core.application_state import ApplicationState
 from core.command_factory import CommandFactory
 
 
@@ -42,6 +41,7 @@ class Engine:
                 command = self._command_factory.create(input_line)
                 output.append(command.execute())
                 print("\n".join(output))
+
             except ValueError as err:
                 output.append(err.args[0])
                 print(err.args[0])
