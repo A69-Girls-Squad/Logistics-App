@@ -23,7 +23,7 @@ class TestRemoveTruckFromRouteCommand(unittest.TestCase):
 
         output = cmd.execute()
 
-        self.assertEqual(output, "Truck with ID 1001 has been removed from Route 11, truck status changed to free")
+        self.assertEqual(output, "Truck with ID 1001 has been removed from Route 11, truck status changed to free.")
 
     def test_invalid_params_count(self):
         params = ["1001"]
