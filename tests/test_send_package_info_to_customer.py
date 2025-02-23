@@ -1,21 +1,21 @@
 import unittest
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock
 from skeleton.commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
 from skeleton.core.application_data import ApplicationData
 from skeleton.errors.application_error import ApplicationError
+import smtplib
 
 class TestSendPackageInfoToCustomerCommand(unittest.TestCase):
 
-    @patch('cmds.send_package_info_to_customer.smtplib.SMTP')
-    def test_package_info_found(self, mock_smtp):
+    def test_package_info_found(self):
         params = ["101"]
         app_data_mock = MagicMock(ApplicationData)
         package_mock = MagicMock()
         package_mock.id = 101
         package_mock.start_location = "Start Location"
         package_mock.end_location = "End Location"
-        package_mock.departure_time = "2025-02-27 10:00"
-        package_mock.estimated_arrival_time = "2025-02-28 16:00"
+        package_mock.departure_time.isoformat.return_value = "2025-02-27 10:00"
+        package_mock.estimated_arrival_time.isoformat.return_value = "2025-02-28 16:00"
         package_mock.customer_email = "customer@test.com"
 
         app_data_mock.find_package_by_id.return_value = package_mock
@@ -50,13 +50,16 @@ class TestSendPackageInfoToCustomerCommand(unittest.TestCase):
         with self.assertRaises(ApplicationError):
             cmd.execute()
 
-    @patch('cmds.send_package_info_to_customer.smtplib.SMTP')
-    def test_send_email_called(self, mock_smtp):
+    def test_send_email_called(self):
         params = ["101"]
         app_data_mock = MagicMock(ApplicationData)
         package_mock = MagicMock()
         package_mock.id = 101
         package_mock.customer_email = "customer@test.com"
+        package_mock.start_location = "Start Location"
+        package_mock.end_location = "End Location"
+        package_mock.departure_time.isoformat.return_value = "2025-02-27 10:00"
+        package_mock.estimated_arrival_time.isoformat.return_value = "2025-02-28 16:00"
 
         app_data_mock.find_package_by_id.return_value = package_mock
 
