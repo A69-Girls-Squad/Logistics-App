@@ -41,4 +41,4 @@ class SearchRouteCommand(BaseCommand):
                                          f"\nDeparture Time: | {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
                                          f'\n{self.ROW_SEP_LONG}')
                         suitable_routes.append(route_details)
-        return f"SUITABLE ROUTES:\n{self.TABLE_SEP}\n"+"\n".join(suitable_routes) + self.ROW_SEP_LONG
+        return f"SUITABLE ROUTES:\n{self.TABLE_SEP}\n"+"\n".join(suitable_routes)

@@ -28,7 +28,7 @@ createroute SYD,MEL,ADL 2025-10-12T06:00
 createpackage SYD MEL 45 johnsmith@gmail.com
 searchroute 1
 UnassignPackageToRoute 1 1
-assignpackagetoroute 2 1
+assignpackagetoroute 1 1
 showpackages all
 exit
 '''
@@ -76,7 +76,7 @@ showpackages assigned
 # detailed information which is then emailed to the customer.
 
 '''
-sendpackageinfotocustomer 1
+showpackage 1
 '''
 
 

@@ -7,19 +7,26 @@ from models.constants.distances import Distance
 
 
 class Route:
+    """
+    Represents a delivery route with multiple stops, including details such as locations,
+    departure time, assigned truck, packages, and estimated arrival times.
+
+    Attributes:
+        CITIES (list): A list of valid cities for the route, derived from `Distance.DISTANCES`.
+        AVERAGE_SPEED (int): The average speed of the truck in kilometers per hour.
+        LOCATIONS_SEPARATOR (str): The separator used to split locations in the input string.
+        REQUIRED_DATE_FORMAT (str): The required format for the departure time string.
+        STATUS_CREATED (str): Status indicating the route has been created but not yet departed.
+        STATUS_IN_PROGRESS (str): Status indicating the route is currently in progress.
+        STATUS_FINISHED (str): Status indicating the route has been completed.
+        _current_id (int): A class-level counter for generating unique route IDs.
+    """
 
     CITIES = list(Distance.DISTANCES)
     AVERAGE_SPEED = 87
     LOCATIONS_SEPARATOR = ","
     REQUIRED_DATE_FORMAT = '%Y-%m-%d %H:%M'
 
-    """
-    Defines the possible statuses of a route during its lifecycle:
-    
-    1. **Created** - Assigned to a route after creation but before departure.
-    2. **In progress** - The route is in progress between departure and the estimated arrival time at the final location.
-    3. **Finished** - The route has reached its final destination after the estimated arrival time.
-    """
     STATUS_CREATED = "Created"
     STATUS_IN_PROGRESS = "In progress"
     STATUS_FINISHED = "Finished"
@@ -38,6 +45,16 @@ class Route:
         return cls._current_id
 
     def __init__(self, locations: str, departure_time: str):
+        """
+        Initializes a Route instance with the provided locations and departure time.
+
+        Args:
+            locations (str): A string of locations separated by `LOCATIONS_SEPARATOR`.
+            departure_time (str): The departure time in the format `REQUIRED_DATE_FORMAT`.
+
+        Raises:
+            ApplicationError: If the locations or departure time are invalid.
+        """
         self.locations = locations
         self.departure_time = departure_time
 
@@ -80,26 +97,22 @@ class Route:
         route._assigned_truck_id = data.get("assigned_truck_id", None)
         route._assigned_packages_ids = data.get("assigned_package_ids", [])
         route._load = data.get("load", 0)
-        # stops_data = data.get("stops", {})
-        # route._stops = {loc: datetime.fromisoformat(time) if time else None
-        #                 for loc, time in stops_data.items()}
-
 
         return route
 
     def to_json(self) -> dict:
         """
-        Converts the Route object into a JSON dictionary.
+        Converts the Route object into a JSON-compatible dictionary.
 
         Returns:
             dict: A dictionary representation of the route, including:
                 - locations (str): The locations string.
                 - departure_time (str): The departure time in REQUIRED_DATE_FORMAT.
-                - _id (str): The route's unique identifier.
-                - _assigned_truck_id (int or None): The ID of the assigned truck.
-                - _assigned_package_ids (list): The list of assigned package IDs.
-                - _load (float): The total load weight.
-                - _stops (dict): A dictionary mapping locations to estimated arrival times (as ISO strings).
+                - id (str): The route's unique identifier.
+                - assigned_truck_id (int or None): The ID of the assigned truck.
+                - assigned_package_ids (list): The list of assigned package IDs.
+                - load (float): The total load weight.
+                - stops (dict): A dictionary mapping locations to estimated arrival times (as ISO strings).
         """
         return {
             "locations": self.LOCATIONS_SEPARATOR.join(self.locations),
@@ -111,32 +124,27 @@ class Route:
             "stops": {loc: time.isoformat() for loc, time in self._stops.items()}
         }
 
-    """
-    Manages the locations where the route will stop.
-
-    The user provides a string containing a list of locations, separated by commas. 
-    Upon initialization, this string is converted into a list of individual location names.
-
-    - The **locations** property returns the locations as a tuple.
-    - The setter validates the input, ensuring:
-      1. Locations exist in the predefined `Location.CITIES` list.
-      2. At least two locations are provided.
-      3. Locations are correctly separated by commas.
-
-    Raises:
-        ApplicationError:
-        - If locations are not separated by the expected delimiter.
-        - If one or more provided locations are not found in `Location.CITIES`.
-        - If the list contains fewer than two locations.
-        - If consecutive duplicate locations are detected.
-    """
     @property
     def locations(self):
+        """
+        Gets the locations of the route as a tuple.
+
+        Returns:
+            tuple: A tuple of location names.
+        """
         return tuple(self._locations)
 
     @locations.setter
     def locations(self, value: str):
+        """
+        Sets the locations of the route.
 
+        Args:
+            value (str): A string of locations separated by `LOCATIONS_SEPARATOR`.
+
+        Raises:
+            ApplicationError: If the locations are invalid, contain duplicates, or are too few.
+        """
         if not isinstance(value, str):
             raise ApplicationError("Invalid locations")
 
@@ -157,159 +165,137 @@ class Route:
 
         self._locations = value
 
-    """
-    Gets and sets the departure time of the route.
-
-    The user provides a string representing the departure time in the format: "dd/mm/YYYY HH:MM".  
-    Upon setting, the string is converted into a `datetime` object.  
-    If the provided time is in the past, a `ValueError` is raised.  
-    
-    Returns:
-        datetime.datetime: The departure time as a `datetime` object.
-    
-    Raises:
-        ApplicationError:
-        - If the provided string is not in the requested format.
-        - If the provided departure time is in the past.
-    """
     @property
     def departure_time(self):
+        """
+        Gets the departure time of the route.
+
+        Returns:
+            datetime: The departure time as a `datetime` object.
+        """
         return self._departure_time
 
     @departure_time.setter
     def departure_time(self, value: str):
+        """
+        Sets the departure time of the route.
+
+        Args:
+            value (str): The departure time in the format `REQUIRED_DATE_FORMAT`.
+
+        Raises:
+            ApplicationError: If the departure time is in the past or the format is invalid.
+        """
         try:
             departure_time = datetime.fromisoformat(value)
             if departure_time < ApplicationTime.current():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = departure_time
-
         except ValueError:
             raise ApplicationError(f"Departure time {value} "
                                    f"does not match the format {self.REQUIRED_DATE_FORMAT}")
-
-
-    """
-    Returns the unique identifier (UUID) of the route.
-
-    Each route is assigned a UUID upon initialization to ensure uniqueness.
-
-    Returns:
-        str: The unique identifier of the route.
-    """
     @property
     def id(self):
+        """
+        Gets the unique identifier of the route.
+
+        Returns:
+            int: The unique identifier of the route.
+        """
         return self._id
 
-    """
-    Manages the truck assigned to the route.
-    
-    At initialization, the `assigned_truck` attribute is set to `None`.  
-    Later, a truck object can be assigned to the route, but only if it is available  
-    for the entire duration of the route, from departure to estimated arrival.
-    
-    Raises:
-        ValueError: If the truck is not free at the time of assignment.
-    
-    Returns:
-        Truck | None: The currently assigned truck or `None` if no truck has been assigned.
-    """
     @property
     def assigned_truck_id(self):
+        """
+        Gets the ID of the truck assigned to the route.
+
+        Returns:
+            int or None: The ID of the assigned truck, or `None` if no truck is assigned.
+        """
         return self._assigned_truck_id
 
     @assigned_truck_id.setter
     def assigned_truck_id(self, value: Truck):
+        """
+        Sets the ID of the truck assigned to the route.
+
+        Args:
+            value (Truck): The truck to assign to the route.
+        """
         self._assigned_truck_id = value
 
-    """
-    Manages the packages assigned to the route.
-    
-    At initialization, an empty list is created to store assigned packages.  
-    Packages can be added to the route using the `assign_package_to_route` method.
-    
-    Returns:
-        tuple: A tuple containing all assigned packages.
-    """
     @property
     def assigned_packages_ids(self):
+        """
+        Gets the IDs of the packages assigned to the route.
+
+        Returns:
+            tuple: A tuple of package IDs.
+        """
         return tuple(self._assigned_packages_ids)
 
-    """
-    Represents the total load weight of the route.
-    
-    The `load` attribute increases by the weight of each package when assigned to the route.  
-    This helps track the total weight of all assigned packages.
-    
-    Returns:
-        float: The current total load weight of the route.
-    """
     @property
     def load(self):
+        """
+        Gets the total load weight of the route.
+
+        Returns:
+            float: The total load weight in kilograms.
+        """
         return self._load
 
     @load.setter
     def load(self, value: int):
+        """
+        Sets the total load weight of the route.
+
+        Args:
+            value (int): The total load weight in kilograms.
+        """
         self._load = value
 
-    """
-    Represents the estimated arrival times for each stop along the route.
-    
-    This attribute converts the `locations` list into a dictionary,  where:
-    - the keys are location names
-    - the values are their estimated arrival times.
-    
-    Before returning the dictionary, the method calculates the estimated arrival times  
-    by calling `calculating_expected_arrival_times()`.
-    
-    Returns:
-        dict: A dictionary mapping location names (str) to estimated arrival times (datetime).
-    """
     @property
     def stops(self):
+        """
+        Gets the estimated arrival times for each stop along the route.
+
+        Returns:
+            dict: A dictionary mapping location names to estimated arrival times.
+        """
+        self.calculating_estimated_arrival_times()
         return self._stops
 
-    """
-    Calculates the total distance of the route.
-
-    The total distance is computed by summing the distances between consecutive locations  
-    along the route, representing the entire journey the truck will travel.
-
-    Returns:
-        float: The total distance of the route in kilometers.
-    """
     @property
     def distance(self):
+        """
+         Calculates the total distance of the route.
+
+         Returns:
+             float: The total distance in kilometers.
+         """
         distance = 0
         for i in range(len(self.locations)-1):
             distance += Distance.get_distance(self.locations[i], self.locations[i + 1])
         return distance
 
-    """
-    Gets the estimated arrival time of the truck at the final destination.
-
-    The arrival time is determined based on the calculated stop times along the route.
-
-    Returns:
-        datetime: The estimated arrival time at the last stop.
-    """
     @property
-    def estimated_arrival_time(self):
+    def estimated_arrival_time(self) -> datetime:
+        """
+        Gets the estimated arrival time at the final destination.
+
+        Returns:
+            datetime: The estimated arrival time.
+        """
         return self.stops[self.locations[-1]]
 
-    """
-    Determines the current status of the route based on the current time.
-
-    The status can be one of the following:  
-    - `STATUS_CREATED`: The route has not yet departed.  
-    - `STATUS_IN_PROGRESS`: The route is currently ongoing.  
-    - `STATUS_FINISHED`: The route has been completed.
-
-    Returns:
-        str: The current status of the route.
-    """
     @property
     def status(self):
+        """
+        Gets the current status of the route.
+
+        Returns:
+            str: The current status of the route (`STATUS_CREATED`, `STATUS_IN_PROGRESS`, or `STATUS_FINISHED`).
+        """
         if ApplicationTime.current() < self.departure_time:
             return self.STATUS_CREATED
         if ApplicationTime.current() > self.estimated_arrival_time:
@@ -317,12 +303,14 @@ class Route:
         else:
             return self.STATUS_IN_PROGRESS
 
-    """
-    Returns the truck"s estimated last known location based on the current time.
-    If no stops have been reached yet, the start location is returned by default
-    """
     @property
     def current_location(self):
+        """
+        Gets the truck's last known location based on the current time.
+
+        Returns:
+            str: The last known location, or the start location if no stops have been reached.
+        """
         last_stop = None
         for stop in self.stops:
             if ApplicationTime.current() > self.stops[stop]:
@@ -332,6 +320,12 @@ class Route:
         return last_stop
 
     def __str__(self):
+        """
+        Returns a string representation of the route.
+
+        Returns:
+            str: A formatted string containing route details.
+        """
         if self.assigned_truck_id:
             truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id}"
         else:
@@ -339,7 +333,7 @@ class Route:
         return (
             f"Route Details:"
             f"\nID: {self.id}"
-            f"\nHubs:\n{" -> ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" for key, value in self.stops.items())}"
+            f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
             f"\nNumber of Packages: {len(self._assigned_packages_ids)}"
             f"\nCurrent Load: {self.load}"
@@ -375,10 +369,28 @@ class Route:
             self._stops[location] = estimated_arrival_time
 
     def assign_package(self, package_id):
+        """
+        Assigns a package to the route.
+
+        Args:
+            package_id (int): The ID of the package to assign.
+        """
         self._assigned_packages_ids.append(package_id)
 
     def remove_package(self, package_id):
+        """
+        Removes a package from the route.
+
+        Args:
+            package_id (int): The ID of the package to remove.
+        """
         self._assigned_packages_ids.remove(package_id)
 
     def assign_truck(self, truck_id):
+        """
+        Assigns a truck to the route.
+
+        Args:
+            truck_id (int): The ID of the truck to assign.
+        """
         self._assigned_truck_id = truck_id
