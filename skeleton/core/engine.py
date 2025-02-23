@@ -36,7 +36,10 @@ class Engine:
 
         while True:
             try:
-                input_line = input()
+                input_line = input().strip()
+                if not input_line:
+                    print("Please enter a command.")
+                    continue
                 if input_line.lower() == "exit":
                     break
                 command = self._command_factory.create(input_line)
@@ -44,6 +47,6 @@ class Engine:
                 print(command_output)
                 log.append(command_output)
 
-            except ApplicationError as err:
+            except (ApplicationError, ValueError) as err:
                 log.append(err.args[0])
                 print(err.args[0])

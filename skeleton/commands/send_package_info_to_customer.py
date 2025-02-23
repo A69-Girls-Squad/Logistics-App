@@ -1,9 +1,7 @@
 import smtplib
 import logging
-
 from commands.base_command import BaseCommand
 from commands.validation_helpers import try_parse_int
-from models.package import Package
 from core.application_data import ApplicationData
 
 

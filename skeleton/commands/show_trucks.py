@@ -1,8 +1,7 @@
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from commands.validation_helpers import validate_params_count
-# from models.all_trucks import AllTrucks
-from models.truck import Truck
+
 
 class ShowTrucksCommand(BaseCommand):
     """

@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.route import Route
 from commands.validation_helpers import try_parse_float
@@ -213,7 +214,7 @@ class Package:
         return self._estimated_arrival_time
 
     @estimated_arrival_time.setter
-    def estimated_arrival_time(self, value:datetime):
+    def estimated_arrival_time(self, value: datetime):
         """
         Sets the estimated arrival time of the package.
 
@@ -230,7 +231,12 @@ class Package:
         Returns:
             bool: True if the package is assigned, False otherwise.
         """
-        return self.route_id is not None
+        return self._is_assigned
+
+    @is_assigned.setter
+    def is_assigned(self, value: bool):
+
+        self._is_assigned = value
 
     @property
     def route_id(self):
@@ -266,9 +272,9 @@ class Package:
                 - Package status (Awaiting Dispatch, In Transit, or Delivered).
         """
         if self.departure_time:
-            if datetime.now() < self.departure_time:
+            if ApplicationTime.current() < self.departure_time:
                 status = "Awaiting Dispatch"
-            elif datetime.now() < self.estimated_arrival_time:
+            elif ApplicationTime.current() < self.estimated_arrival_time:
                 status = "In Transit"
             else:
                 status = "Delivered"
