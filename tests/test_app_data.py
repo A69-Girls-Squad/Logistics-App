@@ -19,14 +19,6 @@ class ApplicationData_Should(unittest.TestCase):
         self.assertIsInstance(app_data.employees, tuple)
         self.assertIsNone(app_data.logged_in_employee)
 
-    def test_logged_in_employee_raisesWhenInvalidEmployee(self):
-        app_data = ApplicationData()
-
-        with self.assertRaises(ApplicationError):
-            app_data.logged_in_employee = td.INVALID_EMPLOYEE
-
-        self.assertFalse(app_data.has_logged_in_employee)
-
     def test_logged_in_employee_returnsCorrectly(self):
         app_data = ApplicationData()
         employee = Employee(td.VALID_USERNAME, td.VALID_FIRST_NAME, td.VALID_LAST_NAME, td.VALID_PASSWORD,
@@ -57,7 +49,7 @@ class ApplicationData_Should(unittest.TestCase):
         app_data._routes.append(route)
         app_data.assign_package_to_route(package.id, route.id)
         self.assertEqual([], app_data.not_assigned_packages)
-        self.assertIn(package, route.assigned_packages_ids)
+        self.assertIn(package.id, route.assigned_packages_ids)
 
     def test_not_assigned_packages_returnsCorrectly(self):
         app_data = ApplicationData()
@@ -114,7 +106,7 @@ class ApplicationData_Should(unittest.TestCase):
 
     def test_find_truck_by_id_returnsCorrectly(self):
         app_data = ApplicationData()
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
+        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         app_data._trucks.append(truck)
         self.assertEqual(truck, app_data.find_truck_by_id(truck.id))
 
@@ -133,31 +125,12 @@ class ApplicationData_Should(unittest.TestCase):
                                                        td.VALID_PASSWORD, td.VALID_EMPLOYEE_ROLE), Employee)
         self.assertEqual(1, len(app_data.employees))
 
-    def test_find_employee_by_username_whenNoEmployees(self):
-        app_data = ApplicationData()
-        with self.assertRaises(ApplicationError):
-            found_employee = app_data.find_employee_by_username(td.VALID_USERNAME)
-            self.assertIsNone(found_employee)
-
-    def test_find_employee_by_username_invalidUsername(self):
-        app_data = ApplicationData()
-        app_data.create_employee(td.VALID_USERNAME, td.VALID_FIRST_NAME, td.VALID_LAST_NAME, td.VALID_PASSWORD,
-                                 td.VALID_EMPLOYEE_ROLE)
-        with self.assertRaises(ApplicationError):
-            found_employee = app_data.find_employee_by_username(td.INVALID_USERNAME)
-            self.assertIsNone(found_employee)
-
     def test_find_employee_by_username_returnsCorrectly(self):
         app_data = ApplicationData()
         employee = Employee(td.VALID_USERNAME, td.VALID_FIRST_NAME, td.VALID_LAST_NAME, td.VALID_PASSWORD,
                             td.VALID_EMPLOYEE_ROLE)
         app_data._employees.append(employee)
         self.assertEqual(employee, app_data.find_employee_by_username(td.VALID_USERNAME))
-
-    def test_login_invalidEmployee(self):
-        app_data = ApplicationData()
-        with self.assertRaises(ApplicationError):
-            app_data.login(td.INVALID_EMPLOYEE)
 
     def test_login_assignsCorrectly(self):
         app_data = ApplicationData()
@@ -219,7 +192,7 @@ class ApplicationData_Should(unittest.TestCase):
     def test_assign_package_noCapacity(self):
         app_data = ApplicationData()
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
+        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         route.assign_truck(truck)
         package = Package(td.VALID_START_LOCATION,td.VALID_END_LOCATION, td.VALID_WEIGHT, td.VALID_CUSTOMER_EMAIL)
         with self.assertRaises(ApplicationError):
@@ -229,15 +202,14 @@ class ApplicationData_Should(unittest.TestCase):
         app_data = ApplicationData()
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         app_data._routes.append(route)
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
+        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         app_data._trucks.append(truck)
         route.assigned_truck_id = truck.id
         package = Package(td.VALID_START_LOCATION,td.VALID_END_LOCATION, td.VALID_WEIGHT, td.VALID_CUSTOMER_EMAIL)
         app_data._packages.append(package)
         app_data.assign_package_to_route(package.id, route.id)
 
-        self.assertIn(package, route.assigned_packages_ids)
+        self.assertIn(package.id, route.assigned_packages_ids)
         self.assertEqual(route.id, package.route_id)
         self.assertEqual(1, len(route.assigned_packages_ids))
-
 

@@ -251,9 +251,8 @@ class ApplicationData:
         Finds and returns the package associated with the provided ID.
         If no match is found, returns `None`.
         """
-        for package in self.packages:
-            if package.id == package_id:
-                return package
+        return next((package for package in self.packages if package.id == package_id), None)
+
 
     def find_employee_by_username(self, username: str) -> Employee:
         """

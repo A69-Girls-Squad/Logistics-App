@@ -5,6 +5,7 @@ from commands.login import LoginCommand
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
 from models.constants.employee_role import EmployeeRole
+import test_data as td
 
 
 def _create_fake_params(
@@ -50,6 +51,14 @@ class LoginCommandTest_Should(unittest.TestCase):
         fake_params = _create_fake_params(password="invalidPassword")
         app_data = ApplicationData()
         app_data.create_employee("username", "John", "Smith", "password1234", EmployeeRole.REGULAR)
+        cmd = LoginCommand(fake_params, app_data)
+
+        with self.assertRaises(ApplicationError):
+            cmd.execute()
+
+    def test_execute_raisesError_whenNoEmployees(self):
+        fake_params = _create_fake_params()
+        app_data = ApplicationData()
         cmd = LoginCommand(fake_params, app_data)
 
         with self.assertRaises(ApplicationError):
