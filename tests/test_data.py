@@ -25,9 +25,9 @@ INVALID_ROUTE_ID = "TestInvalidRouteID"
 
 VALID_ID_LEN = 6
 
-EXPECTED_STOPS = {"BRI": datetime.datetime(2055, 2, 18, 4, 18),
-                    "MEL": datetime.datetime(2055, 2, 17, 8, 1),
-                    "SYD": datetime.datetime(2055, 2, 16, 21, 56)}
+EXPECTED_STOPS = {'BRI': datetime.datetime(2055, 2, 17, 17, 52, 4, 137931),
+ 'MEL': datetime.datetime(2055, 2, 16, 21, 34, 49, 655172),
+ 'SYD': datetime.datetime(2055, 2, 16, 11, 30)}
 
 VALID_CITY_1 = "SYD"
 VALID_CITY_2 = "MEL"

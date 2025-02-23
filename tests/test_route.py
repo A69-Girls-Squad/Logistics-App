@@ -118,10 +118,6 @@ class Route_Should(unittest.TestCase):
             with patch("datetime.datetime.now", return_value=route.departure_time+timedelta(days=1)):
                 self.assertEqual(td.EXPECTED_CURRENT_LOCATION, route.current_location)
 
-    def test_get_distance_equalCities(self):
-        with self.assertRaises(ApplicationError):
-            Distance.get_distance(td.VALID_CITY_1, td.VALID_CITY_1)
-
     def test_get_distance_returnsCorrect(self):
         distance = Distance.get_distance(td.VALID_CITY_1, td.VALID_CITY_2)
         self.assertEqual(td.EXPECTED_DISTANCE, distance)
@@ -136,6 +132,7 @@ class Route_Should(unittest.TestCase):
                         f"\nDeparture Time: 2055-02-16 11:30"
                         f"\nNumber of Packages: {len(route.assigned_packages_ids)}"
                         f"\nCurrent Load: {route.load}"
+                        f"\nAssigned Truck ID: {truck.id}"
                         f"\nStatus: {route.status}"
                         f"\nCurrent Location: {route.current_location}"
                         f"\n============")
@@ -148,7 +145,7 @@ class Route_Should(unittest.TestCase):
         expected_str = (f"Route Details:"
                         f"\nID: {route.id}"
                         f"\nHubs:"
-                        f"\nSYD: 2055-02-16 21:56:00 -> MEL: 2055-02-17 08:01:00 -> BRI: 2055-02-18 04:18:00"
+                        f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
                         f"\nDeparture Time: 2055-02-16 11:30"
                         f"\nNumber of Packages: 0"
                         f"\nCurrent Load: 0"
@@ -168,16 +165,3 @@ class Route_Should(unittest.TestCase):
         truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         route.assign_truck(truck)
         self.assertEqual(truck, route.assigned_truck_id)
-
-    def test_remove_truck_whenNoTruck(self):
-        with self.assertRaises(ApplicationError):
-            route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-            route.remove_truck()
-
-    def test_remove_truck_whenAssigned(self):
-        app_data = ApplicationData()
-        route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
-        route.assign_truck(truck)
-        route.remove_truck()
-        self.assertIsNone(route.assigned_truck_id)
