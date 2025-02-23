@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.truck import Truck
 from models.constants.distances import Distance
@@ -178,7 +180,7 @@ class Route:
     def departure_time(self, value: str):
         try:
             departure_time = datetime.fromisoformat(value)
-            if departure_time < datetime.now():
+            if departure_time < ApplicationTime.current():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = departure_time
 
@@ -308,9 +310,9 @@ class Route:
     """
     @property
     def status(self):
-        if datetime.now() < self.departure_time:
+        if ApplicationTime.current() < self.departure_time:
             return self.STATUS_CREATED
-        if datetime.now() > self.estimated_arrival_time:
+        if ApplicationTime.current() > self.estimated_arrival_time:
             return self.STATUS_FINISHED
         else:
             return self.STATUS_IN_PROGRESS
@@ -323,7 +325,7 @@ class Route:
     def current_location(self):
         last_stop = None
         for stop in self.stops:
-            if datetime.now() > self.stops[stop]:
+            if ApplicationTime.current() > self.stops[stop]:
                 last_stop = stop
             else:
                 break

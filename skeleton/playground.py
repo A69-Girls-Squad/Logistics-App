@@ -57,6 +57,7 @@ exit
 # the time of the day.
 
 '''
+settime 2025-02-23T06:30
 createroute ASP,ADL,MEL,SYD,BRI 2025-02-25T00:17
 showroutesinprogress
 '''
