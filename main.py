@@ -4,7 +4,6 @@ from core.command_factory import CommandFactory
 from core.engine import Engine
 
 
-
 app_data = ApplicationState.load_data()
 
 if app_data is None:

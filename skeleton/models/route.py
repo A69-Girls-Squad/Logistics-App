@@ -181,6 +181,7 @@ class Route:
             if departure_time < datetime.now():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = departure_time
+
         except ValueError:
             raise ApplicationError(f"Departure time {value} "
                                    f"does not match the format {self.REQUIRED_DATE_FORMAT}")
@@ -264,7 +265,6 @@ class Route:
     """
     @property
     def stops(self):
-        self.calculating_estimated_arrival_times()
         return self._stops
 
     """
@@ -337,7 +337,7 @@ class Route:
         return (
             f"Route Details:"
             f"\nID: {self.id}"
-            f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
+            f"\nHubs:\n{" -> ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
             f"\nNumber of Packages: {len(self._assigned_packages_ids)}"
             f"\nCurrent Load: {self.load}"

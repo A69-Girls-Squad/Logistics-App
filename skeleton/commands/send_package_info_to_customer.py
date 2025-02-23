@@ -28,8 +28,8 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
             f"Package ID: {package.id}\n"
             f"Start Location: {package.start_location}\n"
             f"End Location: {package.end_location}\n"
-            f"Departure Time: {package.departure_time}\n"
-            f"Estimated Arrival Time: {package.estimated_arrival_time}\n"
+            f"Departure Time: {package.departure_time.isoformat(sep=" ", timespec="minutes")}\n"
+            f"Estimated Arrival Time: {package.estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}\n"
         )
         return package_info
     
