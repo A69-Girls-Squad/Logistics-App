@@ -43,7 +43,7 @@ class Engine:
                 if input_line.lower() == "exit":
                     break
                 command = self._command_factory.create(input_line)
-                command_output = command.execute()
+                command_output = "\n" + command.execute()
                 print(command_output)
                 log.append(command_output)
 
