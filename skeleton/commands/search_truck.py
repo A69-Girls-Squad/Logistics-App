@@ -14,20 +14,20 @@ class SearchTruckCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self):
-        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + self.SEP)
+        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + self.ROW_SEP_LONG)
 
         suitable_trucks = []
         route_id = try_parse_int(self._params[0])
         route = self.app_data.find_route_by_id(route_id)
         if not route:
-            raise ApplicationError("No route found!" + self.SEP)
+            raise ApplicationError("No route found!" + self.ROW_SEP_LONG)
 
         for truck in self.app_data.trucks:
             if truck.is_suitable(route):
                 suitable_trucks.append(truck)
 
         if not suitable_trucks:
-            return "No available truck found" + self.SEP
+            return "No available truck found" + self.ROW_SEP_LONG
 
         return "\n".join([f"TRUCK ID: {truck.id} {truck.name} | "
                           f"Capacity: {truck.capacity} | "

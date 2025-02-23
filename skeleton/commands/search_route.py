@@ -22,7 +22,7 @@ class SearchRouteCommand(BaseCommand):
             if route.assigned_truck_id:
                 truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
                 if not truck:
-                    raise ApplicationError("No truck found!" + self.SEP)
+                    raise ApplicationError("No truck found!" + self.ROW_SEP_LONG)
                 free_capacity = truck.capacity - route.load
                 if free_capacity < package.weight:
                     sufficient_capacity = False
