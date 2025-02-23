@@ -25,7 +25,20 @@ class Truck:
 
     @classmethod
     def from_json(cls, data):
+        """
+        Creates a Truck instance from a JSON dictionary.
 
+        Args:
+            data (dict): A dictionary containing truck details, including:
+                - id (int): The truck's unique identifier.
+                - name (str): The name of the truck.
+                - capacity (int): The capacity of the truck.
+                - max_range (int): The maximum range of the truck.
+                - assigned_route_id (int or None): The ID of the assigned route.
+
+        Returns:
+            Truck: An instance of the Truck class.
+        """
         truck = cls(
             name=data["name"],
             capacity=data["capacity"],
@@ -37,6 +50,17 @@ class Truck:
         return truck
 
     def to_json(self) -> dict:
+        """
+        Converts the Truck instance into a JSON dictionary.
+
+        Returns:
+            dict: A dictionary representation of the truck, including:
+                - id (int): The truck's unique identifier.
+                - name (str): The name of the truck.
+                - capacity (int): The capacity of the truck.
+                - max_range (int): The maximum range of the truck.
+                - assigned_route_id (int or None): The ID of the assigned route.
+        """
         return {
             "id": self._id,
             "name": self._name,
