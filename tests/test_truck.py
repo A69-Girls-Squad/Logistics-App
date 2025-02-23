@@ -1,13 +1,13 @@
 import unittest
 from unittest.mock import MagicMock
 from models.truck import Truck
-from errors.application_error import ApplicationError
 
+class TestTruck(unittest.TestCase):
 
-class TruckShould(unittest.TestCase):
+    def setUp(self):
+        Truck._current_id = 1000
 
     def test_next_id(self):
-        Truck._current_id = 1000
         first_id = Truck.next_id()
         second_id = Truck.next_id()
         
@@ -17,10 +17,11 @@ class TruckShould(unittest.TestCase):
     def test_truck_init(self):
         truck = Truck(name="Truck1", capacity=1000, max_range=5000)
         
+        self.assertEqual(truck._name, "Truck1")
+        self.assertEqual(truck._capacity, 1000)
+        self.assertEqual(truck._max_range, 5000)
         self.assertEqual(truck.id, 1001)
-        self.assertEqual(truck.capacity, 1000)
-        self.assertEqual(truck.max_range, 5000)
-        self.assertIsNone(truck.assigned_route_id)
+        self.assertIsNone(truck._assigned_route_id)
 
     def test_from_json(self):
         data = {
@@ -34,9 +35,10 @@ class TruckShould(unittest.TestCase):
         truck = Truck.from_json(data)
         
         self.assertEqual(truck.id, 1001)
-        self.assertEqual(truck.capacity, 1000)
-        self.assertEqual(truck.max_range, 5000)
-        self.assertIsNone(truck.assigned_route_id)
+        self.assertEqual(truck._name, "Truck1")
+        self.assertEqual(truck._capacity, 1000)
+        self.assertEqual(truck._max_range, 5000)
+        self.assertIsNone(truck._assigned_route_id)
 
     def test_to_json(self):
         truck = Truck(name="Truck1", capacity=1000, max_range=5000)
@@ -58,7 +60,7 @@ class TruckShould(unittest.TestCase):
         
         self.assertTrue(truck.is_suitable(route))
 
-    def test_is_suitable_insufficient_capacity(self):
+    def test_is_suitable_unsufficient_capacity(self):
         route = MagicMock()
         route.load = 5000
         route.distance = 4000
@@ -66,7 +68,7 @@ class TruckShould(unittest.TestCase):
         
         self.assertFalse(truck.is_suitable(route))
 
-    def test_is_suitable_insufficient_max_range(self):
+    def test_is_suitable_unsufficient_max_range(self):
         route = MagicMock()
         route.load = 5000
         route.distance = 4000
@@ -96,7 +98,7 @@ class TruckShould(unittest.TestCase):
         
         self.assertEqual(str(truck), expected_str)
 
-        truck.assigned_route_id = 1
+        truck._assigned_route_id = 1
         expected_str_busy = (
             f"Truck with ID: 1001\n"
             f"Name: Truck1\n"

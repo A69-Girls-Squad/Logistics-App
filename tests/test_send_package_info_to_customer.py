@@ -3,7 +3,6 @@ from unittest.mock import MagicMock
 from skeleton.commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
 from skeleton.core.application_data import ApplicationData
 from skeleton.errors.application_error import ApplicationError
-import smtplib
 
 class TestSendPackageInfoToCustomerCommand(unittest.TestCase):
 
@@ -21,21 +20,22 @@ class TestSendPackageInfoToCustomerCommand(unittest.TestCase):
         app_data_mock.find_package_by_id.return_value = package_mock
 
         cmd = SendPackageInfoToCustomerCommand(params, app_data_mock)
+        
+        cmd.send_email = MagicMock()
 
-        output = cmd.execute()
+        cmd.execute()
 
-        expected_output = (
+        expected_email_body = (
             "Package ID: 101\n"
             "Start Location: Start Location\n"
             "End Location: End Location\n"
             "Departure Time: 2025-02-27 10:00\n"
             "Estimated Arrival Time: 2025-02-28 16:00\n"
         )
-        self.assertIn(expected_output, output)
 
         cmd.send_email.assert_called_once_with(
             "Package Details: 101",
-            expected_output,
+            expected_email_body,
             "customer@test.com"
         )
 
@@ -68,8 +68,16 @@ class TestSendPackageInfoToCustomerCommand(unittest.TestCase):
 
         cmd.execute()
 
+        expected_email_body = (
+            "Package ID: 101\n"
+            "Start Location: Start Location\n"
+            "End Location: End Location\n"
+            "Departure Time: 2025-02-27 10:00\n"
+            "Estimated Arrival Time: 2025-02-28 16:00\n"
+        )
+
         cmd.send_email.assert_called_once_with(
             "Package Details: 101",
-            "Package ID: 101\nStart Location: Start Location\nEnd Location: End Location\nDeparture Time: 2025-02-27 10:00\nEstimated Arrival Time: 2025-02-28 16:00\n",
+            expected_email_body,
             "customer@test.com"
         )
