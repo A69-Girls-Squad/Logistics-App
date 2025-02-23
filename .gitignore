@@ -169,3 +169,9 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/Logistics APP Project.iml
+/.idea/misc.xml
+/.idea/vcs.xml
+/.idea/workspace.xml
+/app_state.json

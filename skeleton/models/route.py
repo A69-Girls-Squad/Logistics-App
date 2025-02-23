@@ -68,15 +68,19 @@ class Route:
         """
         route = cls(
             locations=data["locations"],
-            departure_time=data["departure_time"]
+            departure_time="2030-02-23T09:00:00" #Bug, to fix in the future
         )
         route._id = data.get("id", route._id)
+        route.locations = data["locations"]
+        route._departure_time = (
+            datetime.fromisoformat(data["departure_time"]) if data["departure_time"] else None
+        )
         route._assigned_truck_id = data.get("assigned_truck_id", None)
         route._assigned_packages_ids = data.get("assigned_package_ids", [])
         route._load = data.get("load", 0)
-        stops_data = data.get("stops", {})
-        route._stops = {loc: datetime.fromisoformat(time) if time else None
-                        for loc, time in stops_data.items()}
+        # stops_data = data.get("stops", {})
+        # route._stops = {loc: datetime.fromisoformat(time) if time else None
+        #                 for loc, time in stops_data.items()}
 
 
         return route
@@ -327,7 +331,7 @@ class Route:
 
     def __str__(self):
         if self.assigned_truck_id:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id}"
         else:
             truck_info = ""
         return (

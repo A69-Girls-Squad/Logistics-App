@@ -100,6 +100,7 @@ class Package:
             datetime.fromisoformat(data["estimated_arrival_time"]) if data["estimated_arrival_time"] else None
         )
         package._is_assigned = data["is_assigned"]
+        package._route_id = data["route_id"]
 
         return package
 
@@ -275,7 +276,7 @@ class Package:
             status = "Not assigned"
 
         return (f"ID: {self._id}"
-                f"\nStart Location: {self._start_location})"
+                f"\nStart Location: {self._start_location}"
                 f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f} kg"
                 f"\nCustomer Email Address: {self._customer_email}"
