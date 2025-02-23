@@ -37,56 +37,56 @@ class ApplicationData:
             "packages": [package.to_json() for package in self._packages],
             "employees": [employee.to_json() for employee in self._employees]}
 
-    """
-    Returns the entire truck park as an immutable tuple of truck objects.
-    """
     @property
     def trucks(self):
+        """
+        Returns the entire truck park as an immutable tuple of truck objects.
+        """
         return tuple(self._trucks)
 
-    """
-    Returns all created routes.
-    """
     @property
     def routes(self):
+        """
+        Returns all created routes.
+        """
         return tuple(self._routes)
 
-    """
-    Returns all created packages.
-    """
     @property
     def packages(self):
+        """
+        Returns all created packages.
+        """
         return tuple(self._packages)
 
-    """
-    Returns all created employees.
-    """
     @property
     def employees(self):
+        """
+        Returns all created employees.
+        """
         return tuple(self._employees)
 
-    """
-    Manages the currently logged-in employee.
-
-    Retrieves or updates the employee who is currently logged in.
-    Ensures only valid `Employee` objects can be assigned.
-    """
     @property
     def logged_in_employee(self):
+        """
+        Manages the currently logged-in employee.
+
+        Retrieves or updates the employee who is currently logged in.
+        Ensures only valid `Employee` objects can be assigned.
+        """
         return self._logged_in_employee
 
     @logged_in_employee.setter
     def logged_in_employee(self, value: Employee):
         self._logged_in_employee = value
 
-    """
-    Indicates whether an employee is currently logged in.
-    
-    Checks if there is a logged-in employee.
-    Returns `True` if an employee is logged in, otherwise `False`.
-    """
     @property
     def has_logged_in_employee(self):
+        """
+        Indicates whether an employee is currently logged in.
+
+        Checks if there is a logged-in employee.
+        Returns `True` if an employee is logged in, otherwise `False`.
+        """
         return self.logged_in_employee is not None
 
     def create_truck(self, name: str, capacity: int, max_range: int):
