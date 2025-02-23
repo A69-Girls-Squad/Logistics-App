@@ -89,17 +89,6 @@ class ApplicationData:
     def has_logged_in_employee(self):
         return self.logged_in_employee is not None
 
-    """
-    Retrieves a list of all packages that are not assigned to a route.
-    """
-    @property
-    def not_assigned_packages(self):
-        not_assigned_packages = []
-        for package in self.packages:
-            if not package.is_assigned:
-                not_assigned_packages.append(package)
-        return not_assigned_packages
-
     def create_truck(self, name: str, capacity: int, max_range: int):
         truck = Truck(name, capacity, max_range)
         self._trucks.append(truck)
@@ -176,10 +165,10 @@ class ApplicationData:
         if route is None:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
 
-        if package.is_assigned:
-            raise ApplicationError(f"Package with ID {package_id} is already assigned")
         if package.route_id == route_id or package_id in route.assigned_packages_ids:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
+        if package.is_assigned():
+            raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
         # redundant
         # if not route.assigned_truck_id:
@@ -230,7 +219,13 @@ class ApplicationData:
         Returns:
             list: A list of packages that match the specified assigned status.
         """
-        return [package for package in self._packages if package.is_assigned == is_assigned]
+        #return [package for package in self._packages if package.is_assigned == is_assigned]
+        package_list = []
+        for package in self.packages:
+            if package.is_assigned() == is_assigned:
+                package_list.append(package)
+
+        return package_list
 
     def find_truck_by_id(self, truck_id: int) -> Truck:
         """

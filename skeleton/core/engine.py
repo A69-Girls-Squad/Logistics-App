@@ -32,7 +32,7 @@ class Engine:
         Exceptions:
             ValueError: If an invalid command is entered, an error message is displayed.
         """
-        output = []
+        output = ["\n"]
 
         while True:
             try:
