@@ -6,12 +6,11 @@ class Engine:
     """
     Main execution engine responsible for handling user input and executing commands.
 
+    The Engine class processes user input, creates commands using a CommandFactory,
+    and executes those commands. It runs in an interactive loop until the user enters 'exit'.
+
     Attributes:
         _command_factory (CommandFactory): Factory instance used to create commands.
-
-    Methods:
-        start():
-            Starts the command processing loop, reading user input and executing corresponding commands.
     """
     def __init__(self, factory: CommandFactory):
         """
@@ -26,11 +25,14 @@ class Engine:
         """
         Starts the interactive loop, processing user input and executing commands.
 
-        The loop runs until the user enters 'exit'. Commands are processed using
-        the CommandFactory, and their output is stored and displayed.
+        The loop continuously reads user input, creates commands using the CommandFactory,
+        and executes them. The output of each command is displayed, and errors are handled gracefully.
+
+        The loop terminates when the user enters 'exit'.
 
         Exceptions:
-            ValueError: If an invalid command is entered, an error message is displayed.
+            ApplicationError: If a command execution fails due to application-specific rules.
+            ValueError: If an invalid command is entered or the input is malformed.
         """
         log = ["\n"]
 

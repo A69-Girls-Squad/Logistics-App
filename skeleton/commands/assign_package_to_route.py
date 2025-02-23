@@ -4,11 +4,36 @@ from core.application_data import ApplicationData
 
 
 class AssignPackageToRouteCommand(BaseCommand):
+    """
+    Command to assign a package to a specific route.
+
+    This command validates the input parameters, assigns a package to a route,
+    and logs the action.
+    """
     def __init__(self, params, app_data: ApplicationData):
+        """
+        Initializes the command with parameters and application data.
+
+        Args:
+            params (list): The command parameters (package ID and route ID).
+            app_data (ApplicationData): The shared application data.
+
+        Raises:
+            ValueError: If the number of parameters is invalid.
+        """
         validate_params_count(params, 2)
         super().__init__(params, app_data)
 
     def execute(self):
+        """
+        Executes the command to assign a package to a route.
+
+        Returns:
+            str: A confirmation message indicating the package was assigned to the route.
+
+        Raises:
+            ValueError: If the package ID or route ID is invalid.
+        """
         package_id = try_parse_int(self.params[0])
         route_id = try_parse_int(self.params[1])
 
