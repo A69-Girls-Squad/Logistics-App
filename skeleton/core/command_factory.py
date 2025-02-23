@@ -1,5 +1,6 @@
 from commands.reassign_package import ReassignPackageCommand
 from commands.set_time import SetTimeCommand
+from commands.show_package import ShowPackageCommand
 from commands.unassign_package_from_route import UnassignPackageToRouteCommand
 from commands.assign_package_to_route import AssignPackageToRouteCommand
 from commands.assign_truck_to_route import AssignTruckToRouteCommand
@@ -76,6 +77,8 @@ class CommandFactory:
             return SearchTruckCommand(params, self._app_data)
         if cmd.lower() == "showpackages":
             return ShowPackagesCommand(params, self._app_data)
+        if cmd.lower() == "showpackage":
+            return ShowPackageCommand(params, self._app_data)
         if cmd.lower() == "showroute":
             return ShowRouteCommand(params, self._app_data)
         if cmd.lower() == "showtrucks":
