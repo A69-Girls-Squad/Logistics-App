@@ -19,7 +19,7 @@ class ShowPackagesCommand(BaseCommand):
         else:
             packages = self.app_data.packages
 
-        result = "\n".join([str(package) for package in packages])
+        result = "\n".join([str(package) for package in packages]) + self.ROW_SEP_LONG
         self.logger.info(result)
         return result
 

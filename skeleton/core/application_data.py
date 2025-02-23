@@ -170,6 +170,7 @@ class ApplicationData:
         if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
+        # When no truck is assigned to route, package assignment is impossible
         if not route.assigned_truck_id:
              raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
 

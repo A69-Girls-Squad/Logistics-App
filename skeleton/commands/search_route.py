@@ -22,7 +22,7 @@ class SearchRouteCommand(BaseCommand):
             if route.assigned_truck_id:
                 truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
                 if not truck:
-                    raise ApplicationError("No truck found!")
+                    raise ApplicationError("No truck found!" + self.SEP)
                 free_capacity = truck.capacity - route.load
                 if free_capacity < package.weight:
                     sufficient_capacity = False
@@ -31,10 +31,14 @@ class SearchRouteCommand(BaseCommand):
                 locations = route.locations
                 if package.start_location in locations and package.end_location in locations:
                     if locations.index(package.start_location) < locations.index(package.end_location):
-                        route_details = (f"Route Details:"
-                                         f"\nID: {route.id}"
-                                         f"\nHubs:\n{" -> ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" for key, value in route.stops.items())}"
-                                         f"\nDeparture Time: {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
-                                         f"\n============")
+                        route_details = (f"ROUTE ID:       | {route.id}"
+                                         f'\n{self.TABLE_SEP}'
+                                         f"\nHubs:           |"
+                                         f" {" -> ".join(f"{key}: "
+                                         f"{value.isoformat(sep=" ", timespec="minutes")}" 
+                                            for key, value in route.stops.items())}"
+                                         f'\n{self.TABLE_SEP}'
+                                         f"\nDeparture Time: | {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
+                                         f'\n{self.ROW_SEP_LONG}')
                         suitable_routes.append(route_details)
-        return f"Suitable Routes:\n"+"\n".join(suitable_routes)
+        return f"SUITABLE ROUTES:\n{self.TABLE_SEP}\n"+"\n".join(suitable_routes) + self.ROW_SEP_LONG

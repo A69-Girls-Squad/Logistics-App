@@ -278,6 +278,8 @@ class Package:
                 status = "In Transit"
             else:
                 status = "Delivered"
+            status += (f"\nDeparture time: {self._departure_time.isoformat(sep=" ", timespec="minutes")}"
+                       f"\nEstimated arrival time: {self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}")
         else:
             status = "Not assigned"
 
@@ -286,6 +288,4 @@ class Package:
                 f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f} kg"
                 f"\nCustomer Email Address: {self._customer_email}"
-                f"\nDeparture time: {self._departure_time.isoformat(sep=" ", timespec="minutes")}"
-                f"\nEstimated arrival time: {self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}"
                 f"\nPackage status: {status}")
