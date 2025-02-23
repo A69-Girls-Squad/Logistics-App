@@ -13,5 +13,10 @@ class AssignPackageToRouteCommand(BaseCommand):
         route_id = try_parse_int(self.params[1])
 
         self.app_data.assign_package_to_route(package_id, route_id)
+        
+        self.logger.info(
+            f"Package with ID {package_id} was assigned to Route with ID {route_id} "
+            f"| Executed by: {self.app_data.logged_in_employee}"
+            )
 
         return f"Package with ID {package_id} was assigned to Route with ID {route_id}"

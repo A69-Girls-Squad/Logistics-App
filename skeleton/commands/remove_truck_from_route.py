@@ -30,7 +30,9 @@ class RemoveTruckFromRouteCommand(BaseCommand):
         
         truck.remove_from_route()
 
-        self.logger.info(f"Truck with ID {truck_id} has been removed from Route {route_id}, truck status changed to free. | Executed by: username")
+        self.logger.info(
+             f"Truck with ID {truck_id} has been removed from Route {route_id}, "
+             f"truck status changed to free. | Executed by: {self.app_data.logged_in_employee}")
 
         return f"Truck with ID {truck_id} has been removed from Route {route_id}, truck status changed to free."
 

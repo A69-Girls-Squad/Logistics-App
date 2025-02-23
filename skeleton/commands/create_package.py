@@ -14,7 +14,7 @@ class CreatePackageCommand(BaseCommand):
         start_location, end_location, weight_float, customer_email = self._params
         weight = try_parse_float(weight_float)
 
-        package = self._app_data.create_package(start_location, end_location, weight, customer_email)
+        package = self.app_data.create_package(start_location, end_location, weight, customer_email)
 
-        self.logger.info(f"Package with ID {package.id} created")
+        self.logger.info(f"Package with ID {package.id} created | Executed by: {self.app_data.logged_in_employee}")
         return f"Package with ID {package.id} was created!"
