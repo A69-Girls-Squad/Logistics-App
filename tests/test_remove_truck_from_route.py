@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
-from skeleton.commands.remove_truck_from_route import RemoveTruckFromRouteCommand
-from skeleton.core.application_data import ApplicationData
-from skeleton.errors.application_error import ApplicationError
+from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
+from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 
 class TestRemoveTruckFromRouteCommand(unittest.TestCase):
 

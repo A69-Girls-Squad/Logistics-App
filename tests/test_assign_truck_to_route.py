@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
-from skeleton.commands.assign_truck_to_route import AssignTruckToRouteCommand
-from skeleton.core.application_data import ApplicationData
-from skeleton.errors.application_error import ApplicationError
+from commands.assign_truck_to_route import AssignTruckToRouteCommand
+from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 
 class TestAssignTruckToRouteCommand(unittest.TestCase):
 

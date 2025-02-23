@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
-from skeleton.commands.search_truck import SearchTruckCommand
-from skeleton.core.application_data import ApplicationData
-from skeleton.errors.application_error import ApplicationError
+from commands.search_truck import SearchTruckCommand
+from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 class TestSearchTruckCommand(unittest.TestCase):
 
     def test_execute_successful(self):
