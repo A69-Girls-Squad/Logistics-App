@@ -1,9 +1,8 @@
 import smtplib
-import logging
 from commands.base_command import BaseCommand
 from commands.validation_helpers import try_parse_int
 from core.application_data import ApplicationData
-
+from errors.application_error import ApplicationError
 
 """
 Sends info regarding a package to the customer.
@@ -11,17 +10,15 @@ Sends info regarding a package to the customer.
 class SendPackageInfoToCustomerCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
-        self.logger = logging.getLogger(self.__class__.__name__)
-
-        logging.basicConfig(
-            format="%(asctime)s - %(name)s - %(message)s",
-            datefmt="%d:%m:%Y %H:%M",
-            level=logging.INFO
-        )
 
     def package_info(self):
         package_id = try_parse_int(self._params[0])
-        package = self._app_data.find_package_by_id(package_id)
+        package = self.app_data.find_package_by_id(package_id)
+
+        if not package:
+            self.logger.error(f"Package with ID {package_id} not found.")
+            raise ApplicationError(f"No package found with ID {package_id}")
+        
         package_info = (
             f"Package ID: {package.id}\n"
             f"Start Location: {package.start_location}\n"
@@ -31,15 +28,14 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
         )
         return package_info
     
-
     def send_email(self, subject: str, body: str, customer_email: str):
         """
         Sends an email with the package information.
 
         """
         employee = self.app_data.logged_in_employee
-        sender_email = employee.email
-        sender_password = employee.password  # to do - take info from app data
+        sender_email = employee.smtp.email
+        sender_password = employee.smtp.password 
 
         smtp_server = "smtp.logistics.com"
         smtp_port = 587
@@ -55,7 +51,7 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
 
     def execute(self):
         package_id = try_parse_int(self._params[0])
-        package = self._app_data.find_package_by_id(package_id)
+        package = self.app_data.find_package_by_id(package_id)
         customer_email = package.customer_email
         package_details = self.package_info()
         subject = f"Package Details: {package.id}"

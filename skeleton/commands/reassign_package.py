@@ -17,5 +17,7 @@ class ReassignPackageCommand(BaseCommand):
 
         self.app_data.assign_package_to_route(package_id, assign_to_route_id)
 
+        self.logger.info(f"Package with ID {package_id} reaasigned from Route {unassign_from_route_id} "
+                         f"to Route {assign_to_route_id} | Executed by: {self.app_data.logged_in_employee}")
         return (f"Package with ID {package_id} was unassigned from Route with ID {unassign_from_route_id}"
                 f"and was assigned to Route with ID {assign_to_route_id}")
