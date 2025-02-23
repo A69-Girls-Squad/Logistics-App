@@ -28,7 +28,7 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
         if not truck:
-            raise ApplicationError(f"No truck with ID {route.assigned_truck_id}")
+            raise ApplicationError(f"Route with ID {route_id} has no Truck assigned")
 
         free_capacity = truck.capacity - route.load
         for package_id in packages_ids:
@@ -38,7 +38,7 @@ class BulkAssignPackagesCommand(BaseCommand):
                 raise ApplicationError(f"No package with ID {package_id}")
 
             if package.weight < free_capacity:
-                route.assign_package(package_id)
+                self.app_data.assign_package_to_route(package_id, route_id)
                 bulk_assigned_packages.append(package.id)
             else:
                 no_more_capacity_message = "No more free capacity. Operation terminated"

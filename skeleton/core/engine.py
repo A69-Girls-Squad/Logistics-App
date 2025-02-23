@@ -32,7 +32,7 @@ class Engine:
         Exceptions:
             ValueError: If an invalid command is entered, an error message is displayed.
         """
-        output = ["\n"]
+        log = ["\n"]
 
         while True:
             try:
@@ -40,13 +40,10 @@ class Engine:
                 if input_line.lower() == "exit":
                     break
                 command = self._command_factory.create(input_line)
-                output.append(command.execute())
-                print("\n".join(output))
+                command_output = command.execute()
+                print(command_output)
+                log.append(command_output)
 
             except ApplicationError as err:
-                output.append(err.args[0])
+                log.append(err.args[0])
                 print(err.args[0])
-
-
-
-

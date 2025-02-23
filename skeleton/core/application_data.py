@@ -8,10 +8,10 @@ from models.route import Route
 
 class ApplicationData:
     def __init__(self):
-        self._trucks = []
-        self._routes = []
-        self._packages = []
-        self._employees = []
+        self._trucks: list[Truck] = []
+        self._routes: list[Route] = []
+        self._packages: list[Package] = []
+        self._employees: list[Employee] = []
         self._logged_in_employee = None
 
     @classmethod
@@ -167,7 +167,7 @@ class ApplicationData:
 
         if package.route_id == route_id or package_id in route.assigned_packages_ids:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
-        if package.is_assigned():
+        if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
         # redundant
@@ -187,6 +187,7 @@ class ApplicationData:
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]
         package.route_id = route.id
+        package._is_assigned = True
         route.assign_package(package.id)
         route.load += package.weight
 
@@ -222,7 +223,7 @@ class ApplicationData:
         #return [package for package in self._packages if package.is_assigned == is_assigned]
         package_list = []
         for package in self.packages:
-            if package.is_assigned() == is_assigned:
+            if package.is_assigned == is_assigned:
                 package_list.append(package)
 
         return package_list
