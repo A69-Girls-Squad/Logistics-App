@@ -118,7 +118,7 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
                          f"\nRoute Details:"
                          f"\nID: {route.id}"
                          f"\nHubs:"
-                         f"\nSYD: 2055-02-16 21:56:00 -> MEL: 2055-02-17 08:01:00 -> BRI: 2055-02-18 04:18:00"
+                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
                          f"\nDeparture Time: 2055-02-16 11:30"
                          "\n============",
                          output)
@@ -144,13 +144,13 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
                          f"\nRoute Details:"
                          f"\nID: {route_1.id}"
                          f"\nHubs:"
-                         f"\nSYD: 2055-02-16 21:56:00 -> MEL: 2055-02-17 08:01:00 -> BRI: 2055-02-18 04:18:00"
+                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
                          f"\nDeparture Time: 2055-02-16 11:30"
                          "\n============"
                          f"\nRoute Details:"
                          f"\nID: {route_2.id}"
                          f"\nHubs:"
-                         f"\nSYD: 2055-02-16 21:56:00 -> MEL: 2055-02-17 08:01:00 -> BRI: 2055-02-18 04:18:00"
+                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
                          f"\nDeparture Time: 2055-02-16 11:30"
                          "\n============",
                          output)

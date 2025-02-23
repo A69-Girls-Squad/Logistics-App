@@ -1,8 +1,6 @@
 from commands.validation_helpers import validate_params_count, try_parse_int
 from commands.base_command import BaseCommand
 from errors.application_error import ApplicationError
-from models.package import Package
-from models.route import Route
 from core.application_data import ApplicationData
 
 class SearchTruckCommand(BaseCommand):

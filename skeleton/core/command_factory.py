@@ -1,4 +1,5 @@
 from commands.reassign_package import ReassignPackageCommand
+from commands.set_time import SetTimeCommand
 from commands.unassign_package_from_route import UnassignPackageToRouteCommand
 from commands.assign_package_to_route import AssignPackageToRouteCommand
 from commands.assign_truck_to_route import AssignTruckToRouteCommand
@@ -97,5 +98,7 @@ class CommandFactory:
             return UnassignPackageToRouteCommand(params, self._app_data)
         if cmd.lower() == 'reassignpackage':
             return ReassignPackageCommand(params, self._app_data)
+        if cmd.lower() == "settime":
+            return SetTimeCommand(params, self._app_data)
 
         raise ApplicationError(f"Command {cmd} is not supported.")

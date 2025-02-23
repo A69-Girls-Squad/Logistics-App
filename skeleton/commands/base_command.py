@@ -17,6 +17,8 @@ class BaseCommand:
             level=logging.INFO
         )
 
+        # log to file instead of console
+
     @property
     def params(self):
         return tuple(self._params)

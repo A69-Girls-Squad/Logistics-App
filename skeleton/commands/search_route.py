@@ -33,7 +33,7 @@ class SearchRouteCommand(BaseCommand):
                     if locations.index(package.start_location) < locations.index(package.end_location):
                         route_details = (f"Route Details:"
                                          f"\nID: {route.id}"
-                                         f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in route.stops.items())}"
+                                         f"\nHubs:\n{" -> ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" for key, value in route.stops.items())}"
                                          f"\nDeparture Time: {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
                                          f"\n============")
                         suitable_routes.append(route_details)

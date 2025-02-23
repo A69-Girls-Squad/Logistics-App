@@ -27,7 +27,8 @@ createroute BRI,SYD,MEL 2025-10-10T06:00
 createroute SYD,MEL,ADL 2025-10-12T06:00
 createpackage SYD MEL 45 johnsmith@gmail.com
 searchroute 1
-assignpackagetoroute 1 1
+UnassignPackageToRoute 1 1
+assignpackagetoroute 2 1
 showpackages all
 exit
 '''
@@ -56,7 +57,8 @@ exit
 # the time of the day.
 
 '''
-createroute ASP,ADL,MEL,SYD,BRI 2025-02-23T00:17
+settime 2025-02-23T06:30
+createroute ASP,ADL,MEL,SYD,BRI 2025-02-25T00:17
 showroutesinprogress
 '''
 
@@ -65,7 +67,7 @@ showroutesinprogress
 # route. The system responds with a list of packages containing their IDs and locations
 
 '''
-showpackages unassigned
+showpackages assigned
 '''
 
 # Use case #5
@@ -75,4 +77,26 @@ showpackages unassigned
 
 '''
 sendpackageinfotocustomer 1
+'''
+
+
+# ALL INPUT
+'''
+createroute BRI,SYD,MEL 2025-10-10T06:00
+createroute SYD,MEL,ADL 2025-10-12T06:00
+createpackage SYD MEL 45 johnsmith@gmail.com
+searchroute 1
+UnassignPackageToRoute 1 1
+assignpackagetoroute 1 1
+showpackages all
+createroute ASP,ADL,MEL,SYD,BRI 2025-09-12T06:00
+searchtruck 3
+assigntrucktoroute 1001 3
+showpackages all
+bulkassignpackages 3 2 4
+createroute ASP,ADL,MEL,SYD,BRI 2025-02-25T00:17
+showroutesinprogress
+showpackages assigned
+ShowPackageCommand
+exit
 '''

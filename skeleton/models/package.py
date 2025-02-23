@@ -1,5 +1,6 @@
 from datetime import datetime
 import re
+from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.route import Route
 from commands.validation_helpers import try_parse_float
@@ -100,6 +101,7 @@ class Package:
             datetime.fromisoformat(data["estimated_arrival_time"]) if data["estimated_arrival_time"] else None
         )
         package._is_assigned = data["is_assigned"]
+        package._route_id = data["route_id"]
 
         return package
 
@@ -212,7 +214,7 @@ class Package:
         return self._estimated_arrival_time
 
     @estimated_arrival_time.setter
-    def estimated_arrival_time(self, value:datetime):
+    def estimated_arrival_time(self, value: datetime):
         """
         Sets the estimated arrival time of the package.
 
@@ -229,7 +231,12 @@ class Package:
         Returns:
             bool: True if the package is assigned, False otherwise.
         """
-        return self.route_id is not None
+        return self._is_assigned
+
+    @is_assigned.setter
+    def is_assigned(self, value: bool):
+
+        self._is_assigned = value
 
     @property
     def route_id(self):
@@ -265,9 +272,9 @@ class Package:
                 - Package status (Awaiting Dispatch, In Transit, or Delivered).
         """
         if self.departure_time:
-            if datetime.now() < self.departure_time:
+            if ApplicationTime.current() < self.departure_time:
                 status = "Awaiting Dispatch"
-            elif datetime.now() < self.estimated_arrival_time:
+            elif ApplicationTime.current() < self.estimated_arrival_time:
                 status = "In Transit"
             else:
                 status = "Delivered"
@@ -275,10 +282,10 @@ class Package:
             status = "Not assigned"
 
         return (f"ID: {self._id}"
-                f"\nStart Location: {self._start_location})"
+                f"\nStart Location: {self._start_location}"
                 f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f} kg"
                 f"\nCustomer Email Address: {self._customer_email}"
-                f"\nDeparture time: {self._departure_time}"
-                f"\nEstimated arrival time: {self._estimated_arrival_time}"
+                f"\nDeparture time: {self._departure_time.isoformat(sep=" ", timespec="minutes")}"
+                f"\nEstimated arrival time: {self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}"
                 f"\nPackage status: {status}")

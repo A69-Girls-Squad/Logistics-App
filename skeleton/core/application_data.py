@@ -1,4 +1,4 @@
-from datetime import datetime
+from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.employee import Employee
 from models.truck import Truck
@@ -8,10 +8,10 @@ from models.route import Route
 
 class ApplicationData:
     def __init__(self):
-        self._trucks = []
-        self._routes = []
-        self._packages = []
-        self._employees = []
+        self._trucks: list[Truck] = []
+        self._routes: list[Route] = []
+        self._packages: list[Package] = []
+        self._employees: list[Employee] = []
         self._logged_in_employee = None
 
     @classmethod
@@ -89,17 +89,6 @@ class ApplicationData:
     def has_logged_in_employee(self):
         return self.logged_in_employee is not None
 
-    """
-    Retrieves a list of all packages that are not assigned to a route.
-    """
-    @property
-    def not_assigned_packages(self):
-        not_assigned_packages = []
-        for package in self.packages:
-            if not package.is_assigned:
-                not_assigned_packages.append(package)
-        return not_assigned_packages
-
     def create_truck(self, name: str, capacity: int, max_range: int):
         truck = Truck(name, capacity, max_range)
         self._trucks.append(truck)
@@ -176,20 +165,22 @@ class ApplicationData:
         if route is None:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
 
-        if package.is_assigned:
-            raise ApplicationError(f"Package with ID {package_id} is already assigned")
         if package.route_id == route_id or package_id in route.assigned_packages_ids:
             raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
+        if package.is_assigned:
+            raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
-        # redundant
-        # if not route.assigned_truck_id:
-        #     raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
-        if route.assigned_truck_id:
-            truck = self.find_truck_by_id(route.assigned_truck_id)
-            free_capacity = truck.capacity - route.load
-            if free_capacity < package.weight:
-                raise ApplicationError(f"Route with ID {route_id} has no more capacity")
-        if route.departure_time < datetime.now():
+        if not route.assigned_truck_id:
+             raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
+
+        truck = self.find_truck_by_id(route.assigned_truck_id)
+        if truck is None:
+            raise ApplicationError(f"Truck with ID {route.assigned_truck_id} does not exist")
+
+        free_capacity = truck.capacity - route.load
+        if free_capacity < package.weight:
+            raise ApplicationError(f"Route with ID {route_id} has no more capacity")
+        if route.departure_time < ApplicationTime.current():
             raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
         if package.start_location not in route.locations:
             raise ApplicationError(f"Package with ID {package_id} start location "
@@ -198,6 +189,7 @@ class ApplicationData:
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]
         package.route_id = route.id
+        package.is_assigned = True
         route.assign_package(package.id)
         route.load += package.weight
 
@@ -209,12 +201,13 @@ class ApplicationData:
         route = self.find_route_by_id(route_id)
         if route is None:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
-        if route.departure_time > datetime.now():
+        if route.departure_time > ApplicationTime.current():
             raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
 
         package.departure_time = None
         package.estimated_arrival_time = None
         package.route_id = None
+        package.is_assigned = False
         route.remove_package(package.id)
         route.load -= package.weight
 
@@ -251,9 +244,8 @@ class ApplicationData:
         Finds and returns the package associated with the provided ID.
         If no match is found, returns `None`.
         """
-        for package in self.packages:
-            if package.id == package_id:
-                return package
+        return next((package for package in self.packages if package.id == package_id), None)
+
 
     def find_employee_by_username(self, username: str) -> Employee:
         """

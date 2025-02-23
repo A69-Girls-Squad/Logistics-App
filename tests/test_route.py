@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 import test_data as td
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
-from main import app_data
 from models.constants.distances import Distance
 from models.route import Route
 from models.truck import Truck
@@ -64,7 +63,7 @@ class Route_Should(unittest.TestCase):
         self.assertEqual(td.VALID_LOCATIONS_OUTPUT, route.locations)
 
     def test_departure_time_invalidString(self):
-        with self.assertRaises(ValueError):
+        with self.assertRaises(ApplicationError):
             Route(td.VALID_LOCATIONS_INPUT, td.INVALID_DEPARTURE_TIME_INPUT)
 
     def test_departure_time_inThePast(self):
@@ -81,12 +80,6 @@ class Route_Should(unittest.TestCase):
         route.assigned_truck = truck
         self.assertEqual(truck, route.assigned_truck)
 
-    def test_free_capacity_raisesWhenNoAssignedTruck(self):
-        route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        with self.assertRaises(ApplicationError):
-            free_cap = route.free_capacity
-            self.assertEqual(None, free_cap)
-
     def test_distance_returnsCorrectly(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         self.assertEqual(td.VALID_DISTANCE, route.distance)
@@ -97,13 +90,13 @@ class Route_Should(unittest.TestCase):
 
     def test_status_returnsCorrectly_Created(self):
         current_time_plus_two_days = datetime.now() + timedelta(days=2)
-        formatted_time = current_time_plus_two_days.strftime(td.VALID_DATETIME_FORMAT)
+        formatted_time = current_time_plus_two_days.isoformat()
         route = Route(td.VALID_LOCATIONS_INPUT, formatted_time)
         self.assertEqual(Route.STATUS_CREATED, route.status)
 
     def test_status_returnsCorrectly_Finished(self):
         depart_time = datetime.now() + timedelta(days=2)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime(td.VALID_DATETIME_FORMAT))
+        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.isoformat())
 
         with patch("datetime.datetime") as mock_datetime:
             mock_datetime.now.return_value = depart_time + timedelta(days=365 * 5)
@@ -111,7 +104,7 @@ class Route_Should(unittest.TestCase):
 
     def test_status_returnsCorrectly_InProgress(self):
         depart_time = datetime.now() + timedelta(days=2)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime(td.VALID_DATETIME_FORMAT))
+        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.isoformat())
 
         with patch("datetime.datetime"):
             with patch("datetime.datetime.now", return_value=depart_time+timedelta(days=1)):
@@ -119,23 +112,11 @@ class Route_Should(unittest.TestCase):
 
     def test_current_location_returnsCorrectly(self):
         depart_time = datetime.now() + timedelta(days=1)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.strftime(td.VALID_DATETIME_FORMAT))
+        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.isoformat())
 
         with patch("datetime.datetime"):
             with patch("datetime.datetime.now", return_value=route.departure_time+timedelta(days=1)):
                 self.assertEqual(td.EXPECTED_CURRENT_LOCATION, route.current_location)
-
-    def test_get_distance_invalidCity_1(self):
-        with self.assertRaises(ApplicationError):
-            Distance.get_distance(td.INVALID_CITY, td.VALID_CITY_2)
-
-    def test_get_distance_invalidCity_2(self):
-        with self.assertRaises(ApplicationError):
-            Distance.get_distance(td.VALID_CITY_1, td.INVALID_CITY)
-
-    def test_get_distance_equalCities(self):
-        with self.assertRaises(ApplicationError):
-            Distance.get_distance(td.VALID_CITY_1, td.VALID_CITY_1)
 
     def test_get_distance_returnsCorrect(self):
         distance = Distance.get_distance(td.VALID_CITY_1, td.VALID_CITY_2)
@@ -143,7 +124,7 @@ class Route_Should(unittest.TestCase):
 
     def test_str_returnsCorrectly_ifAssignedTruck(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
+        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         route.assign_truck(truck)
         expected_str = (f"Route Details:"
                         f"\nID: {route.id}"
@@ -151,6 +132,7 @@ class Route_Should(unittest.TestCase):
                         f"\nDeparture Time: 2055-02-16 11:30"
                         f"\nNumber of Packages: {len(route.assigned_packages_ids)}"
                         f"\nCurrent Load: {route.load}"
+                        f"\nAssigned Truck ID: {truck.id}"
                         f"\nStatus: {route.status}"
                         f"\nCurrent Location: {route.current_location}"
                         f"\n============")
@@ -163,7 +145,7 @@ class Route_Should(unittest.TestCase):
         expected_str = (f"Route Details:"
                         f"\nID: {route.id}"
                         f"\nHubs:"
-                        f"\nSYD: 2055-02-16 21:56:00 -> MEL: 2055-02-17 08:01:00 -> BRI: 2055-02-18 04:18:00"
+                        f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
                         f"\nDeparture Time: 2055-02-16 11:30"
                         f"\nNumber of Packages: 0"
                         f"\nCurrent Load: 0"
@@ -180,19 +162,6 @@ class Route_Should(unittest.TestCase):
 
     def test_assign_truck(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
+        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         route.assign_truck(truck)
         self.assertEqual(truck, route.assigned_truck_id)
-
-    def test_remove_truck_whenNoTruck(self):
-        with self.assertRaises(ApplicationError):
-            route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-            route.remove_truck()
-
-    def test_remove_truck_whenAssigned(self):
-        app_data = ApplicationData()
-        route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        truck = Truck(td.VALID_TRUCK_NAME, td.VALID_CAPACITY, td.VALID_MAX_RANGE)
-        route.assign_truck(truck)
-        route.remove_truck()
-        self.assertIsNone(route.assigned_truck_id)

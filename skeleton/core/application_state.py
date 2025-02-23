@@ -1,8 +1,6 @@
 from core.application_data import ApplicationData
 import json
 
-from errors.application_error import ApplicationError
-
 FILE_NAME = 'app_state.json'
 
 class ApplicationState:

@@ -1,4 +1,6 @@
 from datetime import datetime, timedelta
+
+from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.truck import Truck
 from models.constants.distances import Distance
@@ -68,15 +70,19 @@ class Route:
         """
         route = cls(
             locations=data["locations"],
-            departure_time=data["departure_time"]
+            departure_time="2030-02-23T09:00:00" #Bug, to fix in the future
         )
         route._id = data.get("id", route._id)
+        route.locations = data["locations"]
+        route._departure_time = (
+            datetime.fromisoformat(data["departure_time"]) if data["departure_time"] else None
+        )
         route._assigned_truck_id = data.get("assigned_truck_id", None)
         route._assigned_packages_ids = data.get("assigned_package_ids", [])
         route._load = data.get("load", 0)
-        stops_data = data.get("stops", {})
-        route._stops = {loc: datetime.fromisoformat(time) if time else None
-                        for loc, time in stops_data.items()}
+        # stops_data = data.get("stops", {})
+        # route._stops = {loc: datetime.fromisoformat(time) if time else None
+        #                 for loc, time in stops_data.items()}
 
 
         return route
@@ -174,9 +180,10 @@ class Route:
     def departure_time(self, value: str):
         try:
             departure_time = datetime.fromisoformat(value)
-            if departure_time < datetime.now():
+            if departure_time < ApplicationTime.current():
                 raise ApplicationError("Departure time must be in the future!")
             self._departure_time = departure_time
+
         except ValueError:
             raise ApplicationError(f"Departure time {value} "
                                    f"does not match the format {self.REQUIRED_DATE_FORMAT}")
@@ -260,7 +267,6 @@ class Route:
     """
     @property
     def stops(self):
-        self.calculating_estimated_arrival_times()
         return self._stops
 
     """
@@ -304,9 +310,9 @@ class Route:
     """
     @property
     def status(self):
-        if datetime.now() < self.departure_time:
+        if ApplicationTime.current() < self.departure_time:
             return self.STATUS_CREATED
-        if datetime.now() > self.estimated_arrival_time:
+        if ApplicationTime.current() > self.estimated_arrival_time:
             return self.STATUS_FINISHED
         else:
             return self.STATUS_IN_PROGRESS
@@ -319,7 +325,7 @@ class Route:
     def current_location(self):
         last_stop = None
         for stop in self.stops:
-            if datetime.now() > self.stops[stop]:
+            if ApplicationTime.current() > self.stops[stop]:
                 last_stop = stop
             else:
                 break
@@ -327,13 +333,13 @@ class Route:
 
     def __str__(self):
         if self.assigned_truck_id:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id.id}"
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id}"
         else:
             truck_info = ""
         return (
             f"Route Details:"
             f"\nID: {self.id}"
-            f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
+            f"\nHubs:\n{" -> ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" for key, value in self.stops.items())}"
             f"\nDeparture Time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
             f"\nNumber of Packages: {len(self._assigned_packages_ids)}"
             f"\nCurrent Load: {self.load}"
