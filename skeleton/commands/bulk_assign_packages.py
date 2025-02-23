@@ -47,7 +47,7 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         self.logger.info(f"Bulk assigned packages to Route ID {route_id}:"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message}"
-                         f" | Executed by: {self.app_data.logged_in_employee}")
+                         f" | Executed by: {self.app_data.logged_in_employee}"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message} | Executed by: username" + self.SEP)
 
         return f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}" + self.SEP
