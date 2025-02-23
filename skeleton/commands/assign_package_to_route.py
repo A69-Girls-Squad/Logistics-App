@@ -19,4 +19,4 @@ class AssignPackageToRouteCommand(BaseCommand):
             f"| Executed by: {self.app_data.logged_in_employee}"
             )
 
-        return f"Package with ID {package_id} was assigned to Route with ID {route_id}" + self.SEP
+        return f"Package with ID {package_id} was assigned to Route with ID {route_id}" + self.ROW_SEP*2

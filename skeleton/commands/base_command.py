@@ -2,9 +2,8 @@ import logging
 from core.application_data import ApplicationData
 
 class BaseCommand:
-    ROW_SEP_SHORT = "\n" + "=" * 60
-    ROW_SEP_LONG = "\n" + "=" * 40
-    TABLE_SEP = "-" * 16 + "|" + "-" * 43
+    ROW_SEP = "\n" + "=" * 40
+    TABLE_SEP = "-" * 16 + "|"
 
     def __init__(self, params, app_data: ApplicationData):
         self._params = params
@@ -32,12 +31,12 @@ class BaseCommand:
         return self._app_data
 
     def execute(self) -> str:
-        raise NotImplementedError("Execute method has to be overridden" + self.ROW_SEP_SHORT)
+        raise NotImplementedError("Execute method has to be overridden" + self.ROW_SEP)
 
     def requires_login(self):
         if self._requires_login and not self._app_data.has_logged_in_employee:
             self.logger.warning("Unauthorized access attempt detected.")
-            raise ValueError("You are not logged in! Please login first!" + self.ROW_SEP_SHORT)
+            raise ValueError("You are not logged in! Please login first!" + self.ROW_SEP)
         return ""
 
     def _throw_if_employee_logged_in(self):
@@ -45,5 +44,5 @@ class BaseCommand:
             logged_employee = self._app_data.logged_in_employee
             self.logger.error(f"Attempt to log in while employee {logged_employee.username} is already logged in.")
             raise ValueError(
-                f"Employee {logged_employee.username} is logged in! Please log out first!" + self.ROW_SEP_SHORT
+                f"Employee {logged_employee.username} is logged in! Please log out first!" + self.ROW_SEP*2
             )

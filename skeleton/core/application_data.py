@@ -171,21 +171,23 @@ class ApplicationData:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
         # When no truck is assigned to route, package assignment is impossible
-        if not route.assigned_truck_id:
-             raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
+        # if not route.assigned_truck_id:
+        #      raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
 
-        truck = self.find_truck_by_id(route.assigned_truck_id)
-        if truck is None:
-            raise ApplicationError(f"Truck with ID {route.assigned_truck_id} does not exist")
+        if route.assigned_truck_id:
+            truck = self.find_truck_by_id(route.assigned_truck_id)
+            # if truck is None:
+            #     raise ApplicationError(f"Truck with ID {route.assigned_truck_id} does not exist")
 
-        free_capacity = truck.capacity - route.load
-        if free_capacity < package.weight:
-            raise ApplicationError(f"Route with ID {route_id} has no more capacity")
-        if route.departure_time < ApplicationTime.current():
-            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
-        if package.start_location not in route.locations:
-            raise ApplicationError(f"Package with ID {package_id} start location "
-                                   f"does not exists in Route with ID {route_id}")
+            free_capacity = truck.capacity - route.load
+            if free_capacity < package.weight:
+                raise ApplicationError(f"Route with ID {route_id} has no more capacity")
+            if route.departure_time < ApplicationTime.current():
+                raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+            if package.start_location not in route.locations:
+                raise ApplicationError(f"Package with ID {package_id} start location "
+                                       f"does not exists in Route with ID {route_id}")
+
 
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]

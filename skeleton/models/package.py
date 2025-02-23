@@ -283,7 +283,7 @@ class Package:
         else:
             status = "Not assigned"
 
-        return (f"ID: {self._id}"
+        return (f"PACKAGE ID: {self._id}"
                 f"\nStart Location: {self._start_location}"
                 f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f} kg"

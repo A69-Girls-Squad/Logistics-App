@@ -27,7 +27,6 @@ createroute BRI,SYD,MEL 2025-10-10T06:00
 createroute SYD,MEL,ADL 2025-10-12T06:00
 createpackage SYD MEL 45 johnsmith@gmail.com
 searchroute 1
-UnassignPackageToRoute 1 1
 assignpackagetoroute 1 1
 showpackages all
 exit
@@ -44,7 +43,7 @@ exit
 
 '''
 createroute ASP,ADL,MEL,SYD,BRI 2025-09-12T06:00
-searchtruck 3
+searchtruck 1
 assigntrucktoroute 1001 3
 showpackages all
 bulkassignpackages 3 2 4
@@ -57,8 +56,8 @@ exit
 # the time of the day.
 
 '''
-settime 2025-02-23T06:30
-createroute ASP,ADL,MEL,SYD,BRI 2025-02-25T00:17
+createroute ASP,ADL,MEL,SYD,BRI 2025-02-25-00:17
+settime 2025-02-28-02:00
 showroutesinprogress
 '''
 

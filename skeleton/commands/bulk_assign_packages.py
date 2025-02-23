@@ -28,14 +28,14 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
         if not truck:
-            raise ApplicationError(f"Route with ID {route_id} has no Truck assigned" + self.ROW_SEP_LONG)
+            raise ApplicationError(f"Route with ID {route_id} has no Truck assigned" + self.ROW_SEP)
 
         free_capacity = truck.capacity - route.load
         for package_id in packages_ids:
             package_id = try_parse_int(package_id)
             package = self.app_data.find_package_by_id(package_id)
             if not package:
-                raise ApplicationError(f"No package with ID {package_id}" + self.ROW_SEP_LONG)
+                raise ApplicationError(f"No package with ID {package_id}" + self.ROW_SEP)
 
             if package.weight < free_capacity:
                 self.app_data.assign_package_to_route(package_id, route_id)
@@ -43,11 +43,11 @@ class BulkAssignPackagesCommand(BaseCommand):
             else:
                 no_more_capacity_message = "No more free capacity. Operation terminated"
 
-                no_more_capacity_message = "No more free capacity. Operation terminated" + self.ROW_SEP_LONG
+                no_more_capacity_message = "No more free capacity. Operation terminated" + self.ROW_SEP
 
         self.logger.info(f"Bulk assigned packages to Route ID {route_id}:"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message}"
                          f" | Executed by: {self.app_data.logged_in_employee}"
-                         f" {bulk_assigned_packages}\n{no_more_capacity_message} | Executed by: username" + self.ROW_SEP_LONG)
+                         f" {bulk_assigned_packages}\n{no_more_capacity_message} | Executed by: username" + self.ROW_SEP)
 
-        return f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}" + self.ROW_SEP_LONG
+        return f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}" + self.ROW_SEP*2

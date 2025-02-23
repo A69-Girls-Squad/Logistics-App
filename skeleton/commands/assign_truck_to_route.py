@@ -23,6 +23,6 @@ class AssignTruckToRouteCommand(BaseCommand):
             f"| Executed by: {self.app_data.logged_in_employee}"
             )
 
-        return f"Truck with id {truck_id} assigned to route {route_id}" + self.ROW_SEP_LONG
+        return f"Truck with id {truck_id} assigned to route {route_id}" + self.ROW_SEP*2
 
     

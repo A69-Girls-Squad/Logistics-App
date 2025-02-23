@@ -14,4 +14,4 @@ class UnassignPackageToRouteCommand(BaseCommand):
 
         self.app_data.unassign_package_from_route(package_id, route_id)
 
-        return f"Package with ID {package_id} was unassigned from Route with ID {route_id}" + self.ROW_SEP_LONG
+        return f"Package with ID {package_id} was unassigned from Route with ID {route_id}" + self.ROW_SEP*2

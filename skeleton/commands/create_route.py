@@ -17,15 +17,15 @@ class CreateRouteCommand(BaseCommand):
         self.logger.info(f"Route with ID {route.id} was created!"
                          f"\nLocations: {route.locations}\n"
                          f"\nDeparture Time: {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
-                         f"\nExecuted by: username" + self.ROW_SEP_SHORT)
+                         f"\nExecuted by: username" + self.ROW_SEP)
         self.logger.info(f"Route with ID {id} was created!"
                          f"\nLocations: {route.locations}"
                          f"\nDeparture Time: {route.departure_time.isoformat(sep=" ", timespec="minutes")} "
-                         f"| Executed by: {self.app_data.logged_in_employee}" + self.ROW_SEP_SHORT)
+                         f"| Executed by: {self.app_data.logged_in_employee}" + self.ROW_SEP)
 
-        return (f'Route with ID {route.id} was created!'
-                f'\n{self.TABLE_SEP}'
-                f'\nLocations:      | {locations}'
-                f'\n{self.TABLE_SEP}'
-                f'\nDeparture Time: | {route.departure_time.isoformat(sep=" ", timespec="minutes")}'
-                f'\n{self.TABLE_SEP}') + self.ROW_SEP_SHORT
+        return (f"Route with ID {route.id} was created!"
+                f"\n{self.TABLE_SEP}"
+                f"\nLocations:      | {locations}"
+                f"\n{self.TABLE_SEP}"
+                f"\nDeparture Time: | {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
+                f"\n{self.TABLE_SEP}") + self.ROW_SEP*2
