@@ -1,11 +1,10 @@
 import unittest
 from unittest.mock import Mock
-
+from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
+from models.constants.employee_role import EmployeeRole
 from commands.login import LoginCommand
 from commands.logout import LogoutCommand
-from core.application_data import ApplicationData
-from errors.application_error import ApplicationError
-from models.constants.employee_role import EmployeeRole
 
 
 def _create_fake_params():

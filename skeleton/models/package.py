@@ -1,9 +1,9 @@
-from datetime import datetime
 import re
-from core.application_time import ApplicationTime
+from datetime import datetime
 from errors.application_error import ApplicationError
-from models.route import Route
+from core.application_time import ApplicationTime
 from commands.validation_helpers import try_parse_float
+from models.route import Route
 
 
 class Package:

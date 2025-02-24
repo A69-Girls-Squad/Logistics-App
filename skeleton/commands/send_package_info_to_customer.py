@@ -1,8 +1,9 @@
 import smtplib
-from commands.base_command import BaseCommand
-from commands.validation_helpers import try_parse_int
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from commands.validation_helpers import try_parse_int
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
+
 
 """
 Sends info regarding a package to the customer.

@@ -1,10 +1,8 @@
 import unittest
 from unittest.mock import Mock
-
-from commands.create_route import CreateRouteCommand
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
-
+from core.application_data import ApplicationData
+from commands.create_route import CreateRouteCommand
 
 
 def _create_fake_params(

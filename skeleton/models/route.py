@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
 from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
-from models.truck import Truck
 from models.constants.distances import Distance
+from models.truck import Truck
 
 
 class Route:

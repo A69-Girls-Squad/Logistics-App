@@ -1,6 +1,7 @@
 import logging
 from core.application_data import ApplicationData
 
+
 class BaseCommand:
     """
     Base class for all commands in the application.

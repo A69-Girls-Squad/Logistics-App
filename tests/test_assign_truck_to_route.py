@@ -1,9 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
-from commands.assign_truck_to_route import AssignTruckToRouteCommand
-from core.application_data import ApplicationData
-from errors.application_error import ApplicationError
 import test_data as td
+from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
+from commands.assign_truck_to_route import AssignTruckToRouteCommand
 
 
 class TestAssignTruckToRouteCommand(unittest.TestCase):

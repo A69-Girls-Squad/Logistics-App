@@ -1,7 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+import test_data as td
 from models.truck import Truck
-import test_data as td  # Import test data as td
 
 
 class Truck_Should(unittest.TestCase):

@@ -1,8 +1,8 @@
 from datetime import datetime
-from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count
-from core.application_data import ApplicationData
 from core.application_time import ApplicationTime
+from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
 
 
 class SetTimeCommand(BaseCommand):

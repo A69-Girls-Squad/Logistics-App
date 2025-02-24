@@ -1,9 +1,8 @@
 import unittest
-from datetime import datetime
-from models.package import Package
-from models.route import Route
-from errors.application_error import ApplicationError
 import test_data as td
+from errors.application_error import ApplicationError
+from models.package import Package
+
 
 class PackageTests(unittest.TestCase):
     def setUp(self):

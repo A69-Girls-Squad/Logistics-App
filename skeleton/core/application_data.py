@@ -1,10 +1,10 @@
 from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
-from models.constants.employee_role import EmployeeRole
 from models.employee import Employee
-from models.truck import Truck
+from models.constants.employee_role import EmployeeRole
 from models.package import Package
 from models.route import Route
+from models.truck import Truck
 
 
 class ApplicationData:

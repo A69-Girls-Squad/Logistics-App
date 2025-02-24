@@ -1,6 +1,6 @@
+from commands.validation_helpers import validate_params_count, try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
-from commands.validation_helpers import validate_params_count, try_parse_int
 
 
 class AssignTruckToRouteCommand(BaseCommand):

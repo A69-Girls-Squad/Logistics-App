@@ -1,8 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
-from skeleton.commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
-from skeleton.core.application_data import ApplicationData
 from skeleton.errors.application_error import ApplicationError
+from skeleton.core.application_data import ApplicationData
+from skeleton.commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
+
 
 class TestSendPackageInfoToCustomerCommand(unittest.TestCase):
 

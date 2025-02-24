@@ -2,7 +2,6 @@ import unittest
 from unittest.mock import patch
 from datetime import datetime, timedelta
 import test_data as td
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
 from models.constants.distances import Distance
 from models.route import Route

@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
-from commands.search_truck import SearchTruckCommand
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
+from commands.search_truck import SearchTruckCommand
 
 
 class TestSearchTruckCommand(unittest.TestCase):
