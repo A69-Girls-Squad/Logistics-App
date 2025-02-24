@@ -15,16 +15,6 @@ class RegisterEmployeeCommand(BaseCommand):
         _requires_login (bool): Indicates whether the command requires a logged-in user (set to False for registration).
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (username, first name, last name, password, and optional role).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 4)
         super().__init__(params, app_data)
         self._requires_login = False

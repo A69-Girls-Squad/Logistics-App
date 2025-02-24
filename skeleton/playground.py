@@ -57,7 +57,7 @@ exit
 
 '''
 createroute ASP,ADL,MEL,SYD,BRI 2025-02-25-00:17
-settime 2025-02-28-02:00
+settime 2025-02-26-02:00
 showroutesinprogress
 '''
 

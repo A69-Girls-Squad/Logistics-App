@@ -39,8 +39,10 @@ class ApplicationState:
         """
         Seeds the given ApplicationData object with sample truck data.
 
-        This method adds a set number of trucks of different types (Scania, Man, Actros) to the provided app_data instance.
-        Specifically, it adds 10 Scania trucks, 15 Man trucks, and 15 Actros trucks with pre-defined weights and capacities.
+        This method adds a set number of trucks of different types (Scania, Man, Actros)
+        to the provided app_data instance.
+        Specifically, it adds 10 Scania trucks, 15 Man trucks, and 15 Actros trucks with pre-defined weights
+        and capacities.
         This is useful for initializing `app_data` with test data, typically for development or testing purposes.
 
         Args:

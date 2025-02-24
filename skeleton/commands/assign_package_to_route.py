@@ -11,16 +11,6 @@ class AssignPackageToRouteCommand(BaseCommand):
     and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params (list): The command parameters (package ID and route ID).
-            app_data (ApplicationData): The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 2)
         super().__init__(params, app_data)
 

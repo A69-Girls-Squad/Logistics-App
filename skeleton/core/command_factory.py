@@ -35,12 +35,6 @@ class CommandFactory:
     """
 
     def __init__(self, data: ApplicationData):
-        """
-        Initializes the CommandFactory with application data.
-
-        Args:
-            data (ApplicationData): The shared application data used by commands.
-        """
         self._app_data = data
 
     def create(self, input_line: str):

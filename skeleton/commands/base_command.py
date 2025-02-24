@@ -11,8 +11,7 @@ class BaseCommand:
     formatting output.
 
     Attributes:
-        ROW_SEP_SHORT (str): A separator for short rows in output.
-        ROW_SEP_LONG (str): A separator for long rows in output.
+        ROW_SEP (str): A separator for rows in output.
         TABLE_SEP (str): A separator for table formatting in output.
         _params (list): The command parameters.
         _app_data (ApplicationData): The shared application data.
@@ -22,7 +21,7 @@ class BaseCommand:
     """
 
     TABLE_SEP = "-" * 16 + "|" + "-" * 43
-    ROW_SEP = "\n" + "=" * 40
+    ROW_SEP = "\n" + "=" * 60
 
     def __init__(self, params, app_data: ApplicationData):
         """

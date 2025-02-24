@@ -1,3 +1,6 @@
+from errors.application_error import ApplicationError
+
+
 class EmployeeRole:
     """
     Represents the possible roles an employee can have within the system.
@@ -26,6 +29,5 @@ class EmployeeRole:
             ValueError: If the provided value does not match any of the valid employee roles.
         """
         if value not in [cls.REGULAR, cls.SUPERVISOR, cls.MANAGER]:
-            raise ValueError(
-                f"None of the possible Employee Role values matches the value {value}.")
+            raise ApplicationError(f"None of the possible Employee Role values matches the value {value}.")
         return value

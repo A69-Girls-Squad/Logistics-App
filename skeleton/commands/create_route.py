@@ -10,16 +10,6 @@ class CreateRouteCommand(BaseCommand):
     This command validates the input parameters, creates a route, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (locations and departure time).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 2)
         super().__init__(params, app_data)
 

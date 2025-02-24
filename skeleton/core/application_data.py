@@ -114,7 +114,7 @@ class ApplicationData:
         return self._logged_in_employee
 
     @logged_in_employee.setter
-    def logged_in_employee(self, value: Employee) -> Employee:
+    def logged_in_employee(self, value: Employee) -> None:
         """
         Sets the currently logged-in employee.
 
@@ -185,7 +185,8 @@ class ApplicationData:
 
         return package
 
-    def create_employee(self, username: str, first_name: str, last_name: str, password: str, employee_role: EmployeeRole) -> Employee:
+    def create_employee(self, username: str, first_name: str, last_name: str,
+                        password: str, employee_role: EmployeeRole) -> Employee:
         """
         Creates a new employee and adds them to the application's employee list.
 
@@ -281,14 +282,8 @@ class ApplicationData:
         if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
-        # When no truck is assigned to route, package assignment is impossible
-        # if not route.assigned_truck_id:
-        #      raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
-
         if route.assigned_truck_id:
             truck = self.find_truck_by_id(route.assigned_truck_id)
-            # if truck is None:
-            #     raise ApplicationError(f"Truck with ID {route.assigned_truck_id} does not exist")
 
             free_capacity = truck.capacity - route.load
             if free_capacity < package.weight:
@@ -298,7 +293,6 @@ class ApplicationData:
             if package.start_location not in route.locations:
                 raise ApplicationError(f"Package with ID {package_id} start location "
                                        f"does not exists in route with ID {route_id}")
-
 
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]

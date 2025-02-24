@@ -1,6 +1,8 @@
 import re
-from models.constants.employee_role import EmployeeRole
 
+
+from models.constants.employee_role import EmployeeRole
+# Value Errors here - why not Application Errors?
 
 class Employee:
     """
@@ -28,6 +30,8 @@ class Employee:
         ValueError: If any attribute does not meet validation criteria.
     """
 
+    SPECIAL_CHARS = ("@", "*", "-", "_")
+
     def __init__(self, username: str, first_name: str, last_name: str, password: str, employee_role: EmployeeRole):
         """
         Initializes an Employee instance.
@@ -45,8 +49,7 @@ class Employee:
         if len(username) < 3 or len(username) > 20:
             raise ValueError("Username must be between 3 and 20 characters.")
         if not re.match(r"^[A-Za-z0-9]+(_[A-Za-z0-9]+)*$", username):
-            raise ValueError(
-                "Username can only contain letters, numbers, and underscores (but not start or end with one).")
+            raise ValueError("Username can only contain letters, numbers, and underscores (but not start or end with one).")
         self._username = username
 
         if len(first_name) > 30 or len(first_name) < 2:
@@ -61,14 +64,14 @@ class Employee:
             raise ValueError("Last name can only contain letters, spaces, and hyphens.")
         self._last_name = last_name
 
-        special_char = ["@", "*", "-", "_"]
         if len(password) > 28 or len(password) < 6:
             raise ValueError("Password must be between 6 and 28 characters long.")
         for char in password:
-            if char not in special_char and not char.isalnum():
-                raise ValueError("Invalid symbols! Password can only contains letters,"
-                                 " numbers and special symbols @, *, -, _")
+            if char not in self.SPECIAL_CHARS and not char.isalnum():
+                raise ValueError(f"Invalid symbols! Password can only contains letters,"
+                                 f" numbers and special symbols {self.SPECIAL_CHARS}")
         self._password = password
+
         self._employee_role = employee_role
 
 
@@ -93,7 +96,7 @@ class Employee:
             first_name=data["first_name"],
             last_name=data["last_name"],
             password=data["password"],
-            employee_role=EmployeeRole(data["employee_role"])
+            employee_role=data["employee_role"]
         )
 
         return employee
@@ -137,6 +140,16 @@ class Employee:
             str: The employee's password.
         """
         return self._password
+
+    @property
+    def employee_role(self) -> EmployeeRole:
+        """
+        Gets the employee's role.
+
+        Returns:
+            str: The employee's role.
+        """
+        return self._employee_role
 
     def __str__(self):
         """

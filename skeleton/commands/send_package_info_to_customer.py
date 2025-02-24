@@ -5,10 +5,11 @@ from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
-"""
-Sends info regarding a package to the customer.
-"""
 class SendPackageInfoToCustomerCommand(BaseCommand):
+    """
+    Sends info regarding a package to the customer.
+    """
+
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
 

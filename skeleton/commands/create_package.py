@@ -10,16 +10,6 @@ class CreatePackageCommand(BaseCommand):
     This command validates the input parameters, creates a package, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (start location, end location, weight, and customer email).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 4)
         super().__init__(params, app_data)
 
@@ -41,11 +31,8 @@ class CreatePackageCommand(BaseCommand):
         package = self.app_data.create_package(start_location, end_location, weight, customer_email)
 
 
-        self.logger.info(f"Package with ID {package.id} created | Executed by: {self.app_data.logged_in_employee}")
-        # return f"Package with ID {package.id} was created!"
-        # self.logger.info(f"Package with ID {package.id} created" + self.ROW_SEP_SHORT)
-        return f"Package with ID {package.id} was created!" + self.ROW_SEP
-        self.logger.info(f"Package with ID {package.id} created | Executed by: {self.app_data.logged_in_employee}"+ self.ROW_SEP)
+        self.logger.info(f"Package with ID {package.id} created | "
+                         f"Executed by: {self.app_data.logged_in_employee}"+ self.ROW_SEP)
 
         return (f"Package with ID {package.id} was created!"
                 f"\n{self.TABLE_SEP}"

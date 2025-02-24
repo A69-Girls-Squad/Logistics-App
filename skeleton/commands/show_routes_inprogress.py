@@ -11,16 +11,6 @@ class ShowRoutesInProgressCommand(BaseCommand):
     This command retrieves and displays details of all routes with the status `STATUS_IN_PROGRESS`.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (none required).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If any parameters are provided.
-        """
         validate_params_count(params, 0)
         super().__init__(params, app_data)
 

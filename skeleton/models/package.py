@@ -285,7 +285,8 @@ class Package:
             else:
                 status = "Delivered"
             status += (f"\nDeparture time: {self._departure_time.isoformat(sep=" ", timespec="minutes")}"
-                       f"\nEstimated arrival time: {self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}")
+                       f"\nEstimated arrival time: "
+                       f"{self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}")
         else:
             status = "Not assigned"
 

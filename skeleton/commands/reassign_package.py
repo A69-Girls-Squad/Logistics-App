@@ -11,16 +11,6 @@ class ReassignPackageCommand(BaseCommand):
     assigns it to the new route, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (package ID, unassign from route ID, and assign to route ID).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 3)
         super().__init__(params, app_data)
 
@@ -42,11 +32,8 @@ class ReassignPackageCommand(BaseCommand):
 
         self.app_data.assign_package_to_route(package_id, assign_to_route_id)
 
-        self.logger.info(f"Package with ID {package_id} reassigned from Route {unassign_from_route_id} "
+        self.logger.info(f"Package with ID {package_id} reassigned from route {unassign_from_route_id} "
                          f"to Route {assign_to_route_id} | Executed by: {self.app_data.logged_in_employee}")
-        return (f"Package with ID {package_id} was unassigned from Route with ID {unassign_from_route_id}"
-                f"and was assigned to Route with ID {assign_to_route_id}" + self.ROW_SEP*2)
-        self.logger.info(f"Package with ID {package_id} reassigned from Route {unassign_from_route_id} "
-                         f"to route {assign_to_route_id} | Executed by: {self.app_data.logged_in_employee}")
+
         return (f"Package with ID {package_id} was unassigned from route with ID {unassign_from_route_id}"
                 f"and was assigned to route with ID {assign_to_route_id}" + self.ROW_SEP*2)

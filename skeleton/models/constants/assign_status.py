@@ -1,3 +1,6 @@
+from errors.application_error import ApplicationError
+
+
 class AssignStatus:
     """
     Represents the possible assignment statuses for packages or tasks within the system.
@@ -26,7 +29,6 @@ class AssignStatus:
             ValueError: If the provided value does not match any of the valid assignment statuses.
         """
         if value not in [cls.ASSIGNED, cls.UNASSIGNED, cls.ALL]:
-            raise ValueError(
-                f"None of the possible Status values matches the value {value}.")
+            raise ApplicationError(f"None of the possible Status values matches the value {value}.")
 
         return value

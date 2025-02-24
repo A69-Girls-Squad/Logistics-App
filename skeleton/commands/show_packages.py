@@ -13,16 +13,6 @@ class ShowPackagesCommand(BaseCommand):
     and returns their string representations.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (a single status string: 'assigned', 'unassigned', or 'all').
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 1)
         super().__init__(params, app_data)
 
@@ -48,7 +38,7 @@ class ShowPackagesCommand(BaseCommand):
         else:
             packages = self.app_data.packages
 
-        def status(package):
+        def status_string(package):
             if package.departure_time:
                 if ApplicationTime.current() < package.departure_time:
                     status = f"\nPackage status: | Awaiting Dispatch\n{self.TABLE_SEP}"
@@ -56,8 +46,12 @@ class ShowPackagesCommand(BaseCommand):
                     status = f"\nPackage status: | In Transit\n{self.TABLE_SEP}"
                 else:
                     status = f"\nPackage status: | Delivered\n{self.TABLE_SEP}"
-                status += (f"\nDeparture time: | {package.departure_time.isoformat(sep=" ", timespec="minutes")}\n{self.TABLE_SEP}"
-                           f"\nArrival time:   | {package.estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}\n{self.TABLE_SEP}")
+                status += (f"\nDeparture time: | "
+                           f"{package.departure_time.isoformat(sep=" ", timespec="minutes")}"
+                           f"\n{self.TABLE_SEP}"
+                           f"\nArrival time:   | "
+                           f"{package.estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}"
+                           f"\n{self.TABLE_SEP}")
             else:
                 status = f"\nPackage status: | Not assigned\n{self.TABLE_SEP}"
             return status
@@ -72,7 +66,7 @@ class ShowPackagesCommand(BaseCommand):
                             f"\n{self.TABLE_SEP}"
                             f"\nCustomer email: | {package.customer_email}"
                             f"\n{self.TABLE_SEP}"
-                            f"{status(package)}" + self.ROW_SEP for package in packages]) + self.ROW_SEP
+                            f"{status_string(package)}" + self.ROW_SEP for package in packages]) + self.ROW_SEP
 
         self.logger.info(result)
         return result

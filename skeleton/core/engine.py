@@ -13,12 +13,6 @@ class Engine:
         _command_factory (CommandFactory): Factory instance used to create commands.
     """
     def __init__(self, factory: CommandFactory):
-        """
-        Initializes the Engine with a CommandFactory instance.
-
-        Args:
-            factory (CommandFactory): The factory responsible for creating command instances.
-        """
         self._command_factory = factory
 
     def start(self):

@@ -1,4 +1,5 @@
 class Distance:
+
     DISTANCES = {
         "SYD": {
             "MEL": 877,

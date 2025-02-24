@@ -12,16 +12,6 @@ class BulkAssignPackagesCommand(BaseCommand):
     and logs the action. It stops assigning packages if the route's capacity is exceeded.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (route ID and a list of package IDs).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_unknown_params_count(params, 2, 102)
         super().__init__(params, app_data)
 
@@ -30,7 +20,8 @@ class BulkAssignPackagesCommand(BaseCommand):
         Executes the command to assign multiple packages to a route.
 
         Returns:
-            str: A confirmation message indicating which packages were assigned and if the operation was terminated due to capacity constraints.
+            str: A confirmation message indicating which packages were assigned and
+            if the operation was terminated due to capacity constraints.
 
         Raises:
             ApplicationError: If the route or any package does not exist, or if the route has no assigned truck.
@@ -60,13 +51,13 @@ class BulkAssignPackagesCommand(BaseCommand):
                 self.app_data.assign_package_to_route(package_id, route_id)
                 bulk_assigned_packages.append(package.id)
             else:
-                no_more_capacity_message = "No more free capacity. Operation terminated"
-
                 no_more_capacity_message = "No more free capacity. Operation terminated" + self.ROW_SEP
 
         self.logger.info(f"Bulk assigned packages to route ID {route_id}:"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message}"
                          f" | Executed by: {self.app_data.logged_in_employee}"
-                         f" {bulk_assigned_packages}\n{no_more_capacity_message} | Executed by: username" + self.ROW_SEP)
+                         f" {bulk_assigned_packages}\n{no_more_capacity_message} | "
+                         f"Executed by: username" + self.ROW_SEP)
 
-        return f"Bulk assigned packages to route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}" + self.ROW_SEP*2
+        return (f"Bulk assigned packages to route ID {route_id}: "
+                f"{bulk_assigned_packages}\n{no_more_capacity_message}") + self.ROW_SEP*2

@@ -13,16 +13,6 @@ class ShowPackageCommand(BaseCommand):
     """
 
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (a single package ID).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 1)
         super().__init__(params, app_data)
 

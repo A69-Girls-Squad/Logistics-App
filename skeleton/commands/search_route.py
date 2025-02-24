@@ -13,16 +13,7 @@ class SearchRouteCommand(BaseCommand):
     and returns a formatted list of suitable routes.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
 
-        Args:
-            params: The command parameters (package ID).
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
         validate_params_count(params, 1)
         super().__init__(params, app_data)
 
@@ -67,4 +58,5 @@ class SearchRouteCommand(BaseCommand):
                                          f"{route.departure_time.isoformat(sep=" ", timespec="minutes")}"
                                          f"\n{self.ROW_SEP}")
                         suitable_routes.append(route_details)
+
         return f"SUITABLE ROUTES:\n{self.ROW_SEP}\n{self.TABLE_SEP}\n"+"\n".join(suitable_routes) + self.ROW_SEP

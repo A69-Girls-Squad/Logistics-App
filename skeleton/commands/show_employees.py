@@ -2,6 +2,7 @@ from errors.application_error import ApplicationError
 from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
+from models.constants.employee_role import EmployeeRole
 
 
 class ShowEmployeesCommand(BaseCommand):
@@ -12,8 +13,8 @@ class ShowEmployeesCommand(BaseCommand):
         validate_params_count(params, 0)
         super().__init__(params, app_data)
 
-    def execute(self) -> str:
-        if self._app_data.logged_in_employee.is_admin:
+    def execute(self):
+        if self._app_data.logged_in_employee.employee_role == EmployeeRole.MANAGER:
             if self._app_data.employees:
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
                 return "\n".join(["--EMPLOYEES--"] + employees + self.ROW_SEP*2)
