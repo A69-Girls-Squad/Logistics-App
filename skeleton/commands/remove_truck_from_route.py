@@ -19,21 +19,22 @@ class RemoveTruckFromRouteCommand(BaseCommand):
 
         truck = self.app_data.find_truck_by_id(truck_id)
         if not truck:
-            raise ApplicationError("No truck found!" + self.ROW_SEP)
+            raise ApplicationError("No truck found!" + BaseCommand.ROW_SEP)
 
         route = self._app_data.find_route_by_id(route_id)
         if not route:
-            raise ApplicationError("No route found!" + self.ROW_SEP)
+            raise ApplicationError("No route found!" + BaseCommand.ROW_SEP)
 
         if truck.assigned_route_id != route.id:
-                raise ApplicationError(f"The selected truck is not assigned to the specified route" + self.ROW_SEP)
+                raise ApplicationError(f"The selected truck is not assigned to the specified route"
+                                       + BaseCommand.ROW_SEP)
 
         self.app_data.unassign_truck_from_route(truck.id)
 
         self.logger.info(f"Truck with ID {truck_id} has been removed from route with ID {route_id}, "
                          f"truck status changed to \"free\". | "
-                         f"Executed by: {self.app_data.logged_in_employee.username}" + self.ROW_SEP)
+                         f"Executed by: {self.app_data.logged_in_employee.username}" + BaseCommand.ROW_SEP)
 
         return (f"Truck with ID {truck_id} has been removed from route ID {route_id}, "
-                f"truck status changed to \"free\".") + self.ROW_SEP*2
+                f"truck status changed to \"free\".") + BaseCommand.ROW_SEP*2
 

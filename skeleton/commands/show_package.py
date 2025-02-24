@@ -30,5 +30,5 @@ class ShowPackageCommand(BaseCommand):
         package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)
         if not package:
-            raise ApplicationError("No package found!" + self.ROW_SEP*2)
+            raise ApplicationError("No package found!" + BaseCommand.ROW_SEP*2)
         return str(package)

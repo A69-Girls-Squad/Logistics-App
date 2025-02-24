@@ -26,7 +26,7 @@ class SearchTruckCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self) -> str:
-        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + self.ROW_SEP)
+        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + BaseCommand.ROW_SEP)
 
         scania_ids = []
         man_ids = []
@@ -35,7 +35,7 @@ class SearchTruckCommand(BaseCommand):
         route_id = try_parse_int(self._params[0])
         route = self.app_data.find_route_by_id(route_id)
         if not route:
-            raise ApplicationError("No route found!" + self.ROW_SEP)
+            raise ApplicationError("No route found!" + BaseCommand.ROW_SEP)
 
         for truck in self.app_data.trucks:
             if truck.is_suitable(route):
@@ -47,23 +47,23 @@ class SearchTruckCommand(BaseCommand):
                     actros_ids.append(truck.id)
 
         if not (scania_ids or man_ids or actros_ids):
-            return "No available truck found" + self.ROW_SEP
+            return "No available truck found" + BaseCommand.ROW_SEP
 
-        return (f"AVAILABLE SCANIA TRUCKS:\n{self.TABLE_SEP}"
-                f"\nIDs:            | {", ".join(map(str, scania_ids))}\n{self.TABLE_SEP}"
-                f"\nCapacity:       | {self.SCANIA_CAPACITY}\n{self.TABLE_SEP}"
-                f"\nMax Range:      | {self.SCANIA_MAX_RANGE}\n{self.TABLE_SEP}"
+        return (f"AVAILABLE SCANIA TRUCKS:\n{BaseCommand.TABLE_SEP}"
+                f"\nIDs:            | {", ".join(map(str, scania_ids))}\n{BaseCommand.TABLE_SEP}"
+                f"\nCapacity:       | {self.SCANIA_CAPACITY}\n{BaseCommand.TABLE_SEP}"
+                f"\nMax Range:      | {self.SCANIA_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
                 f"{self.ROW_SEP}"
               
-                f"\nAVAILABLE MAN TRUCKS:\n{self.TABLE_SEP}"
-                f"\nIDs:            | {", ".join(map(str, man_ids))}\n{self.TABLE_SEP}"
-                f"\nCapacity:       | {self.MAN_CAPACITY}\n{self.TABLE_SEP}"
-                f"\nMax Range:      | {self.MAN_MAX_RANGE}\n{self.TABLE_SEP}"
+                f"\nAVAILABLE MAN TRUCKS:\n{BaseCommand.TABLE_SEP}"
+                f"\nIDs:            | {", ".join(map(str, man_ids))}\n{BaseCommand.TABLE_SEP}"
+                f"\nCapacity:       | {self.MAN_CAPACITY}\n{BaseCommand.TABLE_SEP}"
+                f"\nMax Range:      | {self.MAN_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
                 f"{self.ROW_SEP}"
                 
-                f"\nAVAILABLE ACTROS TRUCKS:\n{self.TABLE_SEP}"
-                f"\nIDs:            | {", ".join(map(str, actros_ids))}\n{self.TABLE_SEP}"
-                f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{self.TABLE_SEP}"
-                f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{self.TABLE_SEP}"
-                + self.ROW_SEP*2)
+                f"\nAVAILABLE ACTROS TRUCKS:\n{BaseCommand.TABLE_SEP}"
+                f"\nIDs:            | {", ".join(map(str, actros_ids))}\n{BaseCommand.TABLE_SEP}"
+                f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{BaseCommand.TABLE_SEP}"
+                f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
+                + BaseCommand.ROW_SEP*2)
         

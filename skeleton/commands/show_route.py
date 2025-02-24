@@ -29,4 +29,4 @@ class ShowRouteCommand(BaseCommand):
         route = self._app_data.find_route_by_id(route_id)
         if not route:
             raise ApplicationError("No route found!")
-        return str(route) + self.ROW_SEP*2
+        return str(route) + BaseCommand.ROW_SEP*2

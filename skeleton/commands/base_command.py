@@ -77,7 +77,7 @@ class BaseCommand:
                 Raises:
                     NotImplementedError: If the method is not overridden by a subclass.
                 """
-        raise NotImplementedError("Execute method has to be overridden" + self.ROW_SEP)
+        raise NotImplementedError("Execute method has to be overridden" + BaseCommand.ROW_SEP)
 
     def requires_login(self) -> str:
         """
@@ -91,7 +91,7 @@ class BaseCommand:
         """
         if self._requires_login and not self._app_data.has_logged_in_employee:
             self.logger.warning("Unauthorized access attempt detected.")
-            raise ValueError("You are not logged in! Please login first!" + self.ROW_SEP)
+            raise ValueError("You are not logged in! Please login first!" + BaseCommand.ROW_SEP)
         return ""
 
     def _throw_if_employee_logged_in(self):
@@ -105,5 +105,5 @@ class BaseCommand:
             logged_employee = self._app_data.logged_in_employee
             self.logger.error(f"Attempt to log in while employee {logged_employee.username} is already logged in.")
             raise ValueError(
-                f"Employee {logged_employee.username} is logged in! Please log out first!" + self.ROW_SEP*2
+                f"Employee {logged_employee.username} is logged in! Please log out first!" + BaseCommand.ROW_SEP*2
             )

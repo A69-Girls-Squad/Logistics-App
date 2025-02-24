@@ -1,6 +1,7 @@
 from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
+from models.truck import Truck
 
 
 class ShowTrucksCommand(BaseCommand):
@@ -27,7 +28,7 @@ class ShowTrucksCommand(BaseCommand):
 
 
     def execute(self) -> str:
-        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + self.ROW_SEP)
+        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + BaseCommand.ROW_SEP)
 
         scania_trucks = {}
         man_trucks = {}
@@ -35,8 +36,8 @@ class ShowTrucksCommand(BaseCommand):
 
         def truck_status(value):
             if truck.assigned_route_id:
-                return f"Busy (Route ID: {truck.assigned_route_id})"
-            return "Free"
+                return f"{Truck.STATUS_BUSY} (Route ID: {truck.assigned_route_id})"
+            return f"{Truck.STATUS_FREE}"
 
         for truck in self.app_data.trucks:
             if truck.name == self.SCANIA_NAME:
@@ -49,23 +50,23 @@ class ShowTrucksCommand(BaseCommand):
         if not (scania_trucks or man_trucks or actros_trucks):
             return "No available truck found" + self.ROW_SEP
 
-        return (f"AVAILABLE SCANIA TRUCKS:\n{self.TABLE_SEP}"
+        return (f"AVAILABLE SCANIA TRUCKS:\n{BaseCommand.TABLE_SEP}"
                 f"\nIDs:            | {"\n                | ".join(f"{key}: {value}" 
-                                                 for key, value in scania_trucks.items())}\n{self.TABLE_SEP}"
-                f"\nCapacity:       | {self.SCANIA_CAPACITY}\n{self.TABLE_SEP}"
-                f"\nMax Range:      | {self.SCANIA_MAX_RANGE}\n{self.TABLE_SEP}"
-                f"{self.ROW_SEP}"
+                                                 for key, value in scania_trucks.items())}\n{BaseCommand.TABLE_SEP}"
+                f"\nCapacity:       | {self.SCANIA_CAPACITY}\n{BaseCommand.TABLE_SEP}"
+                f"\nMax Range:      | {self.SCANIA_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
+                f"{BaseCommand.ROW_SEP}"
 
-                f"\nAVAILABLE MAN TRUCKS:\n{self.TABLE_SEP}"
+                f"\nAVAILABLE MAN TRUCKS:\n{BaseCommand.TABLE_SEP}"
                 f"\nIDs:            | {"\n                | ".join(f"{key}: {value}" 
-                                                 for key, value in man_trucks.items())}\n{self.TABLE_SEP}"
-                f"\nCapacity:       | {self.MAN_CAPACITY}\n{self.TABLE_SEP}"
-                f"\nMax Range:      | {self.MAN_MAX_RANGE}\n{self.TABLE_SEP}"
-                f"{self.ROW_SEP}"
+                                                 for key, value in man_trucks.items())}\n{BaseCommand.TABLE_SEP}"
+                f"\nCapacity:       | {self.MAN_CAPACITY}\n{BaseCommand.TABLE_SEP}"
+                f"\nMax Range:      | {self.MAN_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
+                f"{BaseCommand.ROW_SEP}"
 
-                f"\nAVAILABLE ACTROS TRUCKS:\n{self.TABLE_SEP}"
+                f"\nAVAILABLE ACTROS TRUCKS:\n{BaseCommand.TABLE_SEP}"
                 f"\nIDs:            | {"\n                | ".join(f"{key}: {value}" 
-                                                 for key, value in actros_trucks.items())}\n{self.TABLE_SEP}"
-                f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{self.TABLE_SEP}"
-                f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{self.TABLE_SEP}"
-                + self.ROW_SEP * 2)
+                                                 for key, value in actros_trucks.items())}\n{BaseCommand.TABLE_SEP}"
+                f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{BaseCommand.TABLE_SEP}"
+                f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
+                + BaseCommand.ROW_SEP * 2)

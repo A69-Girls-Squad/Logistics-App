@@ -1,8 +1,6 @@
 import re
-
-
 from models.constants.employee_role import EmployeeRole
-# Value Errors here - why not Application Errors?
+
 
 class Employee:
     """

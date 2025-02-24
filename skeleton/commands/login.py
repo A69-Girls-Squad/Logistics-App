@@ -33,13 +33,13 @@ class LoginCommand(BaseCommand):
         username, password = self._params
         employee = self._app_data.find_employee_by_username(username)
         if not employee:
-            raise ApplicationError("No employee found!" + self.ROW_SEP)
+            raise ApplicationError("No employee found!" + BaseCommand.ROW_SEP)
 
         if employee.password != password:
-            raise ApplicationError("Wrong username or password!" + self.ROW_SEP)
+            raise ApplicationError("Wrong username or password!" + BaseCommand.ROW_SEP)
         else:
             self._app_data.login(employee)
 
-            self.logger.info(f"User {employee.username} successfully logged in!" + self.ROW_SEP)
+            self.logger.info(f"User {employee.username} successfully logged in!" + BaseCommand.ROW_SEP)
             
-            return f"Employee {employee.username} successfully logged in!" + self.ROW_SEP*2
+            return f"Employee {employee.username} successfully logged in!" + BaseCommand.ROW_SEP*2

@@ -147,12 +147,12 @@ class Route:
         if not isinstance(value, str):
             raise ApplicationError("Invalid locations")
 
-        if self.LOCATIONS_SEPARATOR not in value:
-            raise ApplicationError(f"Locations should be separated by \"{self.LOCATIONS_SEPARATOR}\"")
-        value = value.split(self.LOCATIONS_SEPARATOR)
+        if Route.LOCATIONS_SEPARATOR not in value:
+            raise ApplicationError(f"Locations should be separated by \"{Route.LOCATIONS_SEPARATOR}\"")
+        value = value.split(Route.LOCATIONS_SEPARATOR)
 
         for location in value:
-            if location not in self.CITIES:
+            if location not in Route.CITIES:
                 raise ApplicationError(f"Invalid location: {location}.")
 
         for i in range(len(value)-1):
@@ -192,7 +192,7 @@ class Route:
             self._departure_time = departure_time
         except ValueError:
             raise ApplicationError(f"Departure time {value} "
-                                   f"does not match the format {self.REQUIRED_DATE_FORMAT}")
+                                   f"does not match the format {Route.REQUIRED_DATE_FORMAT}")
     @property
     def id(self) -> int:
         """
@@ -296,11 +296,11 @@ class Route:
             str: The current status of the route (`STATUS_CREATED`, `STATUS_IN_PROGRESS`, or `STATUS_FINISHED`).
         """
         if ApplicationTime.current() < self.departure_time:
-            return self.STATUS_CREATED
+            return Route.STATUS_CREATED
         if ApplicationTime.current() > self.estimated_arrival_time:
-            return self.STATUS_FINISHED
+            return Route.STATUS_FINISHED
         else:
-            return self.STATUS_IN_PROGRESS
+            return Route.STATUS_IN_PROGRESS
 
     @property
     def current_location(self) -> str:

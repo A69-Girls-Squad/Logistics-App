@@ -58,6 +58,6 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
         package_details = self.package_info()
         subject = f"Package Details: {package.id}"
 
-        self.logger.info(f"Package info sent to customer: {customer_email}" + self.ROW_SEP)
+        self.logger.info(f"Package info sent to customer: {customer_email}" + BaseCommand.ROW_SEP)
         
         self.send_email(subject, package_details, customer_email)

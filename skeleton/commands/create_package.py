@@ -32,15 +32,15 @@ class CreatePackageCommand(BaseCommand):
 
 
         self.logger.info(f"Package with ID {package.id} created | "
-                         f"Executed by: {self.app_data.logged_in_employee}"+ self.ROW_SEP)
+                         f"Executed by: {self.app_data.logged_in_employee}"+ BaseCommand.ROW_SEP)
 
         return (f"Package with ID {package.id} was created!"
-                f"\n{self.TABLE_SEP}"
+                f"\n{BaseCommand.TABLE_SEP}"
                 f"\nStart Location: | {start_location}"
-                f"\n{self.TABLE_SEP}"
+                f"\n{BaseCommand.TABLE_SEP}"
                 f"\nEnd Location:   | {end_location}"
-                f"\n{self.TABLE_SEP}"
+                f"\n{BaseCommand.TABLE_SEP}"
                 f"\nWeight:         | {weight_float} kg"
-                f"\n{self.TABLE_SEP}"
+                f"\n{BaseCommand.TABLE_SEP}"
                 f"\nCustomer email: | {customer_email}"
-                f"\n{self.TABLE_SEP}") + self.ROW_SEP*2
+                f"\n{BaseCommand.TABLE_SEP}") + BaseCommand.ROW_SEP*2
