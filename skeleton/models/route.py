@@ -1,6 +1,4 @@
 from datetime import datetime, timedelta
-
-from commands.base_command import BaseCommand
 from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.truck import Truck
@@ -26,7 +24,7 @@ class Route:
     CITIES = list(Distance.DISTANCES)
     AVERAGE_SPEED = 87
     LOCATIONS_SEPARATOR = ","
-    REQUIRED_DATE_FORMAT = '%Y-%m-%d %H:%M'
+    REQUIRED_DATE_FORMAT = "%Y-%m-%d %H:%M"
 
     STATUS_CREATED = "Created"
     STATUS_IN_PROGRESS = "In progress"
@@ -341,7 +339,7 @@ class Route:
             f"{truck_info}"
             f"\nStatus: {self.status}"
             f"\nCurrent location: {self.current_location}"
-            f"\n{BaseCommand.ROW_SEP}"
+            f"\n" + "=" * 40
         )
 
     def calculating_estimated_arrival_times(self):

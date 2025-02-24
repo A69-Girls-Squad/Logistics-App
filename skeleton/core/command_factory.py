@@ -80,7 +80,7 @@ class CommandFactory:
             return ShowRouteCommand(params, self._app_data)
         if cmd.lower() == "showtrucks":
             return ShowTrucksCommand(params, self._app_data)
-        if cmd.lower() == 'assignpackagetoroute':
+        if cmd.lower() == "assignpackagetoroute":
             return AssignPackageToRouteCommand(params, self._app_data)
         if cmd.lower() == "assignpackagetoroute":
             return AssignPackageToRouteCommand(params, self._app_data)
@@ -94,9 +94,9 @@ class CommandFactory:
             return SendPackageInfoToCustomerCommand(params, self._app_data)
         if cmd.lower() == "showroutesinprogress":
             return ShowRoutesInProgressCommand(params, self._app_data)
-        if cmd.lower() == 'unassignpackagetoroute':
+        if cmd.lower() == "unassignpackagetoroute":
             return UnassignPackageToRouteCommand(params, self._app_data)
-        if cmd.lower() == 'reassignpackage':
+        if cmd.lower() == "reassignpackage":
             return ReassignPackageCommand(params, self._app_data)
         if cmd.lower() == "settime":
             return SetTimeCommand(params, self._app_data)

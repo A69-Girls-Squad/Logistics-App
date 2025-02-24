@@ -45,7 +45,7 @@ class CreatePackageCommand(BaseCommand):
         self.logger.info(f"Package with ID {package.id} created | Executed by: {self.app_data.logged_in_employee}")
         # return f"Package with ID {package.id} was created!"
         # self.logger.info(f"Package with ID {package.id} created" + self.ROW_SEP_SHORT)
-        return f"Package with ID {package.id} was created!" + self.ROW_SEP_SHORT
+        return f"Package with ID {package.id} was created!" + self.ROW_SEP
         self.logger.info(f"Package with ID {package.id} created | Executed by: {self.app_data.logged_in_employee}"+ self.ROW_SEP)
 
         return (f"Package with ID {package.id} was created!"
