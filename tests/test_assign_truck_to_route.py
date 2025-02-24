@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from commands.assign_truck_to_route import AssignTruckToRouteCommand
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+import test_data as td
 
 
 class TestAssignTruckToRouteCommand(unittest.TestCase):
@@ -39,7 +40,7 @@ class TestAssignTruckToRouteCommand(unittest.TestCase):
             cmd.execute()
 
     def test_invalid_route_id(self):
-        params = ["1001", "invalid"]
+        params = ["1001", td.INVALID_ROUTE_ID]
         app_data_mock = MagicMock(spec=ApplicationData)
 
         cmd = AssignTruckToRouteCommand(params, app_data_mock)
