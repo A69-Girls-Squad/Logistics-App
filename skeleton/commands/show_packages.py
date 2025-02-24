@@ -38,8 +38,6 @@ class ShowPackagesCommand(BaseCommand):
             - If the status is 'unassigned', only unassigned packages are displayed.
             - If the status is 'all', all packages are displayed.
         """
-        status = self.params[0].lower()
-    def execute(self):
         requested_status = self.params[0].lower()
         result = "PACKAGES:" + self.ROW_SEP
 

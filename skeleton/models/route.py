@@ -124,7 +124,7 @@ class Route:
         }
 
     @property
-    def locations(self):
+    def locations(self) -> tuple:
         """
         Gets the locations of the route as a tuple.
 
@@ -134,7 +134,7 @@ class Route:
         return tuple(self._locations)
 
     @locations.setter
-    def locations(self, value: str):
+    def locations(self, value: str) -> None:
         """
         Sets the locations of the route.
 
@@ -165,7 +165,7 @@ class Route:
         self._locations = value
 
     @property
-    def departure_time(self):
+    def departure_time(self) -> datetime:
         """
         Gets the departure time of the route.
 
@@ -175,7 +175,7 @@ class Route:
         return self._departure_time
 
     @departure_time.setter
-    def departure_time(self, value: str):
+    def departure_time(self, value: str) -> None:
         """
         Sets the departure time of the route.
 
@@ -194,7 +194,7 @@ class Route:
             raise ApplicationError(f"Departure time {value} "
                                    f"does not match the format {self.REQUIRED_DATE_FORMAT}")
     @property
-    def id(self):
+    def id(self) -> int:
         """
         Gets the unique identifier of the route.
 
@@ -204,7 +204,7 @@ class Route:
         return self._id
 
     @property
-    def assigned_truck_id(self):
+    def assigned_truck_id(self) -> int:
         """
         Gets the ID of the truck assigned to the route.
 
@@ -214,7 +214,7 @@ class Route:
         return self._assigned_truck_id
 
     @assigned_truck_id.setter
-    def assigned_truck_id(self, value: Truck):
+    def assigned_truck_id(self, value: Truck) -> None:
         """
         Sets the ID of the truck assigned to the route.
 
@@ -224,7 +224,7 @@ class Route:
         self._assigned_truck_id = value
 
     @property
-    def assigned_packages_ids(self):
+    def assigned_packages_ids(self) -> tuple:
         """
         Gets the IDs of the packages assigned to the route.
 
@@ -234,7 +234,7 @@ class Route:
         return tuple(self._assigned_packages_ids)
 
     @property
-    def load(self):
+    def load(self) -> int:
         """
         Gets the total load weight of the route.
 
@@ -244,7 +244,7 @@ class Route:
         return self._load
 
     @load.setter
-    def load(self, value: int):
+    def load(self, value: int) -> None:
         """
         Sets the total load weight of the route.
 
@@ -254,7 +254,7 @@ class Route:
         self._load = value
 
     @property
-    def stops(self):
+    def stops(self) -> dict:
         """
         Gets the estimated arrival times for each stop along the route.
 
@@ -265,7 +265,7 @@ class Route:
         return self._stops
 
     @property
-    def distance(self):
+    def distance(self) -> int:
         """
          Calculates the total distance of the route.
 
@@ -288,7 +288,7 @@ class Route:
         return self.stops[self.locations[-1]]
 
     @property
-    def status(self):
+    def status(self) -> str:
         """
         Gets the current status of the route.
 
@@ -303,7 +303,7 @@ class Route:
             return self.STATUS_IN_PROGRESS
 
     @property
-    def current_location(self):
+    def current_location(self) -> str:
         """
         Gets the truck's last known location based on the current time.
 
@@ -342,7 +342,7 @@ class Route:
             f"\n" + "=" * 40
         )
 
-    def calculating_estimated_arrival_times(self):
+    def calculating_estimated_arrival_times(self) -> None:
         """
         Calculates the expected arrival times for each stop along the route.
 
@@ -367,7 +367,7 @@ class Route:
 
             self._stops[location] = estimated_arrival_time
 
-    def assign_package(self, package_id):
+    def assign_package(self, package_id: int) -> None:
         """
         Assigns a package to the route.
 
@@ -376,7 +376,7 @@ class Route:
         """
         self._assigned_packages_ids.append(package_id)
 
-    def remove_package(self, package_id):
+    def remove_package(self, package_id: int) -> None:
         """
         Removes a package from the route.
 
@@ -385,7 +385,7 @@ class Route:
         """
         self._assigned_packages_ids.remove(package_id)
 
-    def assign_truck(self, truck_id):
+    def assign_truck(self, truck_id: int) -> None:
         """
         Assigns a truck to the route.
 

@@ -13,7 +13,7 @@ class RemoveTruckFromRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
         validate_params_count(self.params, 2)
         truck_id, route_id = self.params
 

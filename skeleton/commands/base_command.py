@@ -69,17 +69,16 @@ class BaseCommand:
         return self._app_data
 
     def execute(self) -> str:
+        """
+                Executes the command. This method must be overridden by subclasses.
+
+                Returns:
+                    str: The result of the command execution.
+
+                Raises:
+                    NotImplementedError: If the method is not overridden by a subclass.
+                """
         raise NotImplementedError("Execute method has to be overridden" + self.ROW_SEP)
-        """
-        Executes the command. This method must be overridden by subclasses.
-
-        Returns:
-            str: The result of the command execution.
-
-        Raises:
-            NotImplementedError: If the method is not overridden by a subclass.
-        """
-        raise NotImplementedError("Execute method has to be overridden" + self.ROW_SEP_SHORT)
 
     def requires_login(self) -> str:
         """

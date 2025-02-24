@@ -7,7 +7,7 @@ class AssignTruckToRouteCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
         """
         Assigns available truck to a route.
 

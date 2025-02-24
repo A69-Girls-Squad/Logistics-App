@@ -195,7 +195,7 @@ class Package:
         return self._departure_time
 
     @departure_time.setter
-    def departure_time(self, value: datetime):
+    def departure_time(self, value: datetime) -> None:
         """
         Sets the departure time of the package.
 
@@ -215,7 +215,7 @@ class Package:
         return self._estimated_arrival_time
 
     @estimated_arrival_time.setter
-    def estimated_arrival_time(self, value: datetime):
+    def estimated_arrival_time(self, value: datetime) -> None:
         """
         Sets the estimated arrival time of the package.
 
@@ -235,7 +235,7 @@ class Package:
         return self._is_assigned
 
     @is_assigned.setter
-    def is_assigned(self, value: bool):
+    def is_assigned(self, value: bool) -> None:
         """
         Sets whether the package is assigned to a route.
 
@@ -245,7 +245,7 @@ class Package:
         self._is_assigned = value
 
     @property
-    def route_id(self):
+    def route_id(self) -> int:
         """
         Gets the route ID associated with the package.
 
@@ -255,7 +255,7 @@ class Package:
         return self._route_id
 
     @route_id.setter
-    def route_id(self, value):
+    def route_id(self, value) -> None:
         """
         Sets the route ID associated with the package.
 

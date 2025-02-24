@@ -14,7 +14,7 @@ class ShowTrucksCommand(BaseCommand):
         super().__init__(params, app_data)
 
 
-    def execute(self):
+    def execute(self) -> str:
         #status_param = self.params[0].lower()
             pass
 

@@ -24,7 +24,7 @@ class AssignPackageToRouteCommand(BaseCommand):
         validate_params_count(params, 2)
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
         """
         Executes the command to assign a package to a route.
 

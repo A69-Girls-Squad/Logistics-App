@@ -12,7 +12,7 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
 
-    def package_info(self):
+    def package_info(self) -> str:
         package_id = try_parse_int(self._params[0])
         package = self.app_data.find_package_by_id(package_id)
 

@@ -36,8 +36,7 @@ class ShowPackageCommand(BaseCommand):
         Raises:
             ApplicationError: If no package is found with the provided ID.
         """
-        package_id = self._params[0]
-    def execute(self):
+
         package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)
         if not package:

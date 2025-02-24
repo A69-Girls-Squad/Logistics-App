@@ -70,27 +70,27 @@ class Truck:
         }
 
     @property
-    def id(self):
+    def id(self) -> int:
         return self._id
 
     @property
-    def name(self):
+    def name(self) -> str:
         return self._name
         
     @property
-    def capacity(self):
+    def capacity(self) -> int:
         return self._capacity
         
     @property
-    def max_range(self):
+    def max_range(self) -> int:
         return self._max_range
 
     @property
-    def assigned_route_id(self):
+    def assigned_route_id(self) -> int:
         return self._assigned_route_id
 
     @assigned_route_id.setter
-    def assigned_route_id(self, value):
+    def assigned_route_id(self, value) -> None:
         self._assigned_route_id = value
 
     def is_suitable(self, route) -> bool:

@@ -25,7 +25,7 @@ class SearchTruckCommand(BaseCommand):
         validate_params_count(params, 1)
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
         self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + self.ROW_SEP)
 
         scania_ids = []

@@ -12,7 +12,7 @@ class ShowEmployeesCommand(BaseCommand):
         validate_params_count(params, 0)
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
         if self._app_data.logged_in_employee.is_admin:
             if self._app_data.employees:
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
