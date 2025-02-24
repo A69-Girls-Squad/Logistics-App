@@ -47,17 +47,17 @@ class Package:
         self._id = Package.next_id()
 
         if start_location not in Route.CITIES:
-            raise ValueError("Location does not exists")
+            raise ValueError("Start location does not exist")
         self._start_location = start_location
 
         if end_location not in Route.CITIES:
-            raise ValueError("Location does not exists")
+            raise ValueError("End location does not exist")
         if start_location == end_location:
             raise ApplicationError("Start location can not be the same as End location")
         self._end_location = end_location
 
         if weight < 0:
-            raise ValueError("Weight can not be negative number")
+            raise ValueError("Weight can not be a negative number")
         self._weight = try_parse_float(weight)
 
         if not Package._email_regex.fullmatch(customer_email):
