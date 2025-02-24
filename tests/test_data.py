@@ -73,3 +73,5 @@ VALID_TRUCK_MAX_RANGE = 8000
     #     else:
     #         return _my_custom_now
 # @patch
+def VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT():
+ return None
