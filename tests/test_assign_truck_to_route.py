@@ -16,7 +16,8 @@ class TestAssignTruckToRouteCommand(unittest.TestCase):
         cmd = AssignTruckToRouteCommand(params, app_data_mock)
         output = cmd.execute()
 
-        self.assertEqual(output, "Truck with id 1001 assigned to route 11")
+        expected_output = "Truck with id 1001 assigned to route 11" + cmd.ROW_SEP_LONG
+        self.assertEqual(output, expected_output)
         app_data_mock.assign_truck_to_route.assert_called_once_with(1001, 11)
 
     def test_invalid_params_count(self):
@@ -52,7 +53,7 @@ class TestAssignTruckToRouteCommand(unittest.TestCase):
         app_data_mock.logged_in_employee = "Test User"
 
         cmd = AssignTruckToRouteCommand(params, app_data_mock)
-        
+
         with self.assertLogs(cmd.logger, level="INFO") as log:
             cmd.execute()
 
