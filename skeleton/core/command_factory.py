@@ -1,5 +1,6 @@
 from commands.reassign_package import ReassignPackageCommand
 from commands.set_time import SetTimeCommand
+from commands.show_package import ShowPackageCommand
 from commands.unassign_package_from_route import UnassignPackageToRouteCommand
 from commands.assign_package_to_route import AssignPackageToRouteCommand
 from commands.assign_truck_to_route import AssignTruckToRouteCommand
@@ -25,15 +26,12 @@ class CommandFactory:
     """
     Factory class responsible for creating command instances based on user input.
 
+    The CommandFactory parses user input, identifies the corresponding command,
+    and returns an instance of the appropriate command class. It uses shared
+    application data to initialize commands.
+
     Attributes:
         _app_data (ApplicationData): The application data shared across commands.
-
-    Methods:
-        create(input_line: str) -> Command:
-            Parses the input line, identifies the command, and returns the corresponding command object.
-
-    Raises:
-        ValueError: If the provided command is not recognized.
     """
 
     def __init__(self, data: ApplicationData):
@@ -56,7 +54,7 @@ class CommandFactory:
             Command: An instance of the corresponding command class.
 
         Raises:
-            ValueError: If the command is not recognized.
+            ApplicationError: If the command is not recognized or is invalid.
         """
         cmd, *params = input_line.split()
 
@@ -76,6 +74,8 @@ class CommandFactory:
             return SearchTruckCommand(params, self._app_data)
         if cmd.lower() == "showpackages":
             return ShowPackagesCommand(params, self._app_data)
+        if cmd.lower() == "showpackage":
+            return ShowPackageCommand(params, self._app_data)
         if cmd.lower() == "showroute":
             return ShowRouteCommand(params, self._app_data)
         if cmd.lower() == "showtrucks":

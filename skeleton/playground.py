@@ -28,7 +28,7 @@ createroute SYD,MEL,ADL 2025-10-12T06:00
 createpackage SYD MEL 45 johnsmith@gmail.com
 searchroute 1
 UnassignPackageToRoute 1 1
-assignpackagetoroute 2 1
+assignpackagetoroute 1 1
 showpackages all
 exit
 '''
@@ -76,22 +76,22 @@ showpackages assigned
 # detailed information which is then emailed to the customer.
 
 '''
-sendpackageinfotocustomer 1
+showpackage 1
 '''
 
 
 # ALL INPUT
 '''
-createroute BRI,SYD,MEL 2025-10-10T06:00
-createroute SYD,MEL,ADL 2025-10-12T06:00
+createroute BRI,SYD,MEL 2025-10-10-06:00
+createroute SYD,MEL,ADL 2025-10-12-06:00
 createpackage SYD MEL 45 johnsmith@gmail.com
 searchroute 1
-UnassignPackageToRoute 1 1
 assignpackagetoroute 1 1
+UnassignPackageToRoute 1 1
 showpackages all
 createroute ASP,ADL,MEL,SYD,BRI 2025-09-12T06:00
-searchtruck 3
-assigntrucktoroute 1001 3
+searchtruck 1
+assigntrucktoroute 1001 2
 showpackages all
 bulkassignpackages 3 2 4
 createroute ASP,ADL,MEL,SYD,BRI 2025-02-25T00:17
