@@ -1,9 +1,8 @@
 import unittest
-from datetime import datetime
 from models.package import Package
-from models.route import Route
 from errors.application_error import ApplicationError
 import test_data as td
+from datetime import datetime
 
 class PackageTests(unittest.TestCase):
     def setUp(self):
@@ -65,7 +64,7 @@ class PackageTests(unittest.TestCase):
                 weight=td.VALID_WEIGHT,
                 customer_email=td.VALID_CUSTOMER_EMAIL
             )
-        self.assertEqual(str(context.exception), "Start location cannot be the same as End location")
+        self.assertEqual(str(context.exception), "Start location can not be the same as End location")
 
     def test_createPackage_withNegativeWeight_raisesValueError(self):
         # Arrange
@@ -79,7 +78,7 @@ class PackageTests(unittest.TestCase):
                 weight=negative_weight,
                 customer_email=td.VALID_CUSTOMER_EMAIL
             )
-        self.assertEqual(str(context.exception), "Weight cannot be a negative number")
+        self.assertEqual(str(context.exception), "Weight can not be a negative number")
 
     def test_createPackage_withInvalidEmail_raisesValueError(self):
         # Arrange
@@ -115,7 +114,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(package.weight, td.VALID_WEIGHT)
         self.assertEqual(package.customer_email, td.VALID_CUSTOMER_EMAIL)
         self.assertEqual(package.departure_time, td.VALID_DEPARTURE_TIME_OUTPUT)
-        self.assertEqual(package.estimated_arrival_time, td.VALID_DEPARTURE_TIME_OUTPUT)
+        self.assertEqual(package.estimated_arrival_time, td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT)
         self.assertTrue(package.is_assigned)
         self.assertEqual(package.route_id, 1)
 
@@ -128,7 +127,7 @@ class PackageTests(unittest.TestCase):
             customer_email=td.VALID_CUSTOMER_EMAIL
         )
         package.departure_time = td.VALID_DEPARTURE_TIME_OUTPUT
-        package.estimated_arrival_time = td.VALID_DEPARTURE_TIME_OUTPUT
+        package.estimated_arrival_time = td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT
         package.is_assigned = True
         package.route_id = 1
 
@@ -142,7 +141,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(json_data["weight"], td.VALID_WEIGHT)
         self.assertEqual(json_data["customer_email"], td.VALID_CUSTOMER_EMAIL)
         self.assertEqual(json_data["departure_time"], td.VALID_DEPARTURE_TIME_OUTPUT.isoformat())
-        self.assertEqual(json_data["estimated_arrival_time"], td.VALID_DEPARTURE_TIME_OUTPUT.isoformat())
+        self.assertEqual(json_data["estimated_arrival_time"], td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT.isoformat())
         self.assertTrue(json_data["is_assigned"])
         self.assertEqual(json_data["route_id"], 1)
 
@@ -155,7 +154,7 @@ class PackageTests(unittest.TestCase):
             customer_email=td.VALID_CUSTOMER_EMAIL
         )
         package.departure_time = td.VALID_DEPARTURE_TIME_OUTPUT
-        package.estimated_arrival_time = td.VALID_DEPARTURE_TIME_OUTPUT
+        package.estimated_arrival_time = td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT
 
         expected_output = (
             f"ID: 1\n"
@@ -163,9 +162,9 @@ class PackageTests(unittest.TestCase):
             f"End Location: {td.VALID_END_LOCATION}\n"
             f"Weight: {td.VALID_WEIGHT:.2f} kg\n"
             f"Customer Email Address: {td.VALID_CUSTOMER_EMAIL}\n"
-            f"Departure time: {td.VALID_DEPARTURE_TIME_OUTPUT.strftime(td.VALID_DATETIME_FORMAT)}\n"
-            f"Estimated arrival time: {td.VALID_DEPARTURE_TIME_OUTPUT.strftime(td.VALID_DATETIME_FORMAT)}\n"
-            f"Package status: Awaiting Dispatch"
+            f"Package status: Awaiting Dispatch\n"
+            f"Departure time: {td.VALID_DEPARTURE_TIME_OUTPUT.isoformat(sep=' ', timespec='minutes')}\n"
+            f"Estimated arrival time: {td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT.isoformat(sep=' ', timespec='minutes')}"
         )
 
         # Act
@@ -173,6 +172,3 @@ class PackageTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(result, expected_output)
-
-if __name__ == "__main__":
-    unittest.main()
