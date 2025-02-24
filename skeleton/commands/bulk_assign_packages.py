@@ -47,7 +47,7 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
         if not truck:
-            raise ApplicationError(f"Route with ID {route_id} has no Truck assigned" + self.ROW_SEP)
+            raise ApplicationError(f"Route with ID {route_id} has no truck assigned" + self.ROW_SEP)
 
         free_capacity = truck.capacity - route.load
         for package_id in packages_ids:
@@ -64,9 +64,9 @@ class BulkAssignPackagesCommand(BaseCommand):
 
                 no_more_capacity_message = "No more free capacity. Operation terminated" + self.ROW_SEP
 
-        self.logger.info(f"Bulk assigned packages to Route ID {route_id}:"
+        self.logger.info(f"Bulk assigned packages to route ID {route_id}:"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message}"
                          f" | Executed by: {self.app_data.logged_in_employee}"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message} | Executed by: username" + self.ROW_SEP)
 
-        return f"Bulk assigned packages to Route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}" + self.ROW_SEP*2
+        return f"Bulk assigned packages to route ID {route_id}: {bulk_assigned_packages}\n{no_more_capacity_message}" + self.ROW_SEP*2

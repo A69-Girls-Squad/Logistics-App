@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 
+from commands.base_command import BaseCommand
 from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.truck import Truck
@@ -327,20 +328,20 @@ class Route:
             str: A formatted string containing route details.
         """
         if self.assigned_truck_id:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id}"
+            truck_info = f"\nAssigned truck ID: {self.assigned_truck_id}"
         else:
             truck_info = ""
         return (
-            f"Route Details:"
+            f"ROUTE DETAILS:"
             f"\nID: {self.id}"
             f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
-            f"\nDeparture Time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
-            f"\nNumber of Packages: {len(self._assigned_packages_ids)}"
-            f"\nCurrent Load: {self.load}"
+            f"\nDeparture time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
+            f"\nNumber of packages: {len(self._assigned_packages_ids)}"
+            f"\nCurrent load: {self.load}"
             f"{truck_info}"
             f"\nStatus: {self.status}"
-            f"\nCurrent Location: {self.current_location}"
-            f"\n============"
+            f"\nCurrent location: {self.current_location}"
+            f"\n{BaseCommand.ROW_SEP}"
         )
 
     def calculating_estimated_arrival_times(self):

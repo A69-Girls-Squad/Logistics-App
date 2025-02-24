@@ -51,6 +51,6 @@ class RegisterEmployeeCommand(BaseCommand):
         employee = self._app_data.create_employee(username, firstname, lastname, password, employee_role)
         self._app_data.login(employee)
 
-        self.logger.info("User {employee.username} registered successfully!" + self.ROW_SEP)
+        self.logger.info(f"User {employee.username} registered successfully!" + self.ROW_SEP)
 
         return f"Employee {employee.username} registered successfully!" + self.ROW_SEP*2

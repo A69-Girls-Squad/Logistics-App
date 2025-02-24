@@ -52,7 +52,7 @@ class Employee:
         if len(first_name) > 30 or len(first_name) < 2:
             raise ValueError("Name must be between 2 and 30 characters.")
         if not first_name.replace(" ", "").replace("-", "").isalpha():
-            raise ValueError("First name an only contain letters, spaces, and hyphens.")
+            raise ValueError("First name can only contain letters, spaces, and hyphens.")
         self._first_name = first_name
 
         if len(last_name) > 30 or len(last_name) < 2:

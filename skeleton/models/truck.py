@@ -108,8 +108,9 @@ class Truck:
         else:
             truck_status = "Free"
 
-        return (f"Truck with ID: {self._id}"
+        return (f"TRUCK DETAILS:"
+                f"\nID: {self._id}"
                 f"\nName: {self._name}"
                 f"\nCapacity: {self.capacity}"
-                f"\nRange: {self.max_range} created"
+                f"\nRange: {self.max_range}"
                 f"\nStatus: {truck_status}")

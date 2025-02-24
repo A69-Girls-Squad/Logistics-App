@@ -66,7 +66,7 @@ showroutesinprogress
 # route. The system responds with a list of packages containing their IDs and locations
 
 '''
-showpackages assigned
+showpackages unassigned
 '''
 
 # Use case #5

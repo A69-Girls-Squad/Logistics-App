@@ -19,10 +19,10 @@ class AssignTruckToRouteCommand(BaseCommand):
         self.app_data.assign_truck_to_route(truck_id, route_id)
 
         self.logger.info(
-            f"Truck with id {truck_id} assigned to route {route_id} "
+            f"Truck with ID {truck_id} assigned to route with ID {route_id} "
             f"| Executed by: {self.app_data.logged_in_employee}"
             )
 
-        return f"Truck with id {truck_id} assigned to route {route_id}" + self.ROW_SEP*2
+        return f"Truck with ID {truck_id} assigned to route with ID {route_id}" + self.ROW_SEP*2
 
     

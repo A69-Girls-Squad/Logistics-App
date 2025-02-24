@@ -66,13 +66,13 @@ class ShowPackagesCommand(BaseCommand):
 
         result += "\n".join([f"\nPACKAGE ID:     | {package.id}"
                             f"\n{self.TABLE_SEP}"
-                            f"\nStart Location: | {package.start_location}"
+                            f"\nStart location: | {package.start_location}"
                             f"\n{self.TABLE_SEP}"
-                            f"\nEnd Location:   | {package.end_location}"
+                            f"\nEnd location:   | {package.end_location}"
                             f"\n{self.TABLE_SEP}"
                             f"\nWeight:         | {package.weight:.2f} kg"
                             f"\n{self.TABLE_SEP}"
-                            f"\nCustomer Email: | {package.customer_email}"
+                            f"\nCustomer email: | {package.customer_email}"
                             f"\n{self.TABLE_SEP}"
                             f"{status(package)}" + self.ROW_SEP for package in packages]) + self.ROW_SEP
 

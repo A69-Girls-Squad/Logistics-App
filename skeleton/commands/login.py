@@ -50,6 +50,6 @@ class LoginCommand(BaseCommand):
         else:
             self._app_data.login(employee)
 
-            self.logger.info("User {employee.username} successfully logged in!" + self.ROW_SEP)
+            self.logger.info(f"User {employee.username} successfully logged in!" + self.ROW_SEP)
             
             return f"Employee {employee.username} successfully logged in!" + self.ROW_SEP*2

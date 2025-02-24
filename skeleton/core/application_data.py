@@ -231,7 +231,7 @@ class ApplicationData:
         if truck.assigned_route_id:
             raise ApplicationError(f"Truck with ID {truck_id} is already assigned")
         if route.assigned_truck_id:
-            raise ApplicationError(f"Route with ID {route_id} already has a Truck assigned")
+            raise ApplicationError(f"Route with ID {route_id} already has a truck assigned")
 
         if route.load > truck.capacity:
             raise ApplicationError("Not enough capacity.")
@@ -277,7 +277,7 @@ class ApplicationData:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
 
         if package.route_id == route_id or package_id in route.assigned_packages_ids:
-            raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
+            raise ApplicationError(f"Package with ID {package_id} is already assigned to route with ID {route_id}")
         if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
@@ -294,10 +294,10 @@ class ApplicationData:
             if free_capacity < package.weight:
                 raise ApplicationError(f"Route with ID {route_id} has no more capacity")
             if route.departure_time < ApplicationTime.current():
-                raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+                raise ApplicationError(f"Assigned truck to route with ID {route_id} has already departed")
             if package.start_location not in route.locations:
                 raise ApplicationError(f"Package with ID {package_id} start location "
-                                       f"does not exists in Route with ID {route_id}")
+                                       f"does not exists in route with ID {route_id}")
 
 
         package.departure_time = route.departure_time
@@ -326,7 +326,7 @@ class ApplicationData:
         if route is None:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
         if route.departure_time > ApplicationTime.current():
-            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+            raise ApplicationError(f"Assigned truck to route with ID {route_id} has already departed")
 
         package.departure_time = None
         package.estimated_arrival_time = None
