@@ -6,11 +6,36 @@ from models.route import Route
 
 
 class SearchRouteCommand(BaseCommand):
+    """
+    Command to search for suitable routes for a specific package.
+
+    This command validates the input parameters, searches for routes that can accommodate the package,
+    and returns a formatted list of suitable routes.
+    """
     def __init__(self, params, app_data: ApplicationData):
+        """
+        Initializes the command with parameters and application data.
+
+        Args:
+            params: The command parameters (package ID).
+            app_data: The shared application data.
+
+        Raises:
+            ValueError: If the number of parameters is invalid.
+        """
         validate_params_count(params, 1)
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
+        """
+        Executes the command to search for suitable routes for a specific package.
+
+        Returns:
+            str: A formatted string containing details of suitable routes.
+
+        Raises:
+            ApplicationError: If the package does not exist or no suitable routes are found.
+        """
         suitable_routes = []
         package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)

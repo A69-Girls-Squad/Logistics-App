@@ -73,21 +73,22 @@ class Package:
     @classmethod
     def from_json(cls, data):
         """
-          Creates a Package instance from a dictionary representation.
+        Creates a Package instance from a JSON-compatible dictionary.
 
-          Args:
-              data (dict): A dictionary containing package details, including:
-                  - _start_location (str): The starting location of the package.
-                  - _end_location (str): The destination location of the package.
-                  - _weight (float): The weight of the package.
-                  - _customer_email (str): The email address of the customer.
-                  - _departure_time (str or None): The departure time in ISO format.
-                  - _estimated_arrival_time (str or None): The estimated arrival time in ISO format.
-                  - _is_assigned (bool): Whether the package is assigned to a route.
+        Args:
+            data (dict): A dictionary containing package details, including:
+                - start_location (str): The starting location of the package.
+                - end_location (str): The destination location of the package.
+                - weight (float): The weight of the package.
+                - customer_email (str): The email address of the customer.
+                - departure_time (str or None): The departure time in ISO format.
+                - estimated_arrival_time (str or None): The estimated arrival time in ISO format.
+                - is_assigned (bool): Whether the package is assigned to a route.
+                - route_id (int or None): The associated route ID.
 
-          Returns:
-              Package: An instance of the Package class.
-          """
+        Returns:
+            Package: An instance of the Package class.
+        """
         package = cls(
             start_location=data["start_location"],
             end_location=data["end_location"],
@@ -111,15 +112,15 @@ class Package:
 
         Returns:
             dict: A dictionary representation of the package, including:
-                - _id (int): The package ID.
-                - _start_location (str): The start location.
-                - _end_location (str): The end location.
-                - _weight (float): The weight of the package.
-                - _customer_email (str): The customer's email address.
-                - _departure_time (str or None): The departure time in ISO format.
-                - _estimated_arrival_time (str or None): The estimated arrival time in ISO format.
-                - _is_assigned (bool): Whether the package is assigned.
-                - _route_id (int or None): The associated route ID.
+                - id (int): The package ID.
+                - start_location (str): The start location.
+                - end_location (str): The end location.
+                - weight (float): The weight of the package.
+                - customer_email (str): The customer's email address.
+                - departure_time (str or None): The departure time in ISO format.
+                - estimated_arrival_time (str or None): The estimated arrival time in ISO format.
+                - is_assigned (bool): Whether the package is assigned.
+                - route_id (int or None): The associated route ID.
         """
         return {
             "id": self._id,
@@ -136,7 +137,7 @@ class Package:
     @property
     def id(self) -> int:
         """
-        Returns the unique package ID.
+        Gets the unique identifier of the package.
 
         Returns:
             int: The package ID.
@@ -146,7 +147,7 @@ class Package:
     @property
     def start_location(self) -> str:
         """
-        Returns the start location of the package.
+        Gets the start location of the package.
 
         Returns:
             str: The start location.
@@ -166,7 +167,7 @@ class Package:
     @property
     def weight(self) -> float:
         """
-        Returns the weight of the package.
+        Gets the weight of the package.
 
         Returns:
             float: The weight of the package in kilograms.
@@ -176,7 +177,7 @@ class Package:
     @property
     def customer_email(self) -> str:
         """
-        Returns the customer's email address.
+        Gets the customer's email address.
 
         Returns:
             str: The customer's email address.
@@ -186,7 +187,7 @@ class Package:
     @property
     def departure_time(self) -> datetime:
         """
-        Returns the departure time of the package.
+        Gets the departure time of the package.
 
         Returns:
             datetime: The departure time.
@@ -206,7 +207,7 @@ class Package:
     @property
     def estimated_arrival_time(self) -> datetime:
         """
-        Returns the estimated arrival time of the package.
+        Gets the estimated arrival time of the package.
 
         Returns:
             datetime: The estimated arrival time.
@@ -226,7 +227,7 @@ class Package:
     @property
     def is_assigned(self) -> bool:
         """
-        Returns whether the package is assigned to a route.
+        Gets whether the package is assigned to a route.
 
         Returns:
             bool: True if the package is assigned, False otherwise.
@@ -235,13 +236,18 @@ class Package:
 
     @is_assigned.setter
     def is_assigned(self, value: bool):
+        """
+        Sets whether the package is assigned to a route.
 
+        Args:
+            value (bool): True if the package is assigned, False otherwise.
+        """
         self._is_assigned = value
 
     @property
     def route_id(self):
         """
-        Returns the route ID associated with the package.
+        Gets the route ID associated with the package.
 
         Returns:
             int: The route ID.
