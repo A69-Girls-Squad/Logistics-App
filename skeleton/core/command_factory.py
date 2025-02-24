@@ -1,7 +1,5 @@
-from commands.reassign_package import ReassignPackageCommand
-from commands.set_time import SetTimeCommand
-from commands.show_package import ShowPackageCommand
-from commands.unassign_package_from_route import UnassignPackageToRouteCommand
+from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
 from commands.assign_package_to_route import AssignPackageToRouteCommand
 from commands.assign_truck_to_route import AssignTruckToRouteCommand
 from commands.bulk_assign_packages import BulkAssignPackagesCommand
@@ -9,17 +7,19 @@ from commands.create_package import CreatePackageCommand
 from commands.create_route import CreateRouteCommand
 from commands.login import LoginCommand
 from commands.logout import LogoutCommand
+from commands.reassign_package import ReassignPackageCommand
 from commands.register_employee import RegisterEmployeeCommand
 from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
 from commands.search_route import SearchRouteCommand
 from commands.search_truck import SearchTruckCommand
 from commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
+from commands.set_time import SetTimeCommand
+from commands.show_package import ShowPackageCommand
 from commands.show_packages import ShowPackagesCommand
 from commands.show_route import ShowRouteCommand
 from commands.show_routes_inprogress import ShowRoutesInProgressCommand
 from commands.show_trucks import ShowTrucksCommand
-from core.application_data import ApplicationData
-from errors.application_error import ApplicationError
+from commands.unassign_package_from_route import UnassignPackageToRouteCommand
 
 
 class CommandFactory:
@@ -80,7 +80,7 @@ class CommandFactory:
             return ShowRouteCommand(params, self._app_data)
         if cmd.lower() == "showtrucks":
             return ShowTrucksCommand(params, self._app_data)
-        if cmd.lower() == 'assignpackagetoroute':
+        if cmd.lower() == "assignpackagetoroute":
             return AssignPackageToRouteCommand(params, self._app_data)
         if cmd.lower() == "assignpackagetoroute":
             return AssignPackageToRouteCommand(params, self._app_data)
@@ -94,9 +94,9 @@ class CommandFactory:
             return SendPackageInfoToCustomerCommand(params, self._app_data)
         if cmd.lower() == "showroutesinprogress":
             return ShowRoutesInProgressCommand(params, self._app_data)
-        if cmd.lower() == 'unassignpackagetoroute':
+        if cmd.lower() == "unassignpackagetoroute":
             return UnassignPackageToRouteCommand(params, self._app_data)
-        if cmd.lower() == 'reassignpackage':
+        if cmd.lower() == "reassignpackage":
             return ReassignPackageCommand(params, self._app_data)
         if cmd.lower() == "settime":
             return SetTimeCommand(params, self._app_data)

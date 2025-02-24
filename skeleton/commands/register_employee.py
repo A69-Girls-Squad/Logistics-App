@@ -1,5 +1,5 @@
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from models.constants.employee_role import EmployeeRole
 
@@ -51,6 +51,6 @@ class RegisterEmployeeCommand(BaseCommand):
         employee = self._app_data.create_employee(username, firstname, lastname, password, employee_role)
         self._app_data.login(employee)
 
-        self.logger.info("User {employee.username} registered successfully!" + self.ROW_SEP_LONG)
+        self.logger.info(f"User {employee.username} registered successfully!" + self.ROW_SEP)
 
-        return f"Employee {employee.username} registered successfully!" + self.ROW_SEP_LONG
+        return f"Employee {employee.username} registered successfully!" + self.ROW_SEP*2

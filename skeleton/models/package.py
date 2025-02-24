@@ -1,9 +1,9 @@
-from datetime import datetime
 import re
-from core.application_time import ApplicationTime
+from datetime import datetime
 from errors.application_error import ApplicationError
-from models.route import Route
+from core.application_time import ApplicationTime
 from commands.validation_helpers import try_parse_float
+from models.route import Route
 
 
 class Package:
@@ -195,7 +195,7 @@ class Package:
         return self._departure_time
 
     @departure_time.setter
-    def departure_time(self, value: datetime):
+    def departure_time(self, value: datetime) -> None:
         """
         Sets the departure time of the package.
 
@@ -215,7 +215,7 @@ class Package:
         return self._estimated_arrival_time
 
     @estimated_arrival_time.setter
-    def estimated_arrival_time(self, value: datetime):
+    def estimated_arrival_time(self, value: datetime) -> None:
         """
         Sets the estimated arrival time of the package.
 
@@ -235,7 +235,7 @@ class Package:
         return self._is_assigned
 
     @is_assigned.setter
-    def is_assigned(self, value: bool):
+    def is_assigned(self, value: bool) -> None:
         """
         Sets whether the package is assigned to a route.
 
@@ -245,7 +245,7 @@ class Package:
         self._is_assigned = value
 
     @property
-    def route_id(self):
+    def route_id(self) -> int:
         """
         Gets the route ID associated with the package.
 
@@ -255,7 +255,7 @@ class Package:
         return self._route_id
 
     @route_id.setter
-    def route_id(self, value):
+    def route_id(self, value) -> None:
         """
         Sets the route ID associated with the package.
 
@@ -289,9 +289,10 @@ class Package:
         else:
             status = "Not assigned"
 
-        return (f"ID: {self._id}"
-                f"\nStart Location: {self._start_location}"
-                f"\nEnd Location: {self._end_location}"
+        return (f"PACKAGE DETAILS"
+                f"\nID: {self._id}"
+                f"\nStart location: {self._start_location}"
+                f"\nEnd location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f} kg"
-                f"\nCustomer Email Address: {self._customer_email}"
+                f"\nCustomer email address: {self._customer_email}"
                 f"\nPackage status: {status}")

@@ -27,6 +27,6 @@ class AssignStatus:
         """
         if value not in [cls.ASSIGNED, cls.UNASSIGNED, cls.ALL]:
             raise ValueError(
-                f'None of the possible Status values matches the value {value}.')
+                f"None of the possible Status values matches the value {value}.")
 
         return value

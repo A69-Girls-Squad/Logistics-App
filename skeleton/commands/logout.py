@@ -1,5 +1,5 @@
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
@@ -36,6 +36,6 @@ class LogoutCommand(BaseCommand):
         """
         self._app_data.logout()
 
-        self.logger.info("User {employee.username} successfully logged out!" + self.ROW_SEP_LONG)
+        self.logger.info(f"User {self.app_data.logged_in_employee.username} successfully logged out!" + self.ROW_SEP)
 
-        return "You logged out!" + self.ROW_SEP_LONG
+        return "You logged out!" + self.ROW_SEP*2

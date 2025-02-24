@@ -1,7 +1,9 @@
-from core.application_data import ApplicationData
 import json
+from core.application_data import ApplicationData
 
-FILE_NAME = 'app_state.json'
+
+FILE_NAME = "app_state.json"
+
 
 class ApplicationState:
 
@@ -14,7 +16,7 @@ class ApplicationState:
             app_data (ApplicationData): An instance of ApplicationData containing the data to be saved.
         """
         data = app_data.to_json()
-        with open(FILE_NAME, 'w') as f:
+        with open(FILE_NAME, "w") as f:
             json.dump(data, f, indent=4)
 
     @classmethod
@@ -26,7 +28,7 @@ class ApplicationState:
             ApplicationData: An instance of ApplicationData populated with the loaded data.
         """
         try:
-            with open(FILE_NAME, 'r') as f:
+            with open(FILE_NAME, "r") as f:
                 data = json.load(f)
                 return ApplicationData.from_json(data)
         except FileNotFoundError:

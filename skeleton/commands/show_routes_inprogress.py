@@ -1,5 +1,5 @@
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from models.route import Route
 
@@ -39,4 +39,4 @@ class ShowRoutesInProgressCommand(BaseCommand):
         for route in self._app_data.routes:
             if route.status == Route.STATUS_IN_PROGRESS:
                 routes_in_progress.append(route)
-        return f"Routs In Progress:\n"+"\n".join([str(route) for route in routes_in_progress]) + self.ROW_SEP_LONG
+        return f"Routs in progress:\n"+"\n".join([str(route) for route in routes_in_progress]) + self.ROW_SEP*2

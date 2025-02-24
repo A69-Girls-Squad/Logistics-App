@@ -1,6 +1,6 @@
+from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
-from commands.validation_helpers import validate_params_count
 
 
 class ShowTrucksCommand(BaseCommand):
@@ -14,7 +14,7 @@ class ShowTrucksCommand(BaseCommand):
         super().__init__(params, app_data)
 
 
-    def execute(self):
+    def execute(self) -> str:
         #status_param = self.params[0].lower()
             pass
 

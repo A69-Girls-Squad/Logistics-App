@@ -1,5 +1,6 @@
 from datetime import datetime
 
+
 class ApplicationTime:
     """
     Manages the current application time, allowing for simulation of time in the application.

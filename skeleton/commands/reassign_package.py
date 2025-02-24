@@ -1,5 +1,5 @@
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
@@ -45,4 +45,8 @@ class ReassignPackageCommand(BaseCommand):
         self.logger.info(f"Package with ID {package_id} reassigned from Route {unassign_from_route_id} "
                          f"to Route {assign_to_route_id} | Executed by: {self.app_data.logged_in_employee}")
         return (f"Package with ID {package_id} was unassigned from Route with ID {unassign_from_route_id}"
-                f"and was assigned to Route with ID {assign_to_route_id}" + self.ROW_SEP_LONG)
+                f"and was assigned to Route with ID {assign_to_route_id}" + self.ROW_SEP*2)
+        self.logger.info(f"Package with ID {package_id} reassigned from Route {unassign_from_route_id} "
+                         f"to route {assign_to_route_id} | Executed by: {self.app_data.logged_in_employee}")
+        return (f"Package with ID {package_id} was unassigned from route with ID {unassign_from_route_id}"
+                f"and was assigned to route with ID {assign_to_route_id}" + self.ROW_SEP*2)

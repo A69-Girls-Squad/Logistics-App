@@ -1,8 +1,9 @@
 import smtplib
-from commands.base_command import BaseCommand
-from commands.validation_helpers import try_parse_int
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from commands.validation_helpers import try_parse_int
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
+
 
 """
 Sends info regarding a package to the customer.
@@ -11,7 +12,7 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
 
-    def package_info(self):
+    def package_info(self) -> str:
         package_id = try_parse_int(self._params[0])
         package = self.app_data.find_package_by_id(package_id)
 
@@ -56,6 +57,6 @@ class SendPackageInfoToCustomerCommand(BaseCommand):
         package_details = self.package_info()
         subject = f"Package Details: {package.id}"
 
-        self.logger.info(f"Package info sent to customer: {customer_email}" + self.ROW_SEP_LONG)
+        self.logger.info(f"Package info sent to customer: {customer_email}" + self.ROW_SEP)
         
         self.send_email(subject, package_details, customer_email)

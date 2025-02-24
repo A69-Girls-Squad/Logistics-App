@@ -1,7 +1,7 @@
-from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count, try_parse_int
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
 
 
 class ShowRouteCommand(BaseCommand):
@@ -39,4 +39,4 @@ class ShowRouteCommand(BaseCommand):
         route = self._app_data.find_route_by_id(route_id)
         if not route:
             raise ApplicationError("No route found!")
-        return str(route)
+        return str(route) + self.ROW_SEP*2

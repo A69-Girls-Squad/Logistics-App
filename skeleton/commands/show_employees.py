@@ -1,6 +1,6 @@
 from errors.application_error import ApplicationError
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
@@ -12,10 +12,10 @@ class ShowEmployeesCommand(BaseCommand):
         validate_params_count(params, 0)
         super().__init__(params, app_data)
 
-    def execute(self):
+    def execute(self) -> str:
         if self._app_data.logged_in_employee.is_admin:
             if self._app_data.employees:
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
-                return "\n".join(["--EMPLOYEES--"] + employees + self.ROW_SEP_LONG)
+                return "\n".join(["--EMPLOYEES--"] + employees + self.ROW_SEP*2)
         else:
             raise ApplicationError(self.ONLY_ADMIN_CAN_SHOW_EMPLOYEES)

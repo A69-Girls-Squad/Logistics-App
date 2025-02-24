@@ -1,13 +1,12 @@
 import unittest
 from unittest.mock import Mock
-
 import test_data as td
-from commands.search_route import SearchRouteCommand
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
 from models.package import Package
 from models.route import Route
 from models.truck import Truck
+from commands.search_route import SearchRouteCommand
 
 
 def _create_fake_params_package(

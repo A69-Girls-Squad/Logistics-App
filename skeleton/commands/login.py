@@ -1,6 +1,6 @@
 from errors.application_error import ApplicationError
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
@@ -43,13 +43,13 @@ class LoginCommand(BaseCommand):
         username, password = self._params
         employee = self._app_data.find_employee_by_username(username)
         if not employee:
-            raise ApplicationError("No employee found!" + self.ROW_SEP_LONG)
+            raise ApplicationError("No employee found!" + self.ROW_SEP)
 
         if employee.password != password:
-            raise ApplicationError("Wrong username or password!" + self.ROW_SEP_LONG)
+            raise ApplicationError("Wrong username or password!" + self.ROW_SEP)
         else:
             self._app_data.login(employee)
 
-            self.logger.info("User {employee.username} successfully logged in!" + self.ROW_SEP_LONG)
+            self.logger.info(f"User {employee.username} successfully logged in!" + self.ROW_SEP)
             
-            return f"Employee {employee.username} successfully logged in!" + self.ROW_SEP_LONG
+            return f"Employee {employee.username} successfully logged in!" + self.ROW_SEP*2

@@ -1,7 +1,7 @@
 import unittest
 import test_data as td
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
 from models.employee import Employee
 from models.package import Package
 from models.route import Route

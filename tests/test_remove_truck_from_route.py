@@ -1,8 +1,9 @@
 import unittest
 from unittest.mock import MagicMock
-from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
+from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
+
 
 class TestRemoveTruckFromRouteCommand(unittest.TestCase):
 
@@ -23,7 +24,11 @@ class TestRemoveTruckFromRouteCommand(unittest.TestCase):
 
         output = cmd.execute()
 
-        self.assertEqual(output, "Truck with ID 1001 has been removed from Route 11, truck status changed to free")
+        expected_output = (
+            "Truck with ID 1001 has been removed from Route 11, truck status changed to free."
+            + cmd.ROW_SEP_LONG
+        )
+        self.assertEqual(output, expected_output)
 
     def test_invalid_params_count(self):
         params = ["1001"]

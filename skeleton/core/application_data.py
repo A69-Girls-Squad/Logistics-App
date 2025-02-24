@@ -1,10 +1,10 @@
 from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
-from models.constants.employee_role import EmployeeRole
 from models.employee import Employee
-from models.truck import Truck
+from models.constants.employee_role import EmployeeRole
 from models.package import Package
 from models.route import Route
+from models.truck import Truck
 
 
 class ApplicationData:
@@ -104,7 +104,7 @@ class ApplicationData:
         return tuple(self._employees)
 
     @property
-    def logged_in_employee(self):
+    def logged_in_employee(self) -> Employee:
         """
         Gets the currently logged-in employee.
 
@@ -114,7 +114,7 @@ class ApplicationData:
         return self._logged_in_employee
 
     @logged_in_employee.setter
-    def logged_in_employee(self, value: Employee):
+    def logged_in_employee(self, value: Employee) -> Employee:
         """
         Sets the currently logged-in employee.
 
@@ -127,7 +127,7 @@ class ApplicationData:
         self._logged_in_employee = value
 
     @property
-    def has_logged_in_employee(self):
+    def has_logged_in_employee(self) -> bool:
         """
         Checks if an employee is currently logged in.
 
@@ -136,7 +136,7 @@ class ApplicationData:
         """
         return self.logged_in_employee is not None
 
-    def create_truck(self, name: str, capacity: int, max_range: int):
+    def create_truck(self, name: str, capacity: int, max_range: int) -> None:
         """
         Creates a new truck and adds it to the application's truck list.
 
@@ -151,7 +151,7 @@ class ApplicationData:
         truck = Truck(name, capacity, max_range)
         self._trucks.append(truck)
 
-    def create_route(self, locations: str, departure_time: str):
+    def create_route(self, locations: str, departure_time: str) -> Route:
         """
         Creates a new route and adds it to the application's route list.
 
@@ -209,7 +209,7 @@ class ApplicationData:
 
         return employee
 
-    def assign_truck_to_route(self, truck_id: int, route_id: int):
+    def assign_truck_to_route(self, truck_id: int, route_id: int) -> None:
         """
         Assigns a truck to a route.
 
@@ -231,7 +231,7 @@ class ApplicationData:
         if truck.assigned_route_id:
             raise ApplicationError(f"Truck with ID {truck_id} is already assigned")
         if route.assigned_truck_id:
-            raise ApplicationError(f"Route with ID {route_id} already has a Truck assigned")
+            raise ApplicationError(f"Route with ID {route_id} already has a truck assigned")
 
         if route.load > truck.capacity:
             raise ApplicationError("Not enough capacity.")
@@ -242,7 +242,7 @@ class ApplicationData:
         route.assigned_truck_id = truck.id
         route.assigned_truck_capacity = truck.capacity
 
-    def unassign_truck_from_route(self, truck_id):
+    def unassign_truck_from_route(self, truck_id: int) -> None:
         """
         Unassigns a truck from its assigned route.
 
@@ -258,7 +258,7 @@ class ApplicationData:
         route.assigned_truck_id = None
         route.assigned_truck_capacity = None
 
-    def assign_package_to_route(self, package_id: int, route_id: int):
+    def assign_package_to_route(self, package_id: int, route_id: int) -> None:
         """
         Assigns a package to a route.
 
@@ -277,26 +277,28 @@ class ApplicationData:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
 
         if package.route_id == route_id or package_id in route.assigned_packages_ids:
-            raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
+            raise ApplicationError(f"Package with ID {package_id} is already assigned to route with ID {route_id}")
         if package.is_assigned:
             raise ApplicationError(f"Package with ID {package_id} is already assigned")
 
         # When no truck is assigned to route, package assignment is impossible
-        if not route.assigned_truck_id:
-             raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
+        # if not route.assigned_truck_id:
+        #      raise ApplicationError(f"No Truck is assigned to Route with ID {route_id}")
 
-        truck = self.find_truck_by_id(route.assigned_truck_id)
-        if truck is None:
-            raise ApplicationError(f"Truck with ID {route.assigned_truck_id} does not exist")
+        if route.assigned_truck_id:
+            truck = self.find_truck_by_id(route.assigned_truck_id)
+            # if truck is None:
+            #     raise ApplicationError(f"Truck with ID {route.assigned_truck_id} does not exist")
 
-        free_capacity = truck.capacity - route.load
-        if free_capacity < package.weight:
-            raise ApplicationError(f"Route with ID {route_id} has no more capacity")
-        if route.departure_time < ApplicationTime.current():
-            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
-        if package.start_location not in route.locations:
-            raise ApplicationError(f"Package with ID {package_id} start location "
-                                   f"does not exists in Route with ID {route_id}")
+            free_capacity = truck.capacity - route.load
+            if free_capacity < package.weight:
+                raise ApplicationError(f"Route with ID {route_id} has no more capacity")
+            if route.departure_time < ApplicationTime.current():
+                raise ApplicationError(f"Assigned truck to route with ID {route_id} has already departed")
+            if package.start_location not in route.locations:
+                raise ApplicationError(f"Package with ID {package_id} start location "
+                                       f"does not exists in route with ID {route_id}")
+
 
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]
@@ -305,7 +307,7 @@ class ApplicationData:
         route.assign_package(package.id)
         route.load += package.weight
 
-    def unassign_package_from_route(self, package_id: int, route_id: int):
+    def unassign_package_from_route(self, package_id: int, route_id: int) -> None:
         """
         Unassigns a package from its assigned route.
 
@@ -324,7 +326,7 @@ class ApplicationData:
         if route is None:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
         if route.departure_time > ApplicationTime.current():
-            raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+            raise ApplicationError(f"Assigned truck to route with ID {route_id} has already departed")
 
         package.departure_time = None
         package.estimated_arrival_time = None
@@ -395,7 +397,7 @@ class ApplicationData:
         """
         return next((employee for employee in self.employees if employee.username == username), None)
 
-    def login(self, employee: Employee):
+    def login(self, employee: Employee) -> None:
         """
         Logs in an employee by setting them as the currently logged-in employee.
 
@@ -404,7 +406,7 @@ class ApplicationData:
         """
         self._logged_in_employee = employee
 
-    def logout(self):
+    def logout(self) -> None:
         """
         Logs out the currently logged-in employee by setting the logged-in employee to `None`.
         After calling this method, no employee will be considered logged in until a new `login` method is called.

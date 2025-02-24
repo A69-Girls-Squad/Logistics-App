@@ -7,9 +7,9 @@ class EmployeeRole:
         SUPERVISOR (str): Represents a supervisor role.
         MANAGER (str): Represents a manager role.
     """
-    REGULAR = 'Regular'
-    SUPERVISOR = 'Supervisor'
-    MANAGER = 'Manager'
+    REGULAR = "Regular"
+    SUPERVISOR = "Supervisor"
+    MANAGER = "Manager"
 
     @classmethod
     def from_string(cls, value) -> str:
@@ -27,5 +27,5 @@ class EmployeeRole:
         """
         if value not in [cls.REGULAR, cls.SUPERVISOR, cls.MANAGER]:
             raise ValueError(
-                f'None of the possible Employee Role values matches the value {value}.')
+                f"None of the possible Employee Role values matches the value {value}.")
         return value

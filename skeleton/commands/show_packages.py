@@ -1,5 +1,6 @@
-from commands.base_command import BaseCommand
+from core.application_time import ApplicationTime
 from commands.validation_helpers import validate_params_count
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from models.constants.assign_status import AssignStatus
 
@@ -37,16 +38,42 @@ class ShowPackagesCommand(BaseCommand):
             - If the status is 'unassigned', only unassigned packages are displayed.
             - If the status is 'all', all packages are displayed.
         """
-        status = self.params[0].lower()
+        requested_status = self.params[0].lower()
+        result = "PACKAGES:" + self.ROW_SEP
 
-        if status == AssignStatus.ASSIGNED:
+        if requested_status == AssignStatus.ASSIGNED:
             packages = self.app_data.get_packages_by_assigned_status(True)
-        elif status == AssignStatus.UNASSIGNED:
+        elif requested_status == AssignStatus.UNASSIGNED:
             packages = self.app_data.get_packages_by_assigned_status(False)
         else:
             packages = self.app_data.packages
 
-        result = "\n".join([str(package) for package in packages]) + self.ROW_SEP_LONG
+        def status(package):
+            if package.departure_time:
+                if ApplicationTime.current() < package.departure_time:
+                    status = f"\nPackage status: | Awaiting Dispatch\n{self.TABLE_SEP}"
+                elif ApplicationTime.current() < package.estimated_arrival_time:
+                    status = f"\nPackage status: | In Transit\n{self.TABLE_SEP}"
+                else:
+                    status = f"\nPackage status: | Delivered\n{self.TABLE_SEP}"
+                status += (f"\nDeparture time: | {package.departure_time.isoformat(sep=" ", timespec="minutes")}\n{self.TABLE_SEP}"
+                           f"\nArrival time:   | {package.estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}\n{self.TABLE_SEP}")
+            else:
+                status = f"\nPackage status: | Not assigned\n{self.TABLE_SEP}"
+            return status
+
+        result += "\n".join([f"\nPACKAGE ID:     | {package.id}"
+                            f"\n{self.TABLE_SEP}"
+                            f"\nStart location: | {package.start_location}"
+                            f"\n{self.TABLE_SEP}"
+                            f"\nEnd location:   | {package.end_location}"
+                            f"\n{self.TABLE_SEP}"
+                            f"\nWeight:         | {package.weight:.2f} kg"
+                            f"\n{self.TABLE_SEP}"
+                            f"\nCustomer email: | {package.customer_email}"
+                            f"\n{self.TABLE_SEP}"
+                            f"{status(package)}" + self.ROW_SEP for package in packages]) + self.ROW_SEP
+
         self.logger.info(result)
         return result
 

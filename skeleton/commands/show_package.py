@@ -1,7 +1,7 @@
-from commands.base_command import BaseCommand
-from commands.validation_helpers import validate_params_count
-from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.base_command import BaseCommand
+from core.application_data import ApplicationData
 
 
 class ShowPackageCommand(BaseCommand):
@@ -36,8 +36,9 @@ class ShowPackageCommand(BaseCommand):
         Raises:
             ApplicationError: If no package is found with the provided ID.
         """
-        package_id = self._params[0]
+
+        package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)
         if not package:
-            raise ApplicationError("No package found!" + self.ROW_SEP_LONG)
+            raise ApplicationError("No package found!" + self.ROW_SEP*2)
         return str(package)

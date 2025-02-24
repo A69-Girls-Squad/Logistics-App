@@ -1,5 +1,5 @@
-from commands.base_command import BaseCommand
 from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
@@ -41,4 +41,4 @@ class UnassignPackageToRouteCommand(BaseCommand):
 
         self.app_data.unassign_package_from_route(package_id, route_id)
 
-        return f"Package with ID {package_id} was unassigned from Route with ID {route_id}" + self.ROW_SEP_LONG
+        return f"Package with ID {package_id} was unassigned from route with ID {route_id}" + self.ROW_SEP*2
