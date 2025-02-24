@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import Mock
+
+from commands.base_command import BaseCommand
 from errors.application_error import ApplicationError
 from core.application_data import ApplicationData
 from models.constants.employee_role import EmployeeRole
@@ -33,7 +35,7 @@ class LoginCommandTest_Should(unittest.TestCase):
 
         output = cmd.execute()
 
-        self.assertEqual(f"Employee username successfully logged in!", output)
+        self.assertEqual(f"Employee username successfully logged in!"+BaseCommand.ROW_SEP*2, output)
 
     def test_execute_raisesError_invalidUsername(self):
         from errors.application_error import ApplicationError

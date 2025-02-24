@@ -73,7 +73,7 @@ class TestSearchTruckCommand(unittest.TestCase):
 
         cmd = SearchTruckCommand(params, app_data_mock)
 
-        expected_output = "No available truck found" + cmd.ROW_SEP_LONG
+        expected_output = "No available truck found" + cmd.ROW_SEP
         output = cmd.execute()
 
         self.assertEqual(output, expected_output)

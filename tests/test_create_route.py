@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import Mock
+
+from commands.base_command import BaseCommand
 from errors.application_error import ApplicationError
 from core.application_data import ApplicationData
 from commands.create_route import CreateRouteCommand
@@ -30,11 +32,13 @@ class CreateRouteCommandTest_Should(unittest.TestCase):
         cmd = CreateRouteCommand(fake_params, app_data)
 
         output = cmd.execute()
-
-        self.assertEqual(
-            f"Route with id 1 was created!"
-            f"\nLocations: {fake_params[0]}"
-            f"\nDeparture Time: {fake_params[1]}", output)
+        expected_message = (f"Route with ID 1 was created!"
+                f"\n{BaseCommand.TABLE_SEP}"
+                f"\nLocations:      | {fake_params[0]}"
+                f"\n{BaseCommand.TABLE_SEP}"
+                f"\nDeparture Time: | {fake_params[1]}"
+                f"\n{BaseCommand.TABLE_SEP}") + BaseCommand.ROW_SEP*2
+        self.assertEqual(expected_message, output)
 
     def test_execute_raisesError_invalidLocations(self):
         app_data = ApplicationData()

@@ -94,22 +94,24 @@ class Truck_Should(unittest.TestCase):
     def test_str_method(self):
         truck = Truck(name=td.VALID_TRUCK_NAME, capacity=td.VALID_TRUCK_CAPACITY, max_range=td.VALID_TRUCK_MAX_RANGE)
         expected_str = (
-            f"Truck with ID: 1001\n"
+            f"TRUCK DETAILS:\n"
+            f"ID: 1001\n"
             f"Name: {td.VALID_TRUCK_NAME}\n"
             f"Capacity: {td.VALID_TRUCK_CAPACITY}\n"
-            f"Range: {td.VALID_TRUCK_MAX_RANGE} created\n"
+            f"Range: {td.VALID_TRUCK_MAX_RANGE}\n"
             f"Status: Free"
         )
 
-        self.assertEqual(str(truck), expected_str)
+        self.assertEqual(expected_str, str(truck))
 
         truck.assigned_route_id = 1
         expected_str_busy = (
-            f"Truck with ID: 1001\n"
+            f"TRUCK DETAILS:\n"
+            f"ID: 1001\n"
             f"Name: {td.VALID_TRUCK_NAME}\n"
             f"Capacity: {td.VALID_TRUCK_CAPACITY}\n"
-            f"Range: {td.VALID_TRUCK_MAX_RANGE} created\n"
+            f"Range: {td.VALID_TRUCK_MAX_RANGE}\n"
             f"Status: Busy\nRoute ID: 1"
         )
-
-        self.assertEqual(str(truck), expected_str_busy)
+        # expected should be in the first place
+        self.assertEqual(expected_str_busy, str(truck))

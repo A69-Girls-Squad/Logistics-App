@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import Mock
 import test_data as td
+from commands.base_command import BaseCommand
 from errors.application_error import ApplicationError
 from core.application_data import ApplicationData
 from models.package import Package
@@ -48,7 +49,8 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
 
-        self.assertEqual("Suitable Routes:\n", output)
+        expected_message = f"SUITABLE ROUTES:\n{BaseCommand.ROW_SEP}\n{BaseCommand.TABLE_SEP}\n" + BaseCommand.ROW_SEP
+        self.assertEqual(expected_message, output)
 
     def test_execute_endLocationNotIn(self):
         app_data = ApplicationData()
@@ -61,8 +63,9 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         app_data._trucks.append(truck)
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
+        expected_message = f"SUITABLE ROUTES:\n{BaseCommand.ROW_SEP}\n{BaseCommand.TABLE_SEP}\n" + BaseCommand.ROW_SEP
 
-        self.assertEqual("Suitable Routes:\n", output)
+        self.assertEqual(expected_message, output)
 
     def test_execute_endLocationBeforeStart(self):
         app_data = ApplicationData()
@@ -75,8 +78,9 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         app_data._trucks.append(truck)
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
+        expected_message = f"SUITABLE ROUTES:\n{BaseCommand.ROW_SEP}\n{BaseCommand.TABLE_SEP}\n" + BaseCommand.ROW_SEP
 
-        self.assertEqual("Suitable Routes:\n", output)
+        self.assertEqual(expected_message, output)
 
     def test_execute_insufficientCapacity(self):
         app_data = ApplicationData()
@@ -89,8 +93,9 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         app_data._trucks.append(truck)
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
+        expected_message = f"SUITABLE ROUTES:\n{BaseCommand.ROW_SEP}\n{BaseCommand.TABLE_SEP}\n" + BaseCommand.ROW_SEP
 
-        self.assertEqual("Suitable Routes:\n", output)
+        self.assertEqual(expected_message, output)
 
     def test_execute_noRoutes(self):
         app_data = ApplicationData()
@@ -98,8 +103,9 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         app_data._packages.append(package)
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
+        expected_message = f"SUITABLE ROUTES:\n{BaseCommand.ROW_SEP}\n{BaseCommand.TABLE_SEP}\n" + BaseCommand.ROW_SEP
 
-        self.assertEqual("Suitable Routes:\n", output)
+        self.assertEqual(expected_message, output)
 
     def test_execute_searchesRoute_validParams_whenOneRoute(self):
         app_data = ApplicationData()
@@ -112,15 +118,18 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         app_data._trucks.append(truck)
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
+        expected_message = (f"SUITABLE ROUTES:"
+                            f"\n{BaseCommand.ROW_SEP}"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nROUTE ID:       | {route.id}"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nHubs:           | SYD: 2055-02-16 11:30 -> MEL: 2055-02-16 21:34 "
+                            f"-> BRI: 2055-02-17 17:52"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nDeparture time: | 2055-02-16 11:30"
+                            f"\n{BaseCommand.ROW_SEP*2}")
 
-        self.assertEqual(f"Suitable Routes:"
-                         f"\nRoute Details:"
-                         f"\nID: {route.id}"
-                         f"\nHubs:"
-                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
-                         f"\nDeparture Time: 2055-02-16 11:30"
-                         "\n============",
-                         output)
+        self.assertEqual(expected_message, output)
 
     def test_execute_searchesRoute_validParams_whenManyRoutes(self):
         app_data = ApplicationData()
@@ -138,18 +147,25 @@ class SearchRouteCommandTest_Should(unittest.TestCase):
         app_data._trucks.append(truck_2)
         cmd = SearchRouteCommand([package.id], app_data)
         output = cmd.execute()
+        expected_message = (f"SUITABLE ROUTES:"
+                            f"\n{BaseCommand.ROW_SEP}"
+                            f"\n{BaseCommand.TABLE_SEP}\n"
+                            f"ROUTE ID:       | {route_1.id}"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nHubs:           |"
+                            f" SYD: 2055-02-16 11:30 -> MEL: 2055-02-16 21:34 -> BRI: 2055-02-17 17:52"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nDeparture time: | "
+                            f"2055-02-16 11:30"
+                            f"\n{BaseCommand.ROW_SEP}"
+                            f"\nROUTE ID:       | {route_2.id}"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nHubs:           |"
+                            f" SYD: 2055-02-16 11:30 -> MEL: 2055-02-16 21:34 -> BRI: 2055-02-17 17:52"
+                            f"\n{BaseCommand.TABLE_SEP}"
+                            f"\nDeparture time: | "
+                            f"2055-02-16 11:30"
+                            f"\n{BaseCommand.ROW_SEP}"
+                            ) + BaseCommand.ROW_SEP
 
-        self.assertEqual(f"Suitable Routes:"
-                         f"\nRoute Details:"
-                         f"\nID: {route_1.id}"
-                         f"\nHubs:"
-                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
-                         f"\nDeparture Time: 2055-02-16 11:30"
-                         "\n============"
-                         f"\nRoute Details:"
-                         f"\nID: {route_2.id}"
-                         f"\nHubs:"
-                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
-                         f"\nDeparture Time: 2055-02-16 11:30"
-                         "\n============",
-                         output)
+        self.assertEqual(expected_message, output)

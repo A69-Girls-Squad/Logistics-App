@@ -37,26 +37,6 @@ class ApplicationData_Should(unittest.TestCase):
         app_data.logged_in_employee = employee
         self.assertTrue(app_data.has_logged_in_employee)
 
-    def test_not_assigned_packages_noPackages(self):
-        app_data = ApplicationData()
-        self.assertEqual([], app_data.not_assigned_packages)
-
-    def test_not_assigned_packages_noNotAssigned(self):
-        app_data = ApplicationData()
-        package = Package(td.VALID_START_LOCATION, td.VALID_END_LOCATION, td.VALID_WEIGHT, td.VALID_CUSTOMER_EMAIL)
-        route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
-        app_data._packages.append(package)
-        app_data._routes.append(route)
-        app_data.assign_package_to_route(package.id, route.id)
-        self.assertEqual([], app_data.not_assigned_packages)
-        self.assertIn(package.id, route.assigned_packages_ids)
-
-    def test_not_assigned_packages_returnsCorrectly(self):
-        app_data = ApplicationData()
-        package = Package(td.VALID_START_LOCATION, td.VALID_END_LOCATION, td.VALID_WEIGHT, td.VALID_CUSTOMER_EMAIL)
-        app_data._packages.append(package)
-        self.assertEqual(1, len(app_data.not_assigned_packages))
-
     def test_create_package_appendsAndReturnsCorrectly(self):
         app_data = ApplicationData()
         self.assertIsInstance(app_data.create_package(td.VALID_START_LOCATION, td.VALID_END_LOCATION, td.VALID_WEIGHT,

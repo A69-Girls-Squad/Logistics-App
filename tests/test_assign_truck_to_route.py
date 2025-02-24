@@ -17,7 +17,7 @@ class TestAssignTruckToRouteCommand(unittest.TestCase):
         cmd = AssignTruckToRouteCommand(params, app_data_mock)
         output = cmd.execute()
 
-        expected_output = "Truck with id 1001 assigned to route 11" + cmd.ROW_SEP_LONG
+        expected_output = "Truck with ID 1001 assigned to route with ID 11" + cmd.ROW_SEP*2
         self.assertEqual(output, expected_output)
         app_data_mock.assign_truck_to_route.assert_called_once_with(1001, 11)
 
@@ -58,5 +58,5 @@ class TestAssignTruckToRouteCommand(unittest.TestCase):
         with self.assertLogs(cmd.logger, level="INFO") as log:
             cmd.execute()
 
-        expected_log_message = "Truck with id 1001 assigned to route 11 | Executed by: Test User"
+        expected_log_message = "Truck with ID 1001 assigned to route with ID 11 | Executed by: Test User"
         self.assertIn(expected_log_message, log.output[0])
