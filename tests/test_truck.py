@@ -1,21 +1,32 @@
 import unittest
 from unittest.mock import MagicMock
 from models.truck import Truck
-from errors.application_error import ApplicationError
 
-class Truck_Should(unittest.TestCase):
+
+class TestTruck(unittest.TestCase):
 
     def test_next_id(self):
+        Truck._current_id = 1000
         first_id = Truck.next_id()
         second_id = Truck.next_id()
-        
+
         self.assertEqual(first_id, 1001)
         self.assertEqual(second_id, 1002)
 
-    def test_truck_init(self):
-
+    def test_next_id_after_assigning_truck(self):
+        Truck._current_id = 1000
+        Truck.next_id()
+        Truck.next_id()
         truck = Truck(name="Truck1", capacity=1000, max_range=5000)
-        
+        truck_assigned_id = truck.id
+        third_id = Truck.next_id()
+
+        self.assertEqual(third_id, truck_assigned_id + 1)
+
+    def test_truck_init(self):
+        Truck._current_id = 1000
+        truck = Truck(name="Truck1", capacity=1000, max_range=5000)
+
         self.assertEqual(truck._name, "Truck1")
         self.assertEqual(truck._capacity, 1000)
         self.assertEqual(truck._max_range, 5000)
@@ -23,6 +34,7 @@ class Truck_Should(unittest.TestCase):
         self.assertIsNone(truck._assigned_route_id)
 
     def test_from_json(self):
+        Truck._current_id = 1000
         data = {
             "id": 1001,
             "name": "Truck1",
@@ -30,9 +42,8 @@ class Truck_Should(unittest.TestCase):
             "max_range": 5000,
             "assigned_route_id": None
         }
-        
         truck = Truck.from_json(data)
-        
+
         self.assertEqual(truck.id, 1001)
         self.assertEqual(truck._name, "Truck1")
         self.assertEqual(truck._capacity, 1000)
@@ -40,6 +51,7 @@ class Truck_Should(unittest.TestCase):
         self.assertIsNone(truck._assigned_route_id)
 
     def test_to_json(self):
+        Truck._current_id = 1000
         truck = Truck(name="Truck1", capacity=1000, max_range=5000)
         expected_json = {
             "id": 1001,
@@ -48,7 +60,7 @@ class Truck_Should(unittest.TestCase):
             "max_range": 5000,
             "assigned_route_id": None
         }
-        
+
         self.assertEqual(truck.to_json(), expected_json)
 
     def test_is_suitable(self):
@@ -56,7 +68,7 @@ class Truck_Should(unittest.TestCase):
         route.load = 5000
         route.distance = 4000
         truck = Truck(name="Truck1", capacity=10000, max_range=6000)
-        
+
         self.assertTrue(truck.is_suitable(route))
 
     def test_is_suitable_unsufficient_capacity(self):
@@ -64,7 +76,7 @@ class Truck_Should(unittest.TestCase):
         route.load = 5000
         route.distance = 4000
         truck = Truck(name="Truck1", capacity=1000, max_range=6000)
-        
+
         self.assertFalse(truck.is_suitable(route))
 
     def test_is_suitable_unsufficient_max_range(self):
@@ -72,20 +84,21 @@ class Truck_Should(unittest.TestCase):
         route.load = 5000
         route.distance = 4000
         truck = Truck(name="Truck1", capacity=10000, max_range=2000)
-        
+
         self.assertFalse(truck.is_suitable(route))
 
     def test_is_suitable_truck_is_busy(self):
         route = MagicMock()
         route.load = 5000
         route.distance = 4000
-        
+
         truck = Truck(name="TestTruck", capacity=10000, max_range=6000)
-        truck.assigned_route_id = 1
-        
+        truck._assigned_route_id = 1
+
         self.assertFalse(truck.is_suitable(route))
 
     def test_str_method(self):
+        Truck._current_id = 1000
         truck = Truck(name="Truck1", capacity=1000, max_range=5000)
         expected_str = (
             f"Truck with ID: 1001\n"
@@ -94,7 +107,7 @@ class Truck_Should(unittest.TestCase):
             f"Range: 5000 created\n"
             f"Status: Free"
         )
-        
+
         self.assertEqual(str(truck), expected_str)
 
         truck._assigned_route_id = 1
@@ -105,5 +118,5 @@ class Truck_Should(unittest.TestCase):
             f"Range: 5000 created\n"
             f"Status: Busy\nRoute ID: 1"
         )
-        
+
         self.assertEqual(str(truck), expected_str_busy)
