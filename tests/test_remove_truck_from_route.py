@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+#import test_data as td
 
 
 class TestRemoveTruckFromRouteCommand(unittest.TestCase):
