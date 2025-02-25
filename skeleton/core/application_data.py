@@ -290,9 +290,9 @@ class ApplicationData:
                 raise ApplicationError(f"Route with ID {route_id} has no more capacity")
             if route.departure_time < ApplicationTime.current():
                 raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
-            if package.start_location not in route.locations:
-                raise ApplicationError(f"Package with ID {package_id} start location "
-                                       f"does not exists in Route with ID {route_id}")
+            if ((package.start_location not in route.locations) or (package.end_location not in route.locations)
+                    or (route.locations.index(package.start_location) > route.locations.index(package.end_location))):
+                    raise ApplicationError(f"Route with ID {route_id} is not suitable for Package with ID {package_id}")
 
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]
@@ -343,6 +343,18 @@ class ApplicationData:
             list: A list of packages that match the specified assigned status.
         """
         return [package for package in self._packages if package.is_assigned == is_assigned]
+
+    def get_routes_by_status(self, status: str) -> list:
+        """
+        Returns a list of routes based on their status.
+
+        Args:
+            status (str): The status to filter routes by.
+
+        Returns:
+            list: A list of routes that match the specified status.
+        """
+        return [route for route in self._routes if route.status == status]
 
     def find_truck_by_id(self, truck_id: int) -> Truck:
         """

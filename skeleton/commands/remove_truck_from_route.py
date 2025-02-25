@@ -17,6 +17,8 @@ class RemoveTruckFromRouteCommand(BaseCommand):
         validate_params_count(self.params, 1)
         truck_id = try_parse_int(self.params[0])
         truck = self.app_data.find_truck_by_id(truck_id)
+        if not truck:
+            raise ApplicationError("Invalid truck ID!")
 
         if not truck.assigned_route_id:
             raise ApplicationError("This truck is not assigned to any route.")
@@ -32,6 +34,6 @@ class RemoveTruckFromRouteCommand(BaseCommand):
                          f"Truck status changed to \"free\". | "
                          f"Executed by: {self.app_data.logged_in_employee.username}" + BaseCommand.ROW_SEP)
 
-        return (f"Truck with ID {truck_id} has been removed from Route ID {route_id}, "
-                f"Truck status changed to \"free\".")
+        return (f"Truck with ID {truck_id} has been removed from Route ID {route_id}"
+                f"\nTruck status changed to \"free\".")
 

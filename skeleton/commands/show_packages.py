@@ -2,6 +2,7 @@ from core.application_time import ApplicationTime
 from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 from models.constants.assign_status import AssignStatus
 
 
@@ -35,8 +36,10 @@ class ShowPackagesCommand(BaseCommand):
             packages = self.app_data.get_packages_by_assigned_status(True)
         elif requested_status == AssignStatus.UNASSIGNED:
             packages = self.app_data.get_packages_by_assigned_status(False)
-        else:
+        elif requested_status == AssignStatus.ALL:
             packages = self.app_data.packages
+        else:
+            raise ApplicationError("Invalid input!")
 
         def status_string(package):
             if package.departure_time:

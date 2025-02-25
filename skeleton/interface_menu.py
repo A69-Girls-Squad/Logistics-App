@@ -21,9 +21,9 @@ INITIAL_MENU = '''
 
 14. Show Employees
 15. Show Package Info
-16. Show All Packages
-17. Show Route
-18. Show All Routes in Progress
+16. Show Packages
+17. Show Route Info
+18. Show Routes
 19. Show All Trucks
 ------------------------------
 FOR EXIT TYPE "exit"
@@ -103,9 +103,10 @@ SHOW_PACKAGES_MENU = '''
 SHOW PACKAGES INFO:
 ------------------------------
 Please, choose which packages you would like to see:
-1. Assigned Packages
-2. Unassigned Packages
-3. All Packages
+------------------------------
+assigned
+unassigned
+all
 ------------------------------
 '''
 SHOW_ROUTE_MENU = '''
@@ -113,3 +114,16 @@ SHOW_ROUTE_MENU = '''
 SHOW ROUTE INFO:
 ------------------------------
 '''
+SHOW_ROUTES_MENU = '''
+------------------------------
+SHOW ROUTES INFO:
+------------------------------
+Please, choose which routes you would like to see:
+------------------------------
+created
+in progress
+finished
+all
+------------------------------
+'''
+

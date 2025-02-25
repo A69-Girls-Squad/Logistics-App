@@ -30,6 +30,9 @@ class Route:
     STATUS_IN_PROGRESS = "In progress"
     STATUS_FINISHED = "Finished"
 
+    TABLE_SEP = "-" * 16 + "|" + "-" * 43
+    ROW_SEP = "\n" + "=" * 60
+
     _current_id = 0
 
     @classmethod
@@ -378,18 +381,24 @@ class Route:
             str: A formatted string containing route details.
         """
         if self.assigned_truck_id:
-            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id}"
+            truck_info = f"Assigned Truck ID: {self.assigned_truck_id}"
         else:
-            truck_info = ""
+            truck_info = "No truck assigned."
         return (
             f"ROUTE DETAILS:"
-            f"\nID: {self.id}"
-            f"\nHubs:\n{"\n-> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
-            f"\nDeparture time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
-            f"\nNumber of packages: {len(self._assigned_packages_ids)}"
-            f"\nCurrent load: {self.load}"
-            f"{truck_info}"
-            f"\nStatus: {self.status}"
-            f"\nCurrent location: {self.current_location}"
-            f"\n" + "=" * 40
+            f"\n{Route.ROW_SEP}"
+            f"\nID:             | {self.id}"
+            f"\n{Route.TABLE_SEP}"
+            f"\nHubs:           | {"\n                | ".join(f"{key}: {value}" for key, value in self.stops.items())}"
+            f"\n{Route.TABLE_SEP}"
+            f"\nDeparture time: | {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
+            f"\n{Route.TABLE_SEP}"
+            f"\nPackages count: | {len(self._assigned_packages_ids)}"
+            f"\n{Route.TABLE_SEP}"
+            f"\nCurrent load:   | {self.load}"
+            f"\n{Route.TABLE_SEP}"
+            f"\nTruck Info:     | {truck_info}"
+            f"\n{Route.TABLE_SEP}"
+            f"\nStatus:         | {self.status}"
+            f"\n{Route.ROW_SEP}"
         )

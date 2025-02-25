@@ -17,7 +17,7 @@ from commands.set_time import SetTimeCommand
 from commands.show_package import ShowPackageCommand
 from commands.show_packages import ShowPackagesCommand
 from commands.show_route import ShowRouteCommand
-from commands.show_routes_inprogress import ShowRoutesInProgressCommand
+from commands.show_routes import ShowRoutesCommand
 from commands.show_trucks import ShowTrucksCommand
 from commands.unassign_package_from_route import UnassignPackageFromRouteCommand
 import interface_menu
@@ -74,7 +74,7 @@ class CommandFactory:
         if cmd.lower() == "4":
             print(interface_menu.CREATE_ROUTE_MENU)
             params = [input("List of Locations /separated by comma/: "),
-                      input("Departure Time /format YYYY-MM-DDTHH:MM/: ")]
+                      input("Departure Time /format YYYY-MM-DD HH:MM/: ")]
             return CreateRouteCommand(params, self._app_data)
 
         if cmd.lower() == "5":
@@ -82,7 +82,7 @@ class CommandFactory:
             params = [input("Start Location: "),
                       input("End Location: "),
                       input("Weight: "),
-                      input("Customer Info: ")]
+                      input("Customer Email: ")]
             return CreatePackageCommand(params, self._app_data)
 
         if cmd.lower() == "6":
@@ -148,7 +148,9 @@ class CommandFactory:
             return ShowRouteCommand(params, self._app_data)
 
         if cmd.lower() == "18":
-            return ShowRoutesInProgressCommand(params, self._app_data)
+            print(interface_menu.SHOW_ROUTES_MENU)
+            params = [input("Status: ")]
+            return ShowRoutesCommand(params, self._app_data)
 
         if cmd.lower() == "19":
             return ShowTrucksCommand(params, self._app_data)
