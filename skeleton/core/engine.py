@@ -1,6 +1,6 @@
 from errors.application_error import ApplicationError
 from core.command_factory import CommandFactory
-from menu import INITIAL_MENU
+from interface_menu import INITIAL_MENU
 
 
 class Engine:

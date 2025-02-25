@@ -21,7 +21,7 @@ from commands.show_route import ShowRouteCommand
 from commands.show_routes_inprogress import ShowRoutesInProgressCommand
 from commands.show_trucks import ShowTrucksCommand
 from commands.unassign_package_from_route import UnassignPackageFromRouteCommand
-import menu
+import interface_menu
 
 
 class CommandFactory:
@@ -56,7 +56,7 @@ class CommandFactory:
         params = []
 
         if cmd.lower() == "1":
-            print(menu.REGISTER_EMPLOYEE_MENU)
+            print(interface_menu.REGISTER_EMPLOYEE_MENU)
             params = [input("Username: "),
                       input("First Name: "),
                       input("Last Name: "),
@@ -65,7 +65,7 @@ class CommandFactory:
             return RegisterEmployeeCommand(params, self._app_data)
 
         if cmd.lower() == "2":
-            print(menu.LOGIN_MENU)
+            print(interface_menu.LOGIN_MENU)
             params = [input("Username: "), input("Password: ")]
             return LoginCommand(params, self._app_data)
 
@@ -73,13 +73,13 @@ class CommandFactory:
             return LogoutCommand(params, self._app_data)
 
         if cmd.lower() == "4":
-            print(menu.CREATE_ROUTE_MENU)
+            print(interface_menu.CREATE_ROUTE_MENU)
             params = [input("List of Locations /separated by comma/: "),
                       input("Departure Time /format YYYY-MM-DDTHH:MM/: ")]
             return CreateRouteCommand(params, self._app_data)
 
         if cmd.lower() == "5":
-            print(menu.CREATE_PACKAGE_MENU)
+            print(interface_menu.CREATE_PACKAGE_MENU)
             params = [input("Start Location: "),
                       input("End Location: "),
                       input("Weight: "),
@@ -87,46 +87,46 @@ class CommandFactory:
             return CreatePackageCommand(params, self._app_data)
 
         if cmd.lower() == "6":
-            print(menu.SEARCH_ROUTE_MENU)
+            print(interface_menu.SEARCH_ROUTE_MENU)
             params = [input("Please, enter the ID of the package you need a route for: ")]
             return SearchRouteCommand(params, self._app_data)
 
         if cmd.lower() == "7":
-            print(menu.SEARCH_TRUCK_MENU)
+            print(interface_menu.SEARCH_TRUCK_MENU)
             params = [input("Please, enter the ID of the route you need a truck for: ")]
             return SearchTruckCommand(params, self._app_data)
 
         if cmd.lower() == "8":
-            print(menu.ASSIGN_TRUCK_TO_ROUTE_MENU)
+            print(interface_menu.ASSIGN_TRUCK_TO_ROUTE_MENU)
             params = [input("Truck ID: "),
                       input("Route ID: ")]
             return AssignTruckToRouteCommand(params, self._app_data)
 
         if cmd.lower() == "9":
-            print(menu.REMOVE_TRUCK_MENU)
+            print(interface_menu.REMOVE_TRUCK_MENU)
             params = [input("Truck ID: ")]
             return RemoveTruckFromRouteCommand(params, self._app_data)
 
         if cmd.lower() == "10":
-            print(menu.BULK_ASSIGN_PACKAGES_MENU)
+            print(interface_menu.BULK_ASSIGN_PACKAGES_MENU)
             params = [input("Route ID: "),
                       input("Package IDs /separated by comma/: ").split(",")]
             return AssignPackageToRouteCommand(params, self._app_data)
 
         if cmd.lower() == "11":
-            print(menu.BULK_ASSIGN_PACKAGES_MENU)
+            print(interface_menu.BULK_ASSIGN_PACKAGES_MENU)
             params = [input("Package ID: "),
                       input("Route ID: ")]
             return BulkAssignPackagesCommand(params, self._app_data)
 
         if cmd.lower() == "12":
-            print(menu.REASSIGN_PACKAGE_MENU)
+            print(interface_menu.REASSIGN_PACKAGE_MENU)
             params = [input("Package ID: "),
                       input("New Route ID: ")]
             return ReassignPackageCommand(params, self._app_data)
 
         if cmd.lower() == "13":
-            print(menu.REMOVE_PACKAGE_MENU)
+            print(interface_menu.REMOVE_PACKAGE_MENU)
             params = [input("Package ID: ")]
             return UnassignPackageFromRouteCommand(params, self._app_data)
 
@@ -134,17 +134,17 @@ class CommandFactory:
             return ShowEmployeesCommand(params, self._app_data)
 
         if cmd.lower() == "15":
-            print(menu.SHOW_PACKAGE)
+            print(interface_menu.SHOW_PACKAGE)
             params = [input("Package ID: ")]
             return ShowPackageCommand(params, self._app_data)
 
         if cmd.lower() == "16":
-            print(menu.SHOW_PACKAGES_MENU)
+            print(interface_menu.SHOW_PACKAGES_MENU)
             params = [input("Status: ")]
             return ShowPackagesCommand(params, self._app_data)
 
         if cmd.lower() == "17":
-            print(menu.SHOW_ROUTE_MENU)
+            print(interface_menu.SHOW_ROUTE_MENU)
             params = [input("Route ID: ")]
             return ShowRouteCommand(params, self._app_data)
 
