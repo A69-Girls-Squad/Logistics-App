@@ -60,4 +60,4 @@ class BulkAssignPackagesCommand(BaseCommand):
                          f"Executed by: username" + self.ROW_SEP)
 
         return (f"Bulk assigned packages to route ID {route_id}: "
-                f"{bulk_assigned_packages}\n{no_more_capacity_message}") + BaseCommand.ROW_SEP*2
+                f"{bulk_assigned_packages}\n{no_more_capacity_message}")

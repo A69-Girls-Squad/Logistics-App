@@ -40,6 +40,6 @@ class UnassignPackageFromRouteCommand(BaseCommand):
         package = self.app_data.find_package_by_id(package_id)
         route_id = package.route_id
 
-        self.app_data.unassign_package_from_route(package_id, route_id)
+        self.app_data.unassign_package_from_route(package_id)
 
-        return f"Package with ID {package_id} was unassigned from route with ID {route_id}" + BaseCommand.ROW_SEP*2
+        return f"Package with ID {package_id} was unassigned from route with ID {route_id}"

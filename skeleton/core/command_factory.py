@@ -108,15 +108,15 @@ class CommandFactory:
             return RemoveTruckFromRouteCommand(params, self._app_data)
 
         if cmd.lower() == "10":
-            print(interface_menu.BULK_ASSIGN_PACKAGES_MENU)
+            print(interface_menu.ASSIGN_PACKAGE_TO_ROUTE_MENU)
             params = [input("Route ID: "),
-                      input("Package IDs /separated by comma/: ").split(",")]
+                      input("Route ID: ")]
             return AssignPackageToRouteCommand(params, self._app_data)
 
         if cmd.lower() == "11":
             print(interface_menu.BULK_ASSIGN_PACKAGES_MENU)
             params = [input("Package ID: "),
-                      input("Route ID: ")]
+                      input("Package IDs /separated by comma/: ").split(",")]
             return BulkAssignPackagesCommand(params, self._app_data)
 
         if cmd.lower() == "12":

@@ -38,4 +38,4 @@ class RegisterEmployeeCommand(BaseCommand):
 
         self.logger.info(f"User {employee.username} registered successfully!" + BaseCommand.ROW_SEP)
 
-        return f"Employee {employee.username} registered successfully!" + BaseCommand.ROW_SEP*2
+        return f"Employee {employee.username} registered successfully!"

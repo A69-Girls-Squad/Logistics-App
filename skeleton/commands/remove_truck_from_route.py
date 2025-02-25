@@ -30,5 +30,5 @@ class RemoveTruckFromRouteCommand(BaseCommand):
                          f"Executed by: {self.app_data.logged_in_employee.username}" + BaseCommand.ROW_SEP)
 
         return (f"Truck with ID {truck_id} has been removed from route ID {route_id}, "
-                f"truck status changed to \"free\".") + BaseCommand.ROW_SEP*2
+                f"truck status changed to \"free\".")
 

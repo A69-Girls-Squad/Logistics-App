@@ -69,4 +69,4 @@ class ShowTrucksCommand(BaseCommand):
                                                  for key, value in actros_trucks.items())}\n{BaseCommand.TABLE_SEP}"
                 f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{BaseCommand.TABLE_SEP}"
                 f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
-                + BaseCommand.ROW_SEP * 2)
+               )

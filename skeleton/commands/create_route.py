@@ -44,4 +44,4 @@ class CreateRouteCommand(BaseCommand):
                 f"\nLocations:      | {locations}"
                 f"\n{BaseCommand.TABLE_SEP}"
                 f"\nDeparture Time: | {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
-                f"\n{BaseCommand.TABLE_SEP}") + BaseCommand.ROW_SEP*2
+                f"\n{BaseCommand.TABLE_SEP}")

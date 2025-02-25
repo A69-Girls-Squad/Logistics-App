@@ -28,4 +28,4 @@ class LogoutCommand(BaseCommand):
 
         self.logger.info(f"User {self.app_data.logged_in_employee.username} successfully logged out!" + BaseCommand.ROW_SEP)
 
-        return "You logged out!" + BaseCommand.ROW_SEP*2
+        return "You logged out!"

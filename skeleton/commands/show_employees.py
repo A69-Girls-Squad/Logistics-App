@@ -17,6 +17,6 @@ class ShowEmployeesCommand(BaseCommand):
         if self._app_data.logged_in_employee.employee_role == EmployeeRole.MANAGER:
             if self._app_data.employees:
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
-                return "\n".join(["--EMPLOYEES--"] + employees + BaseCommand.ROW_SEP*2)
+                return "\n".join(["--EMPLOYEES--"] + employees)
         else:
             raise ApplicationError(self.ONLY_ADMIN_CAN_SHOW_EMPLOYEES)

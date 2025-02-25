@@ -332,7 +332,7 @@ class Route:
         return (
             f"ROUTE DETAILS:"
             f"\nID: {self.id}"
-            f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
+            f"\nHubs:\n{"\n-> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
             f"\nDeparture time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
             f"\nNumber of packages: {len(self._assigned_packages_ids)}"
             f"\nCurrent load: {self.load}"

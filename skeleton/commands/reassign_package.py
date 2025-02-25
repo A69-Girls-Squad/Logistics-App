@@ -37,4 +37,4 @@ class ReassignPackageCommand(BaseCommand):
                          f"to Route {assign_to_route_id} | Executed by: {self.app_data.logged_in_employee}")
 
         return (f"Package with ID {package_id} was unassigned from route with ID {unassign_from_route_id}"
-                f"and was assigned to route with ID {assign_to_route_id}" + BaseCommand.ROW_SEP*2)
+                f"and was assigned to route with ID {assign_to_route_id}")

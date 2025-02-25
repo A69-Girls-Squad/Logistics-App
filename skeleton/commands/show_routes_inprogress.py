@@ -29,4 +29,4 @@ class ShowRoutesInProgressCommand(BaseCommand):
         for route in self._app_data.routes:
             if route.status == Route.STATUS_IN_PROGRESS:
                 routes_in_progress.append(route)
-        return f"Routs in progress:\n"+"\n".join([str(route) for route in routes_in_progress]) + BaseCommand.ROW_SEP*2
+        return f"Routs in progress:\n"+"\n".join([str(route) for route in routes_in_progress])

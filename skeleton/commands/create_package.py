@@ -43,4 +43,4 @@ class CreatePackageCommand(BaseCommand):
                 f"\nWeight:         | {weight_float} kg"
                 f"\n{BaseCommand.TABLE_SEP}"
                 f"\nCustomer email: | {customer_email}"
-                f"\n{BaseCommand.TABLE_SEP}") + BaseCommand.ROW_SEP*2
+                f"\n{BaseCommand.TABLE_SEP}")

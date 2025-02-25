@@ -67,7 +67,7 @@ class ShowPackagesCommand(BaseCommand):
                             f"\nCustomer email: | {package.customer_email}"
                             f"\n{BaseCommand.TABLE_SEP}"
                             f"{status_string(package)}" + BaseCommand.ROW_SEP for package in packages])
-                   + BaseCommand.ROW_SEP)
+                   )
 
         self.logger.info(result)
         return result
