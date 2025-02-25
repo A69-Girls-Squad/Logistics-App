@@ -41,7 +41,7 @@ class Route:
          Generates and returns the next unique package ID.
 
          Returns:
-             int: The next unique ID.
+             int: The next available unique route ID.
          """
         cls._current_id += 1
         return cls._current_id
@@ -71,21 +71,13 @@ class Route:
 
     @classmethod
     def from_json(cls, data: dict):
-        """
-        Creates a Route instance from a JSON-compatible dictionary.
+        """Create a Route instance from a dictionary.
 
         Args:
-            data (dict): A dictionary containing route details, including:
-                - locations (str): A string of locations separated by commas.
-                - departure_time (str): The departure time in the REQUIRED_DATE_FORMAT.
-                - _id (str): The route's unique identifier.
-                - _assigned_truck_id (int or None): The ID of the assigned truck.
-                - _assigned_package_ids (list): A list of assigned package IDs.
-                - _load (float): The total load weight.
-                - _stops (dict): A dictionary mapping locations to estimated arrival times.
+            data (dict): Route details including locations, departure time, and assignments.
 
         Returns:
-            Route: An instance of the Route class.
+            Route: A new Route instance.
         """
         route = cls(
             locations=data["locations"],
@@ -103,18 +95,10 @@ class Route:
         return route
 
     def to_json(self) -> dict:
-        """
-        Converts the Route object into a JSON-compatible dictionary.
+        """Convert the Route instance to a dictionary.
 
         Returns:
-            dict: A dictionary representation of the route, including:
-                - locations (str): The locations string.
-                - departure_time (str): The departure time in REQUIRED_DATE_FORMAT.
-                - id (str): The route's unique identifier.
-                - assigned_truck_id (int or None): The ID of the assigned truck.
-                - assigned_package_ids (list): The list of assigned package IDs.
-                - load (float): The total load weight.
-                - stops (dict): A dictionary mapping locations to estimated arrival times (as ISO strings).
+            dict: Dictionary representation of the route.
         """
         return {
             "locations": self.LOCATIONS_SEPARATOR.join(self.locations),

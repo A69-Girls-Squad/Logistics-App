@@ -1,4 +1,3 @@
-from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from models.truck import Truck
@@ -23,12 +22,13 @@ class ShowTrucksCommand(BaseCommand):
     ACTROS_MAX_RANGE = 13000
 
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 0)
         super().__init__(params, app_data)
 
 
     def execute(self) -> str:
-        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + BaseCommand.ROW_SEP)
+        super().execute()
+
+        self.logger.info(f"{self.__class__.__name__} executed by user: {self.app_data.logged_in_employee}" + BaseCommand.ROW_SEP)
 
         scania_trucks = {}
         man_trucks = {}
@@ -70,3 +70,9 @@ class ShowTrucksCommand(BaseCommand):
                 f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{BaseCommand.TABLE_SEP}"
                 f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
                )
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 0

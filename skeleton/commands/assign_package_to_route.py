@@ -1,30 +1,34 @@
-from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
 class AssignPackageToRouteCommand(BaseCommand):
     """
-    Command to assign a package to a specific route.
+    A command to assign a package to a specific route.
 
-    This command validates the input parameters, assigns a package to a route,
-    and logs the action.
+    This command takes a package ID and a route ID as parameters, validates them,
+    and assigns the package to the specified route. The action is logged, and a
+    confirmation message is returned.
+
+    Attributes:
+        params (list): A list of parameters passed to the command. The first parameter
+                       should be the package ID, and the second should be the route ID.
+        app_data (ApplicationData): The application data object containing the state
+                                    of the application.
+
+    Methods:
+        execute(): Executes the command to assign the package to the route and logs
+                   the action. Returns a confirmation message.
+        _requires_login(): Specifies that the command requires the user to be logged in.
+        _expected_params_count(): Specifies the expected number of parameters (2).
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 2)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
-        """
-        Executes the command to assign a package to a route.
-
-        Returns:
-            str: A confirmation message indicating the package was assigned to the route.
-
-        Raises:
-            ValueError: If the package ID or route ID is invalid.
-        """
         super().execute()
+
         package_id = try_parse_int(self.params[0])
         route_id = try_parse_int(self.params[1])
 
@@ -39,3 +43,6 @@ class AssignPackageToRouteCommand(BaseCommand):
 
     def _requires_login(self) -> bool:
         return True
+
+    def _expected_params_count(self) -> int:
+        return 2

@@ -1,10 +1,6 @@
 from errors.application_error import ApplicationError
 
 
-def validate_params_count(params, count):
-    if len(params) != count:
-        raise ApplicationError(f"Invalid number of arguments. Expected: {count} / Received: {len(params)}.")
-
 def validate_unknown_params_count(params, min_count, max_count):
     if min_count > len(params) or len(params) > max_count:
         raise ApplicationError(f"Invalid number of arguments. Expected at least {min_count},"

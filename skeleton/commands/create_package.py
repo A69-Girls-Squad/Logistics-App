@@ -1,4 +1,4 @@
-from commands.validation_helpers import validate_params_count, try_parse_float
+from commands.validation_helpers import try_parse_float
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -10,20 +10,11 @@ class CreatePackageCommand(BaseCommand):
     This command validates the input parameters, creates a package, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 4)
         super().__init__(params, app_data)
 
 
     def execute(self) -> str:
-        """
-        Executes the command to create a new package.
-
-        Returns:
-            str: A confirmation message indicating the package was created.
-
-        Raises:
-            ValueError: If any of the parameters are invalid (e.g., invalid weight or email format).
-        """
+        super().execute()
 
         start_location, end_location, weight_float, customer_email = self._params
         weight = try_parse_float(weight_float)
@@ -44,3 +35,9 @@ class CreatePackageCommand(BaseCommand):
                 f"\n{BaseCommand.TABLE_SEP}"
                 f"\nCustomer email: | {customer_email}"
                 f"\n{BaseCommand.TABLE_SEP}")
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 4

@@ -1,4 +1,4 @@
-from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -11,7 +11,6 @@ class ReassignPackageCommand(BaseCommand):
     assigns it to the new route, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 2)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -24,6 +23,7 @@ class ReassignPackageCommand(BaseCommand):
         Raises:
             ApplicationError: If the package or routes do not exist, or if the package cannot be reassigned.
         """
+        super().execute()
         package_id = try_parse_int(self.params[0])
         package = self.app_data.find_package_by_id(package_id)
         unassign_from_route_id = package.route_id
@@ -38,3 +38,9 @@ class ReassignPackageCommand(BaseCommand):
 
         return (f"Package with ID {package_id} was unassigned from Route with ID {unassign_from_route_id}"
                 f"and was assigned to Route with ID {assign_to_route_id}")
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 2

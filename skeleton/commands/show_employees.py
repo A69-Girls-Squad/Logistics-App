@@ -1,26 +1,47 @@
 from errors.application_error import ApplicationError
-from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from models.constants.employee_role import EmployeeRole
 
 
 class ShowEmployeesCommand(BaseCommand):
+    """Command for displaying a list of employees.
 
-    ONLY_ADMIN_CAN_SHOW_EMPLOYEES = "You are not an admin!"
+    Only users with the 'MANAGER' role can execute this command.
+    If the logged-in user is not a manager, an ApplicationError is raised.
+
+    Attributes:
+        ONLY_MANAGER_CAN_SHOW_EMPLOYEES (str): Error message when a non-manager tries to access employees.
+    """
+
+    ONLY_MANAGER_CAN_SHOW_EMPLOYEES = "You are not a Manager!"
 
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 0)
         super().__init__(params, app_data)
 
     def execute(self):
+        """Execute the command to show employees.
+
+        If the logged-in employee has a 'MANAGER' role and employees exist,
+        it returns a formatted list of employees. Otherwise, raises an ApplicationError.
+
+        Returns:
+            str: A formatted string listing employees.
+
+        Raises:
+            ApplicationError: If the logged-in user is not a manager.
+        """
         super().execute()
+
         if self._app_data.logged_in_employee.employee_role == EmployeeRole.MANAGER:
             if self._app_data.employees:
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
                 return "\n".join(["--EMPLOYEES--"] + employees)
         else:
-            raise ApplicationError(self.ONLY_ADMIN_CAN_SHOW_EMPLOYEES)
+            raise ApplicationError(self.ONLY_MANAGER_CAN_SHOW_EMPLOYEES)
 
     def _requires_login(self) -> bool:
         return True
+
+    def _expected_params_count(self) -> int:
+        return 0

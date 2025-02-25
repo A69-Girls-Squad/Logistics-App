@@ -35,12 +35,20 @@ class Engine:
               "\n------------------------------")
         while True:
             try:
+                input("\n\nTo see MENU press Enter.")
+                input_command = input(INITIAL_MENU)
+
+                input_command = input_command.strip()
+
                 input_command = input()
                 if not input_command:
                     print(INITIAL_MENU)
                     continue
+
                 if input_command.lower() == "exit":
+                    print("Exiting the application. Goodbye!")
                     break
+
                 command = self._command_factory.create(input_command)
                 command_output = "\n" + command.execute()
                 print(command_output)

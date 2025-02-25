@@ -1,5 +1,4 @@
 from core.application_time import ApplicationTime
-from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
@@ -14,7 +13,6 @@ class ShowPackagesCommand(BaseCommand):
     and returns their string representations.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 1)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -29,6 +27,8 @@ class ShowPackagesCommand(BaseCommand):
             - If the status is 'unassigned', only unassigned packages are displayed.
             - If the status is 'all', all packages are displayed.
         """
+        super().execute()
+
         requested_status = self.params[0].lower()
         result = "PACKAGES:" + BaseCommand.ROW_SEP
 
@@ -75,5 +75,9 @@ class ShowPackagesCommand(BaseCommand):
         self.logger.info(result)
         return result
 
+    def _requires_login(self) -> bool:
+        return True
 
+    def _expected_params_count(self) -> int:
+        return 1
 

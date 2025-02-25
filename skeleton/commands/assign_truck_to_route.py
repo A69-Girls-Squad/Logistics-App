@@ -1,4 +1,4 @@
-from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -8,11 +8,8 @@ class AssignTruckToRouteCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self) -> str:
-        """
-        Assigns available truck to a route.
+        super().execute()
 
-        """
-        validate_params_count(self.params, 2)
         truck_id = try_parse_int(self.params[0])
         route_id = try_parse_int(self.params[1])
         
@@ -25,3 +22,8 @@ class AssignTruckToRouteCommand(BaseCommand):
 
         return f"Truck with ID {truck_id} assigned to Route with ID {route_id}"
 
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 2

@@ -1,4 +1,3 @@
-from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
@@ -12,7 +11,6 @@ class ShowRoutesCommand(BaseCommand):
     This command retrieves and displays details of all routes with the status `STATUS_IN_PROGRESS`.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 1)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -26,6 +24,7 @@ class ShowRoutesCommand(BaseCommand):
             - This command does not require any parameters.
             - It filters routes with the status `STATUS_IN_PROGRESS` and returns their details.
         """
+        super().execute()
 
         requested_status = self.params[0].capitalize()
 
@@ -39,3 +38,9 @@ class ShowRoutesCommand(BaseCommand):
             raise ApplicationError("Invalid input!")
 
         return f"{requested_status.upper()} ROUTES:\n"+"\n".join([str(route) for route in routes_to_show])
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 0

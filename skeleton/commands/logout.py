@@ -1,4 +1,3 @@
-from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -10,7 +9,6 @@ class LogoutCommand(BaseCommand):
     This command logs out the employee and returns a confirmation message.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 0)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -24,6 +22,7 @@ class LogoutCommand(BaseCommand):
             - This command does not require any parameters.
             - It logs out the currently logged-in employee and updates the application state.
         """
+        super().execute()
         if self.app_data.has_logged_in_employee:
             username = self._app_data.logged_in_employee.username
             self._app_data.logout()
@@ -33,3 +32,9 @@ class LogoutCommand(BaseCommand):
             return "You logged out!"
 
         return "No employee logged in."
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 0
