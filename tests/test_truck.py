@@ -7,7 +7,7 @@ from models.truck import Truck
 class Truck_Should(unittest.TestCase):
 
     def setUp(self):
-        Truck._current_id = 1000  # Reset ID counter before each test
+        Truck._current_id = 1000
 
     def test_next_id(self):
         first_id = Truck.next_id()
@@ -56,8 +56,8 @@ class Truck_Should(unittest.TestCase):
 
     def test_is_suitable(self):
         route = MagicMock()
-        route.load = td.VALID_TRUCK_CAPACITY - 1000  # Within capacity
-        route.distance = td.VALID_TRUCK_MAX_RANGE - 1000  # Within max range
+        route.load = td.VALID_TRUCK_CAPACITY - 1000  
+        route.distance = td.VALID_TRUCK_MAX_RANGE - 1000  
 
         truck = Truck(name=td.VALID_TRUCK_NAME, capacity=td.VALID_TRUCK_CAPACITY, max_range=td.VALID_TRUCK_MAX_RANGE)
 
@@ -65,7 +65,7 @@ class Truck_Should(unittest.TestCase):
 
     def test_is_suitable_insufficient_capacity(self):
         route = MagicMock()
-        route.load = td.VALID_TRUCK_CAPACITY + 1000  # Exceeds capacity
+        route.load = td.VALID_TRUCK_CAPACITY + 1000  
         route.distance = td.VALID_TRUCK_MAX_RANGE - 1000
 
         truck = Truck(name=td.VALID_TRUCK_NAME, capacity=td.VALID_TRUCK_CAPACITY, max_range=td.VALID_TRUCK_MAX_RANGE)
@@ -75,7 +75,7 @@ class Truck_Should(unittest.TestCase):
     def test_is_suitable_insufficient_max_range(self):
         route = MagicMock()
         route.load = td.VALID_TRUCK_CAPACITY - 1000
-        route.distance = td.VALID_TRUCK_MAX_RANGE + 1000  # Exceeds max range
+        route.distance = td.VALID_TRUCK_MAX_RANGE + 1000  
 
         truck = Truck(name=td.VALID_TRUCK_NAME, capacity=td.VALID_TRUCK_CAPACITY, max_range=td.VALID_TRUCK_MAX_RANGE)
 
@@ -87,7 +87,7 @@ class Truck_Should(unittest.TestCase):
         route.distance = td.VALID_TRUCK_MAX_RANGE - 1000
 
         truck = Truck(name=td.VALID_TRUCK_NAME, capacity=td.VALID_TRUCK_CAPACITY, max_range=td.VALID_TRUCK_MAX_RANGE)
-        truck.assigned_route_id = 1  # Truck is busy
+        truck.assigned_route_id = 1 
 
         self.assertFalse(truck.is_suitable(route))
 
@@ -113,5 +113,5 @@ class Truck_Should(unittest.TestCase):
             f"Range: {td.VALID_TRUCK_MAX_RANGE}\n"
             f"Status: Busy\nRoute ID: 1"
         )
-        # expected should be in the first place
+
         self.assertEqual(expected_str_busy, str(truck))
