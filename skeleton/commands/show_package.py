@@ -1,5 +1,5 @@
 from errors.application_error import ApplicationError
-from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -13,7 +13,6 @@ class ShowPackageCommand(BaseCommand):
     """
 
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 1)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -26,9 +25,16 @@ class ShowPackageCommand(BaseCommand):
         Raises:
             ApplicationError: If no package is found with the provided ID.
         """
+        super().execute()
 
         package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)
         if not package:
             raise ApplicationError("No Package found!")
         return str(package)
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 1

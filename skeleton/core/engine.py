@@ -16,6 +16,7 @@ class Engine:
     def __init__(self, factory: CommandFactory):
         self._command_factory = factory
 
+
     def start(self):
         """
         Starts the interactive loop, processing user input and executing commands.
@@ -35,11 +36,17 @@ class Engine:
             try:
                 input("\n\nTo see MENU press Enter.")
                 input_command = input(INITIAL_MENU)
+
+                input_command = input_command.strip()
+
                 if not input_command:
                     print("Please enter a command.")
                     continue
+
                 if input_command.lower() == "exit":
+                    print("Exiting the application. Goodbye!")
                     break
+
                 command = self._command_factory.create(input_command)
                 command_output = "\n" + command.execute()
                 print(command_output)

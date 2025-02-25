@@ -12,7 +12,6 @@ class BulkAssignPackagesCommand(BaseCommand):
     and logs the action. It stops assigning packages if the route's capacity is exceeded.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_unknown_params_count(params, 2, 102)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -26,6 +25,12 @@ class BulkAssignPackagesCommand(BaseCommand):
         Raises:
             ApplicationError: If the route or any package does not exist, or if the route has no assigned truck.
         """
+        validate_unknown_params_count(self._params, min_count=2, max_count=102)
+
+        if self._requires_login() and not self._app_data.has_logged_in_employee:
+            self.logger.warning("Unauthorized access attempt detected.")
+            raise ValueError("You are not logged in! Please login first!" + BaseCommand.ROW_SEP)
+
         bulk_assigned_packages = []
         no_more_capacity_message = ""
 
@@ -61,3 +66,9 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         return (f"Bulk assigned Packages to Route ID {route_id}: "
                 f"{bulk_assigned_packages}\n{no_more_capacity_message}")
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 0

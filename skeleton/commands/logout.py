@@ -10,7 +10,6 @@ class LogoutCommand(BaseCommand):
     This command logs out the employee and returns a confirmation message.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 0)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -24,8 +23,15 @@ class LogoutCommand(BaseCommand):
             - This command does not require any parameters.
             - It logs out the currently logged-in employee and updates the application state.
         """
+        super().execute()
         self._app_data.logout()
 
         self.logger.info(f"User {self.app_data.logged_in_employee.username} successfully logged out!" + BaseCommand.ROW_SEP)
 
         return "You logged out!"
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 0
