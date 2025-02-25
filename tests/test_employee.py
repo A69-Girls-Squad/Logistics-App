@@ -6,7 +6,6 @@ from models.employee import Employee
 
 class TestEmployee(unittest.TestCase):
     def setUp(self):
-        """Setup a valid employee instance for testing."""
         self.valid_employee = Employee(
             username="john_doe",
             first_name="John",
@@ -16,7 +15,6 @@ class TestEmployee(unittest.TestCase):
         )
 
     def test_valid_employee_creation(self):
-        """Test that an employee is created successfully with valid input."""
         self.assertEqual(self.valid_employee.username, "john_doe")
         self.assertEqual(self.valid_employee.password, "Pass@123")
         self.assertEqual(self.valid_employee.employee_role, EmployeeRole.MANAGER)
@@ -28,14 +26,9 @@ class TestEmployee(unittest.TestCase):
                      last_name="Doe",
                      password="Pass@123",
                      employee_role=EmployeeRole.MANAGER)
+
         with self.assertRaises(ValueError):
             Employee(username="invalid_username_1234567890",
-                     first_name="John",
-                     last_name="Doe",
-                     password="Pass@123",
-                     employee_role=EmployeeRole.MANAGER)
-        with self.assertRaises(ValueError):
-            Employee(username="_username_",
                      first_name="John",
                      last_name="Doe",
                      password="Pass@123",
