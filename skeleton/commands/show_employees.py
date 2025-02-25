@@ -14,9 +14,13 @@ class ShowEmployeesCommand(BaseCommand):
         super().__init__(params, app_data)
 
     def execute(self):
+        super().execute()
         if self._app_data.logged_in_employee.employee_role == EmployeeRole.MANAGER:
             if self._app_data.employees:
                 employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
                 return "\n".join(["--EMPLOYEES--"] + employees)
         else:
             raise ApplicationError(self.ONLY_ADMIN_CAN_SHOW_EMPLOYEES)
+
+    def _requires_login(self) -> bool:
+        return True

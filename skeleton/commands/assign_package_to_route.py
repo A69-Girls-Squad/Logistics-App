@@ -24,6 +24,7 @@ class AssignPackageToRouteCommand(BaseCommand):
         Raises:
             ValueError: If the package ID or route ID is invalid.
         """
+        super().execute()
         package_id = try_parse_int(self.params[0])
         route_id = try_parse_int(self.params[1])
 
@@ -35,3 +36,6 @@ class AssignPackageToRouteCommand(BaseCommand):
             )
 
         return f"Package with ID {package_id} was assigned to route with ID {route_id}"
+
+    def _requires_login(self) -> bool:
+        return True

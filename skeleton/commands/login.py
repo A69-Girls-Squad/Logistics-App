@@ -17,7 +17,6 @@ class LoginCommand(BaseCommand):
         super().__init__(params, app_data)
         self._requires_login = False
 
-
     def execute(self) -> str:
         """
         Executes the command to log in an employee.
@@ -36,7 +35,7 @@ class LoginCommand(BaseCommand):
             raise ApplicationError("No employee found!" + BaseCommand.ROW_SEP)
 
         if employee.password != password:
-            raise ApplicationError("Wrong username or password!")
+            raise ApplicationError("Wrong password!")
         else:
             self._app_data.login(employee)
 

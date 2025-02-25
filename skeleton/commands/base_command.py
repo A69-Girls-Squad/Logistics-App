@@ -1,5 +1,6 @@
 import logging
 from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 
 
 class BaseCommand:
@@ -44,7 +45,6 @@ class BaseCommand:
             datefmt="%d:%m:%Y %H:%M",
             level=logging.INFO
         )
-
         self.logger = logging.getLogger(self.__class__.__name__)
 
     @property
@@ -77,9 +77,10 @@ class BaseCommand:
                 Raises:
                     NotImplementedError: If the method is not overridden by a subclass.
                 """
-        raise NotImplementedError("Execute method has to be overridden" + BaseCommand.ROW_SEP)
+        if self._requires_login and not self._app_data.has_logged_in_employee:
+            raise ApplicationError('You are not logged in! Please login first!')
 
-    def requires_login(self) -> str:
+    def _requires_login(self) -> None:
         """
         Validates whether the command requires a logged-in user.
 
@@ -89,10 +90,7 @@ class BaseCommand:
         Raises:
             ValueError: If the command requires a logged-in user but no user is logged in.
         """
-        if self._requires_login and not self._app_data.has_logged_in_employee:
-            self.logger.warning("Unauthorized access attempt detected.")
-            raise ValueError("You are not logged in! Please login first!" + BaseCommand.ROW_SEP)
-        return ""
+        raise NotImplementedError('Override in derived class')
 
     def _throw_if_employee_logged_in(self):
         """

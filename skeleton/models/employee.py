@@ -70,6 +70,8 @@ class Employee:
                                  f" numbers and special symbols {self.SPECIAL_CHARS}")
         self._password = password
 
+        if employee_role not in [EmployeeRole.REGULAR, EmployeeRole.SUPERVISOR, EmployeeRole.MANAGER]:
+            raise ValueError("Invalid employee role!")
         self._employee_role = employee_role
 
 

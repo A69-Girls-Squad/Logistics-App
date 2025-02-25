@@ -13,7 +13,6 @@ from commands.register_employee import RegisterEmployeeCommand
 from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
 from commands.search_route import SearchRouteCommand
 from commands.search_truck import SearchTruckCommand
-from commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
 from commands.set_time import SetTimeCommand
 from commands.show_package import ShowPackageCommand
 from commands.show_packages import ShowPackagesCommand
@@ -109,7 +108,7 @@ class CommandFactory:
 
         if cmd.lower() == "10":
             print(interface_menu.ASSIGN_PACKAGE_TO_ROUTE_MENU)
-            params = [input("Route ID: "),
+            params = [input("Package ID: "),
                       input("Route ID: ")]
             return AssignPackageToRouteCommand(params, self._app_data)
 
@@ -153,9 +152,6 @@ class CommandFactory:
 
         if cmd.lower() == "19":
             return ShowTrucksCommand(params, self._app_data)
-
-        if cmd.lower() == "20":
-            return SendPackageInfoToCustomerCommand(params, self._app_data)
 
         if cmd.lower() == "settime":
             return SetTimeCommand(params, self._app_data)

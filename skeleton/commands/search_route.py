@@ -50,7 +50,7 @@ class SearchRouteCommand(BaseCommand):
                         route_details = (f"ROUTE ID:       | {route.id}"
                                          f"\n{BaseCommand.TABLE_SEP}"
                                          f"\nHubs:           |"
-                                         f" {"\n-> ".join(f"{key}: "
+                                         f" {"\n                | ".join(f"{key}: "
                                          f"{value.isoformat(sep=" ", timespec="minutes")}" 
                                             for key, value in route.stops.items())}"
                                          f"\n{BaseCommand.TABLE_SEP}"

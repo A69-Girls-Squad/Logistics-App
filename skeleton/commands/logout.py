@@ -24,8 +24,12 @@ class LogoutCommand(BaseCommand):
             - This command does not require any parameters.
             - It logs out the currently logged-in employee and updates the application state.
         """
-        self._app_data.logout()
+        if self.app_data.has_logged_in_employee:
+            username = self._app_data.logged_in_employee.username
+            self._app_data.logout()
 
-        self.logger.info(f"User {self.app_data.logged_in_employee.username} successfully logged out!" + BaseCommand.ROW_SEP)
+            self.logger.info(f"User {username} successfully logged out!" + BaseCommand.ROW_SEP)
 
-        return "You logged out!"
+            return "You logged out!"
+
+        return "No employee logged in."

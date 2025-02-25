@@ -16,8 +16,11 @@ class RemoveTruckFromRouteCommand(BaseCommand):
     def execute(self) -> str:
         validate_params_count(self.params, 1)
         truck_id = try_parse_int(self.params[0])
-
         truck = self.app_data.find_truck_by_id(truck_id)
+
+        if not truck.assigned_route_id:
+            raise ApplicationError("This truck is not assigned to any route.")
+
         route_id = truck.assigned_route_id
 
         if not truck:

@@ -30,13 +30,14 @@ class Engine:
             ValueError: If an invalid command is entered or the input is malformed.
         """
         log = ["\n"]
-
+        print("------------------------------"
+              "\nTo see MENU press Enter."
+              "\n------------------------------")
         while True:
             try:
-                input("\n\nTo see MENU press Enter.")
-                input_command = input(INITIAL_MENU)
+                input_command = input()
                 if not input_command:
-                    print("Please enter a command.")
+                    print(INITIAL_MENU)
                     continue
                 if input_command.lower() == "exit":
                     break
