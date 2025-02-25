@@ -30,8 +30,8 @@ class AssignPackageToRouteCommand(BaseCommand):
         self.app_data.assign_package_to_route(package_id, route_id)
         
         self.logger.info(
-            f"Package with ID {package_id} was assigned to route with ID {route_id} "
+            f"Package with ID {package_id} was assigned to Route with ID {route_id} "
             f"| Executed by: {self.app_data.logged_in_employee}"
             )
 
-        return f"Package with ID {package_id} was assigned to route with ID {route_id}"
+        return f"Package with ID {package_id} was assigned to Route with ID {route_id}"

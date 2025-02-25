@@ -28,5 +28,5 @@ class ShowRouteCommand(BaseCommand):
         route_id = try_parse_int(self._params[0])
         route = self._app_data.find_route_by_id(route_id)
         if not route:
-            raise ApplicationError("No route found!")
+            raise ApplicationError("No Route found!")
         return str(route)

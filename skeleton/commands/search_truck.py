@@ -35,7 +35,7 @@ class SearchTruckCommand(BaseCommand):
         route_id = try_parse_int(self._params[0])
         route = self.app_data.find_route_by_id(route_id)
         if not route:
-            raise ApplicationError("No route found!" + BaseCommand.ROW_SEP)
+            raise ApplicationError("No Route found!" + BaseCommand.ROW_SEP)
 
         for truck in self.app_data.trucks:
             if truck.is_suitable(route):
@@ -47,7 +47,7 @@ class SearchTruckCommand(BaseCommand):
                     actros_ids.append(truck.id)
 
         if not (scania_ids or man_ids or actros_ids):
-            return "No available truck found" + BaseCommand.ROW_SEP
+            return "No available Truck found" + BaseCommand.ROW_SEP
 
         return (f"AVAILABLE SCANIA TRUCKS:\n{BaseCommand.TABLE_SEP}"
                 f"\nIDs:            | {", ".join(map(str, scania_ids))}\n{BaseCommand.TABLE_SEP}"

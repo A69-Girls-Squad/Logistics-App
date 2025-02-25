@@ -318,30 +318,6 @@ class Route:
                 break
         return last_stop
 
-    def __str__(self):
-        """
-        Returns a string representation of the route.
-
-        Returns:
-            str: A formatted string containing route details.
-        """
-        if self.assigned_truck_id:
-            truck_info = f"\nAssigned truck ID: {self.assigned_truck_id}"
-        else:
-            truck_info = ""
-        return (
-            f"ROUTE DETAILS:"
-            f"\nID: {self.id}"
-            f"\nHubs:\n{"\n-> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
-            f"\nDeparture time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
-            f"\nNumber of packages: {len(self._assigned_packages_ids)}"
-            f"\nCurrent load: {self.load}"
-            f"{truck_info}"
-            f"\nStatus: {self.status}"
-            f"\nCurrent location: {self.current_location}"
-            f"\n" + "=" * 40
-        )
-
     def calculating_estimated_arrival_times(self) -> None:
         """
         Calculates the expected arrival times for each stop along the route.
@@ -393,3 +369,27 @@ class Route:
             truck_id (int): The ID of the truck to assign.
         """
         self._assigned_truck_id = truck_id
+
+    def __str__(self):
+        """
+        Returns a string representation of the route.
+
+        Returns:
+            str: A formatted string containing route details.
+        """
+        if self.assigned_truck_id:
+            truck_info = f"\nAssigned Truck ID: {self.assigned_truck_id}"
+        else:
+            truck_info = ""
+        return (
+            f"ROUTE DETAILS:"
+            f"\nID: {self.id}"
+            f"\nHubs:\n{"\n-> ".join(f"{key}: {value}" for key, value in self.stops.items())}"
+            f"\nDeparture time: {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
+            f"\nNumber of packages: {len(self._assigned_packages_ids)}"
+            f"\nCurrent load: {self.load}"
+            f"{truck_info}"
+            f"\nStatus: {self.status}"
+            f"\nCurrent location: {self.current_location}"
+            f"\n" + "=" * 40
+        )
