@@ -1,6 +1,5 @@
 from errors.application_error import ApplicationError
 from core.command_factory import CommandFactory
-import menu
 from menu import INITIAL_MENU
 
 
