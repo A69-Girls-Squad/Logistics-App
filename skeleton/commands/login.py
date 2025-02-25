@@ -13,7 +13,6 @@ class LoginCommand(BaseCommand):
     """
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
-        self._requires_login = False
 
     def execute(self) -> str:
         """

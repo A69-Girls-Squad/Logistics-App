@@ -18,6 +18,9 @@ class Package:
     _current_id = 0
     _email_regex = re.compile(r"[^@]+@[^@]+\.[^@]+")
 
+    TABLE_SEP = "-" * 16 + "|" + "-" * 43
+    ROW_SEP = "\n" + "=" * 60
+
     @classmethod
     def next_id(cls) -> int:
         """

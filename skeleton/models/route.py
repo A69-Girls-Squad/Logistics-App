@@ -140,7 +140,7 @@ class Route:
 
         for location in value:
             if location not in Route.CITIES:
-                raise ApplicationError(f"Invalid location: {location}.")
+                raise ApplicationError(f"Invalid location: {location}")
 
         for i in range(len(value)-1):
             if value[i] == value[i+1]:
@@ -373,7 +373,8 @@ class Route:
             f"\n{Route.ROW_SEP}"
             f"\nID:             | {self.id}"
             f"\n{Route.TABLE_SEP}"
-            f"\nHubs:           | {"\n                | ".join(f"{key}: {value}" for key, value in self.stops.items())}"
+            f"\nHubs:           | {"\n                | ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" 
+                                                               for key, value in self.stops.items())}"
             f"\n{Route.TABLE_SEP}"
             f"\nDeparture time: | {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
             f"\n{Route.TABLE_SEP}"

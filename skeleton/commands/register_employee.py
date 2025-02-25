@@ -15,7 +15,6 @@ class RegisterEmployeeCommand(BaseCommand):
     """
     def __init__(self, params, app_data: ApplicationData):
         super().__init__(params, app_data)
-        self._requires_login = False
 
     def execute(self) -> str:
         """
@@ -31,7 +30,7 @@ class RegisterEmployeeCommand(BaseCommand):
         self._throw_if_employee_logged_in()
 
         username, firstname, lastname, password, employee_role = self._params
-
+        employee_role = employee_role.capitalize()
 
         employee = self._app_data.create_employee(username, firstname, lastname, password, employee_role)
 

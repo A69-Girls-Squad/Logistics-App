@@ -46,8 +46,6 @@ class Employee:
         """
         if len(username) < 3 or len(username) > 20:
             raise ValueError("Username must be between 3 and 20 characters.")
-        if not re.match(r"^[A-Za-z0-9]+(_[A-Za-z0-9]+)*$", username):
-            raise ValueError("Username can only contain letters, numbers, and underscores (but not start or end with one).")
         self._username = username
 
         if len(first_name) > 30 or len(first_name) < 2:

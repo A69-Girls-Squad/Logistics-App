@@ -28,7 +28,7 @@ class SetTimeCommand(BaseCommand):
         chosen_time = datetime.fromisoformat(self.params[0])
         ApplicationTime.set_current(chosen_time)
 
-        return f"Current application time set to: {chosen_time.strftime("%Y-%m-%d %H:%M")}" + BaseCommand.ROW_SEP*2
+        return f"Current application time set to: {chosen_time.strftime("%Y-%m-%d %H:%M")}"
 
     def _requires_login(self) -> bool:
         return False

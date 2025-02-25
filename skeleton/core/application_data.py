@@ -290,9 +290,51 @@ class ApplicationData:
                 raise ApplicationError(f"Route with ID {route_id} has no more capacity")
             if route.departure_time < ApplicationTime.current():
                 raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
-            if ((package.start_location not in route.locations) or (package.end_location not in route.locations)
-                    or (route.locations.index(package.start_location) > route.locations.index(package.end_location))):
-                    raise ApplicationError(f"Route with ID {route_id} is not suitable for Package with ID {package_id}")
+        if ((package.start_location not in route.locations) or (package.end_location not in route.locations)
+            or (route.locations.index(package.start_location) > route.locations.index(package.end_location))):
+            raise ApplicationError(f"Route with ID {route_id} is not suitable for Package with ID {package_id}")
+
+        package.departure_time = route.departure_time
+        package.estimated_arrival_time = route.stops[package.end_location]
+        package.route_id = route.id
+        package.is_assigned = True
+        route.assign_package(package.id)
+        route.load += package.weight
+
+    def assign_package_to_route(self, package_id: int, route_id: int) -> None:
+        """
+        Assigns a package to a route.
+
+        Args:
+            package_id (int): The ID of the package to assign.
+            route_id (int): The ID of the route to assign the package to.
+
+        Raises:
+            ApplicationError: If the package or route does not exist, or if the package is already assigned.
+        """
+        package = self.find_package_by_id(package_id)
+        if package is None:
+            raise ApplicationError(f"Package with ID {package_id} does not exist")
+        route = self.find_route_by_id(route_id)
+        if route is None:
+            raise ApplicationError(f"Route with ID {route_id} does not exist")
+
+        if package.route_id == route_id or package_id in route.assigned_packages_ids:
+            raise ApplicationError(f"Package with ID {package_id} is already assigned to Route with ID {route_id}")
+        if package.is_assigned:
+            raise ApplicationError(f"Package with ID {package_id} is already assigned")
+
+        if route.assigned_truck_id:
+            truck = self.find_truck_by_id(route.assigned_truck_id)
+
+            free_capacity = truck.capacity - route.load
+            if free_capacity < package.weight:
+                raise ApplicationError(f"Route with ID {route_id} has no more capacity")
+            if route.departure_time < ApplicationTime.current():
+                raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
+        if ((package.start_location not in route.locations) or (package.end_location not in route.locations)
+            or (route.locations.index(package.start_location) > route.locations.index(package.end_location))):
+            raise ApplicationError(f"Route with ID {route_id} is not suitable for Package with ID {package_id}")
 
         package.departure_time = route.departure_time
         package.estimated_arrival_time = route.stops[package.end_location]

@@ -71,7 +71,7 @@ class BaseCommand:
             ValueError: If the user is not logged in when required.
             ApplicationError: If the number of parameters is invalid.
         """
-        if self._requires_login and not self._app_data.has_logged_in_employee:
+        if self._requires_login() and not self._app_data.has_logged_in_employee:
             self.logger.warning("Unauthorized access attempt detected.")
             raise ValueError("You are not logged in! Please login first!" + BaseCommand.ROW_SEP)
 
