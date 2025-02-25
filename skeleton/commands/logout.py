@@ -1,4 +1,3 @@
-from commands.validation_helpers import validate_params_count
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -24,9 +23,10 @@ class LogoutCommand(BaseCommand):
             - It logs out the currently logged-in employee and updates the application state.
         """
         super().execute()
+        username = self.app_data.logged_in_employee.username
         self._app_data.logout()
 
-        self.logger.info(f"User {self.app_data.logged_in_employee.username} successfully logged out!" + BaseCommand.ROW_SEP)
+        self.logger.info(f"User {username} successfully logged out!" + BaseCommand.ROW_SEP)
 
         return "You logged out!"
 
