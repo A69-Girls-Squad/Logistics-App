@@ -1,4 +1,6 @@
 import datetime
+import unittest
+
 from models.constants.employee_role import EmployeeRole
 
 
@@ -14,12 +16,15 @@ VALID_LOCATIONS_INPUT = "SYD,MEL,BRI"
 VALID_LOCATIONS_OUTPUT = ("SYD", "MEL", "BRI")
 VALID_DISTANCE = 2642
 EXPECTED_ESTIMATED_ARRIVAL_TIME = datetime.datetime(2055, 2, 17, 17, 52, 4,137931)
+
 EXPECTED_CURRENT_LOCATION = "SYD"
 
 INVALID_DEPARTURE_TIME_INPUT = "TestInvalidDepartureTime"
 INVALID_DEPARTURE_TIME_IN_THE_PAST = "1900-02-16 11:30"
 VALID_DEPARTURE_TIME_INPUT = "2055-02-16 11:30"
 VALID_DEPARTURE_TIME_OUTPUT = datetime.datetime(2055, 2, 16, 11, 30)
+VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT = datetime.datetime(2055, 2, 17, 17, 52, 4, 137931)
+VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT_NO_SEC = datetime.datetime(2055, 2, 16, 11, 30)
 
 INVALID_ROUTE_ID = "TestInvalidRouteID"
 
@@ -72,6 +77,6 @@ VALID_TRUCK_MAX_RANGE = 8000
     #         return datetime.datetime.now()
     #     else:
     #         return _my_custom_now
-# @patch
-def VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT():
- return None
+# # @patch
+# def VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT() -> None:
+#     return
