@@ -362,7 +362,7 @@ class ApplicationData:
         route = self.find_route_by_id(route_id)
         if route is None:
             raise ApplicationError(f"Route with ID {route_id} does not exist")
-        if route.departure_time > ApplicationTime.current():
+        if route.departure_time < ApplicationTime.current():
             raise ApplicationError(f"Assigned Truck to Route with ID {route_id} has already departed")
 
         package.departure_time = None

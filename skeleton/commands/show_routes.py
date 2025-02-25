@@ -1,6 +1,7 @@
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from errors.application_error import ApplicationError
+from interface_menu import ROW_SEP
 from models.route import Route
 
 
@@ -37,10 +38,14 @@ class ShowRoutesCommand(BaseCommand):
         else:
             raise ApplicationError("Invalid input!")
 
-        return f"{requested_status.upper()} ROUTES:\n"+"\n".join([str(route) for route in routes_to_show])
+        routes_to_show = "\n".join([str(route) for route in routes_to_show])
+        if not routes_to_show:
+            routes_to_show = f"No trucks in status {requested_status}!"
+        return (f"{ROW_SEP}\n{requested_status.upper()} ROUTES:\n{ROW_SEP}\n"
+                + routes_to_show)
 
     def _requires_login(self) -> bool:
         return True
 
     def _expected_params_count(self) -> int:
-        return 0
+        return 1

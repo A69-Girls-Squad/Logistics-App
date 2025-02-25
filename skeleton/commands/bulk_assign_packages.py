@@ -32,7 +32,6 @@ class BulkAssignPackagesCommand(BaseCommand):
             raise ValueError("You are not logged in! Please login first!" + BaseCommand.ROW_SEP)
 
         bulk_assigned_packages = []
-        no_more_capacity_message = ""
 
         route_id, packages_ids = self._params
         route_id = try_parse_int(route_id)
@@ -45,15 +44,15 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         for package_id in packages_ids:
             self.app_data.assign_package_to_route(package_id, route_id)
+            bulk_assigned_packages.append(package_id)
+
 
         self.logger.info(f"Bulk assigned Packages to Route ID {route_id}:"
-                         f" {bulk_assigned_packages}\n{no_more_capacity_message}"
-                         f" | Executed by: {self.app_data.logged_in_employee}"
-                         f" {bulk_assigned_packages}\n{no_more_capacity_message} | "
-                         f"Executed by: username" + self.ROW_SEP)
+                         f" {bulk_assigned_packages}"
+                         f" | Executed by: {self.app_data.logged_in_employee}")
 
         return (f"Bulk assigned Packages to Route ID {route_id}: "
-                f"{bulk_assigned_packages}\n{no_more_capacity_message}")
+                f"{bulk_assigned_packages}")
 
     def _requires_login(self) -> bool:
         return True

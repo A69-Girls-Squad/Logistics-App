@@ -3,6 +3,7 @@ from core.application_time import ApplicationTime
 from errors.application_error import ApplicationError
 from models.constants.distances import Distance
 from models.truck import Truck
+from interface_menu import TABLE_SEP, ROW_SEP
 
 
 class Route:
@@ -29,9 +30,6 @@ class Route:
     STATUS_CREATED = "Created"
     STATUS_IN_PROGRESS = "In progress"
     STATUS_FINISHED = "Finished"
-
-    TABLE_SEP = "-" * 16 + "|" + "-" * 43
-    ROW_SEP = "\n" + "=" * 60
 
     _current_id = 0
 
@@ -369,21 +367,13 @@ class Route:
         else:
             truck_info = "No truck assigned."
         return (
-            f"ROUTE DETAILS:"
-            f"\n{Route.ROW_SEP}"
-            f"\nID:             | {self.id}"
-            f"\n{Route.TABLE_SEP}"
+            f"ROUTE DETAILS:\n{TABLE_SEP}"
+            f"\nID:             | {self.id}\n{TABLE_SEP}"
             f"\nHubs:           | {"\n                | ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}" 
-                                                               for key, value in self.stops.items())}"
-            f"\n{Route.TABLE_SEP}"
-            f"\nDeparture time: | {self.departure_time.isoformat(sep=" ", timespec="minutes")}"
-            f"\n{Route.TABLE_SEP}"
-            f"\nPackages count: | {len(self._assigned_packages_ids)}"
-            f"\n{Route.TABLE_SEP}"
-            f"\nCurrent load:   | {self.load}"
-            f"\n{Route.TABLE_SEP}"
-            f"\nTruck Info:     | {truck_info}"
-            f"\n{Route.TABLE_SEP}"
-            f"\nStatus:         | {self.status}"
-            f"\n{Route.ROW_SEP}"
+                                                               for key, value in self.stops.items())}\n{TABLE_SEP}"
+            f"\nDeparture time: | {self.departure_time.isoformat(sep=" ", timespec="minutes")}\n{TABLE_SEP}"
+            f"\nPackages count: | {len(self._assigned_packages_ids)}\n{TABLE_SEP}"
+            f"\nCurrent load:   | {self.load}\n{TABLE_SEP}"
+            f"\nTruck Info:     | {truck_info}\n{TABLE_SEP}"
+            f"\nStatus:         | {self.status}\n{ROW_SEP}"
         )

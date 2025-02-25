@@ -108,8 +108,8 @@ class CommandFactory:
 
         if cmd == "10":
             print(interface_menu.ASSIGN_PACKAGE_TO_ROUTE_MENU)
-            params = [input("Package ID: "),
-                      input("Route ID: ")]
+            params = [input("Route ID: "),
+                      input("Package ID: ")]
             return AssignPackageToRouteCommand(params, self._app_data)
 
         if cmd == "11":
@@ -156,8 +156,13 @@ class CommandFactory:
             return ShowTrucksCommand(params, self._app_data)
 
         if cmd.split()[0].lower() == "settime":
-            params = cmd.split()
-            params = [params[1]]
+            parts = cmd.split()
+            params = [" ".join(parts[1:])]  # Join all parts after "settime"
             return SetTimeCommand(params, self._app_data)
+
+        # if cmd.split()[0].lower() == "settime":
+        #     params = cmd.split()
+        #     params = [params[1]]
+        #     return SetTimeCommand(params, self._app_data)
 
         raise ApplicationError(f"Command {cmd} is not supported.")

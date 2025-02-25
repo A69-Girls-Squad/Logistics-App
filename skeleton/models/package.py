@@ -4,6 +4,7 @@ from errors.application_error import ApplicationError
 from core.application_time import ApplicationTime
 from commands.validation_helpers import try_parse_float
 from models.route import Route
+from interface_menu import TABLE_SEP, ROW_SEP
 
 
 class Package:
@@ -264,16 +265,17 @@ class Package:
                 status = "In Transit"
             else:
                 status = "Delivered"
-            status += (f"\nDeparture time: {self._departure_time.isoformat(sep=" ", timespec="minutes")}"
-                       f"\nEstimated arrival time: "
-                       f"{self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}")
+            status += (f"\nDeparture time: | {self._departure_time.isoformat(sep=" ", timespec="minutes")}"
+                       f"\nArrival time:   | "
+                       f"{self._estimated_arrival_time.isoformat(sep=" ", timespec="minutes")}"
+                       f"\nRoute ID:       | {self.route_id}")
         else:
             status = "Not assigned"
 
-        return (f"PACKAGE DETAILS"
-                f"\nID: {self._id}"
-                f"\nStart Location: {self._start_location}"
-                f"\nEnd Location: {self._end_location}"
-                f"\nWeight: {self._weight:.2f} kg"
-                f"\nCustomer Email Address: {self._customer_email}"
-                f"\nPackage status: {status}")
+        return (f"{ROW_SEP}\nPACKAGE DETAILS:\n{TABLE_SEP}"
+                f"\nID:             | {self._id}\n{TABLE_SEP}"
+                f"\nStart Location: | {self._start_location}\n{TABLE_SEP}"
+                f"\nEnd Location:   | {self._end_location}\n{TABLE_SEP}"
+                f"\nWeight:         | {self._weight:.2f} kg\n{TABLE_SEP}"
+                f"\nCustomer Email: | {self._customer_email}\n{TABLE_SEP}"
+                f"\nPackage Status: | {status}\n{TABLE_SEP}")

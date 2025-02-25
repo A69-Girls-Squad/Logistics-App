@@ -17,3 +17,4 @@ def try_parse_int(s) -> int:
         return int(s)
     except:
         raise ApplicationError("Invalid value. Should be a number.")
+

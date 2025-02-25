@@ -1,5 +1,5 @@
-import re
 from models.constants.employee_role import EmployeeRole
+from interface_menu import TABLE_SEP, ROW_SEP
 
 
 class Employee:
@@ -156,9 +156,9 @@ class Employee:
         Returns:
             str: A formatted string containing the employee's details.
         """
-        return (f"Employee:"
-                f"\n Username: {self._username}"
-                f"\n First name: {self._first_name}"
-                f"\n Last name: {self._last_name}"
-                f"\n Role: {self._employee_role}")
+        return (f"EMPLOYEE DETAILS:\n{TABLE_SEP}"
+                f"\nUsername:       | {self._username}\n{TABLE_SEP}"
+                f"\nFirst name:     | {self._first_name}\n{TABLE_SEP}"
+                f"\nLast name:      | {self._last_name}\n{TABLE_SEP}"
+                f"\nRole:           | {self._employee_role}\n{TABLE_SEP}")
 

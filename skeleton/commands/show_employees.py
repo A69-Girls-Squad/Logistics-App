@@ -2,6 +2,7 @@ from errors.application_error import ApplicationError
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 from models.constants.employee_role import EmployeeRole
+from interface_menu import TABLE_SEP, ROW_SEP
 
 
 class ShowEmployeesCommand(BaseCommand):
@@ -35,8 +36,9 @@ class ShowEmployeesCommand(BaseCommand):
 
         if self._app_data.logged_in_employee.employee_role == EmployeeRole.MANAGER:
             if self._app_data.employees:
-                employees = [f"{i + 1}. {str(employee)}" for i, employee in enumerate(self._app_data.employees)]
-                return "\n".join(["--EMPLOYEES--"] + employees)
+                employees = [f"{ROW_SEP}\n{str(employee)}\n{ROW_SEP}"
+                             for i, employee in enumerate(self._app_data.employees)]
+                return f"{ROW_SEP}\n" + "\n".join(["EMPLOYEES:"] + employees)
         else:
             raise ApplicationError(self.ONLY_MANAGER_CAN_SHOW_EMPLOYEES)
 
