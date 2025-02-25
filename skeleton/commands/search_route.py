@@ -31,14 +31,14 @@ class SearchRouteCommand(BaseCommand):
         package_id = try_parse_int(self._params[0])
         package = self._app_data.find_package_by_id(package_id)
         if not package:
-            raise ApplicationError("No package found!")
+            raise ApplicationError("No Package found!")
         for route in self._app_data.routes:
 
             sufficient_capacity = True
             if route.assigned_truck_id:
                 truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
                 if not truck:
-                    raise ApplicationError("No truck found!" + BaseCommand.ROW_SEP)
+                    raise ApplicationError("No Truck found!" + BaseCommand.ROW_SEP)
                 free_capacity = truck.capacity - route.load
                 if free_capacity < package.weight:
                     sufficient_capacity = False

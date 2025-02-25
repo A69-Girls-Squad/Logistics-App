@@ -48,7 +48,7 @@ class ShowTrucksCommand(BaseCommand):
                 actros_trucks[truck.id] = truck_status(truck)
 
         if not (scania_trucks or man_trucks or actros_trucks):
-            return "No available truck found" + self.ROW_SEP
+            return "No available Truck found" + self.ROW_SEP
 
         return (f"AVAILABLE SCANIA TRUCKS:\n{BaseCommand.TABLE_SEP}"
                 f"\nIDs:            | {"\n                | ".join(f"{key}: {value}" 

@@ -87,12 +87,12 @@ class CommandFactory:
 
         if cmd.lower() == "6":
             print(interface_menu.SEARCH_ROUTE_MENU)
-            params = [input("Please, enter the ID of the package you need a route for: ")]
+            params = [input("Please, enter the ID of the Package you need a Route for: ")]
             return SearchRouteCommand(params, self._app_data)
 
         if cmd.lower() == "7":
             print(interface_menu.SEARCH_TRUCK_MENU)
-            params = [input("Please, enter the ID of the route you need a truck for: ")]
+            params = [input("Please, enter the ID of the Route you need a Truck for: ")]
             return SearchTruckCommand(params, self._app_data)
 
         if cmd.lower() == "8":

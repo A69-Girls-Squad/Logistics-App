@@ -101,7 +101,7 @@ class BaseCommand:
         """
         if self._app_data.has_logged_in_employee:
             logged_employee = self._app_data.logged_in_employee
-            self.logger.error(f"Attempt to log in while employee {logged_employee.username} is already logged in.")
+            self.logger.error(f"Attempt to log in while Employee {logged_employee.username} is already logged in.")
             raise ValueError(
                 f"Employee {logged_employee.username} is logged in! Please log out first!" + BaseCommand.ROW_SEP*2
             )

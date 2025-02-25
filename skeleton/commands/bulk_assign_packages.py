@@ -34,18 +34,18 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         route = self._app_data.find_route_by_id(route_id)
         if not route:
-            raise ApplicationError(f"No route with ID {route_id}")
+            raise ApplicationError(f"No Route with ID {route_id}")
 
         truck = self._app_data.find_truck_by_id(route.assigned_truck_id)
         if not truck:
-            raise ApplicationError(f"Route with ID {route_id} has no truck assigned" + BaseCommand.ROW_SEP)
+            raise ApplicationError(f"Route with ID {route_id} has no Truck assigned" + BaseCommand.ROW_SEP)
 
         free_capacity = truck.capacity - route.load
         for package_id in packages_ids:
             package_id = try_parse_int(package_id)
             package = self.app_data.find_package_by_id(package_id)
             if not package:
-                raise ApplicationError(f"No package with ID {package_id}" + BaseCommand.ROW_SEP)
+                raise ApplicationError(f"No Package with ID {package_id}" + BaseCommand.ROW_SEP)
 
             if package.weight < free_capacity:
                 self.app_data.assign_package_to_route(package_id, route_id)
@@ -53,11 +53,11 @@ class BulkAssignPackagesCommand(BaseCommand):
             else:
                 no_more_capacity_message = "No more free capacity. Operation terminated" + BaseCommand.ROW_SEP
 
-        self.logger.info(f"Bulk assigned packages to route ID {route_id}:"
+        self.logger.info(f"Bulk assigned Packages to Route ID {route_id}:"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message}"
                          f" | Executed by: {self.app_data.logged_in_employee}"
                          f" {bulk_assigned_packages}\n{no_more_capacity_message} | "
                          f"Executed by: username" + self.ROW_SEP)
 
-        return (f"Bulk assigned packages to route ID {route_id}: "
+        return (f"Bulk assigned Packages to Route ID {route_id}: "
                 f"{bulk_assigned_packages}\n{no_more_capacity_message}")
