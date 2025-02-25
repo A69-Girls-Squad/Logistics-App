@@ -3,7 +3,7 @@ from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
 
-class UnassignPackageToRouteCommand(BaseCommand):
+class UnassignPackageFromRouteCommand(BaseCommand):
     """
     Command to display a list of packages based on their assignment status.
 
@@ -21,7 +21,7 @@ class UnassignPackageToRouteCommand(BaseCommand):
         Raises:
             ValueError: If the number of parameters is invalid.
         """
-        validate_params_count(params, 2)
+        validate_params_count(params, 1)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -37,7 +37,8 @@ class UnassignPackageToRouteCommand(BaseCommand):
             - If the status is 'all', all packages are displayed.
         """
         package_id = try_parse_int(self.params[0])
-        route_id = try_parse_int(self.params[1])
+        package = self.app_data.find_package_by_id(package_id)
+        route_id = package.route_id
 
         self.app_data.unassign_package_from_route(package_id, route_id)
 

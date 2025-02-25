@@ -1,5 +1,7 @@
 from errors.application_error import ApplicationError
 from core.command_factory import CommandFactory
+import menu
+from menu import INITIAL_MENU
 
 
 class Engine:
@@ -32,13 +34,14 @@ class Engine:
 
         while True:
             try:
-                input_line = input().strip()
-                if not input_line:
+                input("\n\nTo see MENU press Enter.")
+                input_command = input(INITIAL_MENU)
+                if not input_command:
                     print("Please enter a command.")
                     continue
-                if input_line.lower() == "exit":
+                if input_command.lower() == "exit":
                     break
-                command = self._command_factory.create(input_line)
+                command = self._command_factory.create(input_command)
                 command_output = "\n" + command.execute()
                 print(command_output)
                 log.append(command_output)

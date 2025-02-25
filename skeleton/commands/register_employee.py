@@ -15,7 +15,7 @@ class RegisterEmployeeCommand(BaseCommand):
         _requires_login (bool): Indicates whether the command requires a logged-in user (set to False for registration).
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 4)
+        validate_params_count(params, 5)
         super().__init__(params, app_data)
         self._requires_login = False
 
@@ -31,12 +31,7 @@ class RegisterEmployeeCommand(BaseCommand):
         """
         self._throw_if_employee_logged_in()
 
-        username, firstname, lastname, password, *rest = self._params
-
-        if not rest:
-            employee_role = EmployeeRole.REGULAR
-        else:
-            employee_role = EmployeeRole.from_string(rest[0])
+        username, firstname, lastname, password, employee_role = self._params
 
         employee = self._app_data.create_employee(username, firstname, lastname, password, employee_role)
         self._app_data.login(employee)

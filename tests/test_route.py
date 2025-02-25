@@ -125,32 +125,32 @@ class Route_Should(unittest.TestCase):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
         route.assign_truck(truck)
-        expected_str = (f"Route Details:"
+        expected_str = (f"ROUTE DETAILS:"
                         f"\nID: {route.id}"
                         f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in route.stops.items())}"
-                        f"\nDeparture Time: 2055-02-16 11:30"
-                        f"\nNumber of Packages: {len(route.assigned_packages_ids)}"
-                        f"\nCurrent Load: {route.load}"
-                        f"\nAssigned Truck ID: {truck.id}"
+                        f"\nDeparture time: 2055-02-16 11:30"
+                        f"\nNumber of packages: {len(route.assigned_packages_ids)}"
+                        f"\nCurrent load: {route.load}"
+                        f"\nAssigned truck ID: {truck.id}"
                         f"\nStatus: {route.status}"
-                        f"\nCurrent Location: {route.current_location}"
-                        f"\n============")
+                        f"\nCurrent location: {route.current_location}"
+                        f"\n" + "="*40)
 
         self.assertEqual(expected_str, str(route))
 
     def test_str_returnsCorrectly_ifNotAssignedTruck(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
 
-        expected_str = (f"Route Details:"
+        expected_str = (f"ROUTE DETAILS:"
                         f"\nID: {route.id}"
                         f"\nHubs:"
                         f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
-                        f"\nDeparture Time: 2055-02-16 11:30"
-                        f"\nNumber of Packages: 0"
-                        f"\nCurrent Load: 0"
+                        f"\nDeparture time: 2055-02-16 11:30"
+                        f"\nNumber of packages: 0"
+                        f"\nCurrent load: 0"
                         f"\nStatus: Created"
-                        f"\nCurrent Location: None"
-                        f"\n============")
+                        f"\nCurrent location: None"
+                        f"\n" + "="*40)
 
         self.assertEqual(expected_str, str(route))
 

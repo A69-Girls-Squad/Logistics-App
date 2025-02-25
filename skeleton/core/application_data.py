@@ -301,7 +301,7 @@ class ApplicationData:
         route.assign_package(package.id)
         route.load += package.weight
 
-    def unassign_package_from_route(self, package_id: int, route_id: int) -> None:
+    def unassign_package_from_route(self, package_id: int) -> None:
         """
         Unassigns a package from its assigned route.
 
@@ -313,6 +313,7 @@ class ApplicationData:
             ApplicationError: If the package or route does not exist, or if the package is not assigned to the route.
         """
         package = self.find_package_by_id(package_id)
+        route_id = package.route_id
         if package is None:
             raise ApplicationError(f"Package with ID {package_id} does not exist")
 

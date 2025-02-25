@@ -11,7 +11,7 @@ class ReassignPackageCommand(BaseCommand):
     assigns it to the new route, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 3)
+        validate_params_count(params, 2)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -25,10 +25,11 @@ class ReassignPackageCommand(BaseCommand):
             ApplicationError: If the package or routes do not exist, or if the package cannot be reassigned.
         """
         package_id = try_parse_int(self.params[0])
-        unassign_from_route_id = try_parse_int(self.params[1])
-        assign_to_route_id = try_parse_int(self.params[2])
+        package = self.app_data.find_package_by_id(package_id)
+        unassign_from_route_id = package.route_id
+        assign_to_route_id = try_parse_int(self.params[1])
 
-        self.app_data.unassign_package_from_route(package_id, unassign_from_route_id)
+        self.app_data.unassign_package_from_route(package_id)
 
         self.app_data.assign_package_to_route(package_id, assign_to_route_id)
 

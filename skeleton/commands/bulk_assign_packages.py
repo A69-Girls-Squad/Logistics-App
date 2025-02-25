@@ -29,7 +29,7 @@ class BulkAssignPackagesCommand(BaseCommand):
         bulk_assigned_packages = []
         no_more_capacity_message = ""
 
-        route_id, *packages_ids = self._params
+        route_id, packages_ids = self._params
         route_id = try_parse_int(route_id)
 
         route = self._app_data.find_route_by_id(route_id)
