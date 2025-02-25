@@ -36,6 +36,7 @@ class BulkAssignPackagesCommand(BaseCommand):
 
         route_id, packages_ids = self._params
         route_id = try_parse_int(route_id)
+        packages_ids = map(int, packages_ids)
 
         route = self._app_data.find_route_by_id(route_id)
 
