@@ -32,6 +32,7 @@ class RemoveTruckFromRouteCommand(BaseCommand):
     def execute(self) -> str:
         super().execute()
         truck_id = try_parse_int(self.params[0])
+
         truck = self.app_data.find_truck_by_id(truck_id)
         if not truck:
             raise ApplicationError("Invalid truck ID!")
@@ -43,6 +44,11 @@ class RemoveTruckFromRouteCommand(BaseCommand):
 
         if not truck:
             raise ApplicationError("No Truck found!" + BaseCommand.ROW_SEP)
+
+        route_id = truck.assigned_route_id
+
+        if route_id is None:
+            raise ApplicationError("Truck is not assigned to any route!" + BaseCommand.ROW_SEP)
 
         self.app_data.unassign_truck_from_route(truck.id)
 
