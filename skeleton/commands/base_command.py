@@ -23,7 +23,7 @@ class BaseCommand:
     TABLE_SEP = "-" * 16 + "|" + "-" * 43
     ROW_SEP = "\n" + "=" * 60
 
-    def __init__(self, params, app_data: ApplicationData):
+    def __init__(self, params: list[str], app_data: ApplicationData):
         """
          Initializes the BaseCommand with parameters and application data.
 
