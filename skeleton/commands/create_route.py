@@ -10,7 +10,6 @@ class CreateRouteCommand(BaseCommand):
     This command validates the input parameters, creates a route, and logs the action.
     """
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 2)
         super().__init__(params, app_data)
 
 
@@ -25,6 +24,7 @@ class CreateRouteCommand(BaseCommand):
             - The `locations` parameter should be a string of locations separated by commas.
             - The `departure_time` parameter should be a string in ISO format.
         """
+        super().execute()
         locations, departure_time = self._params
 
 
@@ -45,3 +45,9 @@ class CreateRouteCommand(BaseCommand):
                 f"\n{BaseCommand.TABLE_SEP}"
                 f"\nDeparture Time: | {route.departure_time.isoformat(sep=" ", timespec="minutes")}"
                 f"\n{BaseCommand.TABLE_SEP}")
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 2

@@ -1,4 +1,4 @@
-from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
@@ -11,17 +11,6 @@ class UnassignPackageFromRouteCommand(BaseCommand):
     and returns their string representations.
     """
     def __init__(self, params, app_data: ApplicationData):
-        """
-        Initializes the command with parameters and application data.
-
-        Args:
-            params: The command parameters (a single status string: 'assigned', 'unassigned', or 'all').
-            app_data: The shared application data.
-
-        Raises:
-            ValueError: If the number of parameters is invalid.
-        """
-        validate_params_count(params, 1)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
@@ -36,6 +25,8 @@ class UnassignPackageFromRouteCommand(BaseCommand):
             - If the status is 'unassigned', only unassigned packages are displayed.
             - If the status is 'all', all packages are displayed.
         """
+        super().execute()
+
         package_id = try_parse_int(self.params[0])
         package = self.app_data.find_package_by_id(package_id)
         route_id = package.route_id
@@ -43,3 +34,9 @@ class UnassignPackageFromRouteCommand(BaseCommand):
         self.app_data.unassign_package_from_route(package_id)
 
         return f"Package with ID {package_id} was unassigned from Route with ID {route_id}"
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 1

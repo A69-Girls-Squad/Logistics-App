@@ -71,24 +71,16 @@ class Package:
 
 
     @classmethod
-    def from_json(cls, data):
+    def from_json(cls, data: dict):
         """
-        Creates a Package instance from a JSON-compatible dictionary.
+         Creates a Package instance from a JSON-compatible dictionary.
 
-        Args:
-            data (dict): A dictionary containing package details, including:
-                - start_location (str): The starting location of the package.
-                - end_location (str): The destination location of the package.
-                - weight (float): The weight of the package.
-                - customer_email (str): The email address of the customer.
-                - departure_time (str or None): The departure time in ISO format.
-                - estimated_arrival_time (str or None): The estimated arrival time in ISO format.
-                - is_assigned (bool): Whether the package is assigned to a route.
-                - route_id (int or None): The associated route ID.
+         Args:
+             data (dict): A dictionary containing package details.
 
-        Returns:
-            Package: An instance of the Package class.
-        """
+         Returns:
+             Package: An instance of the Package class.
+         """
         package = cls(
             start_location=data["start_location"],
             end_location=data["end_location"],
@@ -111,16 +103,7 @@ class Package:
         Converts the package object into a JSON-compatible dictionary.
 
         Returns:
-            dict: A dictionary representation of the package, including:
-                - id (int): The package ID.
-                - start_location (str): The start location.
-                - end_location (str): The end location.
-                - weight (float): The weight of the package.
-                - customer_email (str): The customer's email address.
-                - departure_time (str or None): The departure time in ISO format.
-                - estimated_arrival_time (str or None): The estimated arrival time in ISO format.
-                - is_assigned (bool): Whether the package is assigned.
-                - route_id (int or None): The associated route ID.
+            dict: A dictionary representation of the package.
         """
         return {
             "id": self._id,
@@ -266,17 +249,11 @@ class Package:
 
     def __str__(self) -> str:
         """
-        Returns a readable string representation of the package, including its status based on the current time.
+         Returns a readable string representation of the package.
 
-        Returns:
-            str: A formatted string describing the package, including:
-                - ID
-                - Start and end locations
-                - Weight
-                - Customer email
-                - Departure and estimated arrival times
-                - Package status (Awaiting Dispatch, In Transit, or Delivered).
-        """
+         Returns:
+             str: A formatted string describing the package.
+         """
         if self.departure_time:
             if ApplicationTime.current() < self.departure_time:
                 status = "Awaiting Dispatch"

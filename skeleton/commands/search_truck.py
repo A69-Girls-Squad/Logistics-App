@@ -1,14 +1,44 @@
 from errors.application_error import ApplicationError
-from commands.validation_helpers import validate_params_count, try_parse_int
+from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
 
+
 class SearchTruckCommand(BaseCommand):
     """
-    Searches for available trucks based on truck status,
-    truck capacity and truck max range.
-    
-    """
+     A command to search for available trucks based on their status, capacity, and maximum range.
+
+     This command takes a route ID as a parameter, searches for trucks that are suitable
+     for the specified route, and returns a formatted list of available trucks grouped by
+     their type (Scania, Man, Actros). Each group includes the truck IDs, capacity, and
+     maximum range.
+
+     Attributes:
+         params (list): A list of parameters passed to the command. The first parameter
+                        should be the route ID.
+         app_data (ApplicationData): The application data object containing the state
+                                     of the application.
+
+     Constants:
+         SCANIA_NAME (str): Name of the Scania truck type.
+         MAN_NAME (str): Name of the Man truck type.
+         ACTROS_NAME (str): Name of the Actros truck type.
+         SCANIA_CAPACITY (int): Capacity of Scania trucks.
+         MAN_CAPACITY (int): Capacity of Man trucks.
+         ACTROS_CAPACITY (int): Capacity of Actros trucks.
+         SCANIA_MAX_RANGE (int): Maximum range of Scania trucks.
+         MAN_MAX_RANGE (int): Maximum range of Man trucks.
+         ACTROS_MAX_RANGE (int): Maximum range of Actros trucks.
+
+     Methods:
+         execute(): Executes the command to search for suitable trucks and returns a
+                    formatted string with the results.
+         _requires_login(): Specifies that the command requires the user to be logged in.
+         _expected_params_count(): Specifies the expected number of parameters (1).
+
+     Raises:
+         ApplicationError: If no route is found with the provided ID.
+     """
     SCANIA_NAME = "Scania"
     MAN_NAME = "Man"
     ACTROS_NAME = "Actros"
@@ -22,11 +52,11 @@ class SearchTruckCommand(BaseCommand):
     ACTROS_MAX_RANGE = 13000
 
     def __init__(self, params, app_data: ApplicationData):
-        validate_params_count(params, 1)
         super().__init__(params, app_data)
 
     def execute(self) -> str:
-        self.logger.info(f"{self.__class__.__name__} executed by user: {self._logged_employee}" + BaseCommand.ROW_SEP)
+        super().execute()
+        self.logger.info(f"{self.__class__.__name__} executed by user: {self.app_data.logged_in_employee}" + BaseCommand.ROW_SEP)
 
         scania_ids = []
         man_ids = []
@@ -66,4 +96,9 @@ class SearchTruckCommand(BaseCommand):
                 f"\nCapacity:       | {self.ACTROS_CAPACITY}\n{BaseCommand.TABLE_SEP}"
                 f"\nMax Range:      | {self.ACTROS_MAX_RANGE}\n{BaseCommand.TABLE_SEP}"
                )
-        
+
+    def _requires_login(self) -> bool:
+        return True
+
+    def _expected_params_count(self) -> int:
+        return 1
