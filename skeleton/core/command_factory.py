@@ -156,8 +156,8 @@ class CommandFactory:
             return ShowTrucksCommand(params, self._app_data)
 
         if cmd.split()[0].lower() == "settime":
-            params = cmd.split()
-            params = [params[1]]
+            parts = cmd.split()
+            params = [" ".join(parts[1:])]
             return SetTimeCommand(params, self._app_data)
 
         raise ApplicationError(f"Command {cmd} is not supported.")

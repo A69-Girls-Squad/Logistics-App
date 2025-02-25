@@ -6,7 +6,6 @@ from datetime import datetime
 
 class PackageTests(unittest.TestCase):
     def setUp(self):
-        """Reset the ID counter before each test."""
         Package._current_id = 0
 
     def test_createPackage_withValidData_returnsValidPackage(self):
