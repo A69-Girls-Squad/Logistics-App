@@ -292,8 +292,8 @@ class Package:
 
         return (f"PACKAGE DETAILS"
                 f"\nID: {self._id}"
-                f"\nStart location: {self._start_location}"
-                f"\nEnd location: {self._end_location}"
+                f"\nStart Location: {self._start_location}"
+                f"\nEnd Location: {self._end_location}"
                 f"\nWeight: {self._weight:.2f} kg"
-                f"\nCustomer email address: {self._customer_email}"
+                f"\nCustomer Email Address: {self._customer_email}"
                 f"\nPackage status: {status}")

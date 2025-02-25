@@ -114,7 +114,7 @@ class PackageTests(unittest.TestCase):
         self.assertEqual(package.weight, td.VALID_WEIGHT)
         self.assertEqual(package.customer_email, td.VALID_CUSTOMER_EMAIL)
         self.assertEqual(package.departure_time, td.VALID_DEPARTURE_TIME_OUTPUT)
-        self.assertEqual(package.estimated_arrival_time, td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT)
+        self.assertEqual(package.estimated_arrival_time, td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT_NO_SEC)
         self.assertTrue(package.is_assigned)
         self.assertEqual(package.route_id, 1)
 
@@ -157,6 +157,7 @@ class PackageTests(unittest.TestCase):
         package.estimated_arrival_time = td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT
 
         expected_output = (
+            f"PACKAGE DETAILS\n"
             f"ID: 1\n"
             f"Start Location: {td.VALID_START_LOCATION}\n"
             f"End Location: {td.VALID_END_LOCATION}\n"
