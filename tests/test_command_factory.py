@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 from core.application_data import ApplicationData
 from core.command_factory import CommandFactory
 from errors.application_error import ApplicationError
@@ -14,292 +15,183 @@ from commands.register_employee import RegisterEmployeeCommand
 from commands.remove_truck_from_route import RemoveTruckFromRouteCommand
 from commands.search_route import SearchRouteCommand
 from commands.search_truck import SearchTruckCommand
-from commands.send_package_info_to_customer import SendPackageInfoToCustomerCommand
 from commands.set_time import SetTimeCommand
 from commands.show_package import ShowPackageCommand
 from commands.show_packages import ShowPackagesCommand
 from commands.show_route import ShowRouteCommand
-from commands.show_routes_inprogress import ShowRoutesInProgressCommand
 from commands.show_trucks import ShowTrucksCommand
-from commands.unassign_package_from_route import UnassignPackageToRouteCommand
+from commands.unassign_package_from_route import UnassignPackageFromRouteCommand
 
 
 class CommandFactoryTests(unittest.TestCase):
+    def setUp(self):
+        self.data = ApplicationData()
+        self.factory = CommandFactory(self.data)
+
     def test_properties_returnCorrectTypes(self):
-        # Arrange
-        data = ApplicationData()
-
-        # Act
-        factory = CommandFactory(data)
-
         # Assert
-        self.assertIsInstance(factory._app_data, ApplicationData)
+        self.assertIsInstance(self.factory._app_data, ApplicationData)
 
-    def test_create_withLogin_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["username", "password"])
+    def test_create_withLogin_createsInstance(self, mock_input):
         # Act
-        command = factory.create("login param1 param2")
+        command = self.factory.create("2")
 
         # Assert
         self.assertIsInstance(command, LoginCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 2)
+        self.assertEqual(list(command.params), ["username", "password"])
 
     def test_create_withLogout_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
         # Act
-        command = factory.create("logout")
+        command = self.factory.create("3")
 
         # Assert
         self.assertIsInstance(command, LogoutCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 0)
+        self.assertEqual(list(command.params), [])
 
-    def test_create_withRegisterEmployee_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["user", "John", "Doe", "pass", "Manager"])
+    def test_create_withRegisterEmployee_createsInstance(self, mock_input):
         # Act
-        command = factory.create("registeremployee param1 param2 param3 param4")
+        command = self.factory.create("1")
 
         # Assert
         self.assertIsInstance(command, RegisterEmployeeCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 4)
+        self.assertEqual(list(command.params), ["user", "John", "Doe", "pass", "Manager"])
 
-    def test_create_withCreateRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["loc1,loc2", "2023-10-10 10:00"])
+    def test_create_withCreateRoute_createsInstance(self, mock_input):
         # Act
-        command = factory.create("createroute param1 param2")
+        command = self.factory.create("4")
 
         # Assert
         self.assertIsInstance(command, CreateRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 2)
+        self.assertEqual(list(command.params), ["loc1,loc2", "2023-10-10 10:00"])
 
-    def test_create_withCreatePackage_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["loc1", "loc2", "10", "test@example.com"])
+    def test_create_withCreatePackage_createsInstance(self, mock_input):
         # Act
-        command = factory.create("createpackage param1 param2 param3 param4")
+        command = self.factory.create("5")
 
         # Assert
         self.assertIsInstance(command, CreatePackageCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 4)
+        self.assertEqual(list(command.params), ["loc1", "loc2", "10", "test@example.com"])
 
-    def test_create_withSearchRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withSearchRoute_createsInstance(self, mock_input):
         # Act
-        command = factory.create("searchroute param")
+        command = self.factory.create("6")
 
         # Assert
         self.assertIsInstance(command, SearchRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["1"])
 
-    def test_create_withSearchTruck_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withSearchTruck_createsInstance(self, mock_input):
         # Act
-        command = factory.create("searchtruck param")
+        command = self.factory.create("7")
 
         # Assert
         self.assertIsInstance(command, SearchTruckCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["1"])
 
-    def test_create_withShowPackages_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withShowPackage_createsInstance(self, mock_input):
         # Act
-        command = factory.create("showpackages param")
-
-        # Assert
-        self.assertIsInstance(command, ShowPackagesCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
-
-    def test_create_withShowPackage_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
-        # Act
-        command = factory.create("showpackage param")
+        command = self.factory.create("15")
 
         # Assert
         self.assertIsInstance(command, ShowPackageCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["1"])
 
-    def test_create_withShowRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withShowPackages_createsInstance(self, mock_input):
         # Act
-        command = factory.create("showroute param")
+        command = self.factory.create("16")
+
+        # Assert
+        self.assertIsInstance(command, ShowPackagesCommand)
+        self.assertEqual(list(command.params), ["1"])
+
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withShowRoute_createsInstance(self, mock_input):
+        # Act
+        command = self.factory.create("17")
 
         # Assert
         self.assertIsInstance(command, ShowRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["1"])
 
     def test_create_withShowTrucks_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
         # Act
-        command = factory.create("showtrucks")
+        command = self.factory.create("19")
 
         # Assert
         self.assertIsInstance(command, ShowTrucksCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 0)
+        self.assertEqual(list(command.params), [])
 
-    def test_create_withAssignPackageToRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1", "2"])
+    def test_create_withAssignPackageToRoute_createsInstance(self, mock_input):
         # Act
-        command = factory.create("assignpackagetoroute param1 param2")
+        command = self.factory.create("10")
 
         # Assert
         self.assertIsInstance(command, AssignPackageToRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 2)
+        self.assertEqual(list(command.params), ["1", "2"])
 
-    def test_create_withAssignTruckToRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1", "2"])
+    def test_create_withAssignTruckToRoute_createsInstance(self, mock_input):
         # Act
-        command = factory.create("assigntrucktoroute param")
+        command = self.factory.create("8")
 
         # Assert
         self.assertIsInstance(command, AssignTruckToRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["1", "2"])
 
-    def test_create_withBulkAssignPackages_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1", "2,3"])
+    def test_create_withBulkAssignPackages_createsInstance(self, mock_input):
         # Act
-        command = factory.create("bulkassignpackages param1 param2")
+        command = self.factory.create("11")
 
         # Assert
         self.assertIsInstance(command, BulkAssignPackagesCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 2)
+        self.assertEqual(list(command.params), ["1", ["2", "3"]])
 
-    def test_create_withRemoveTruckFromRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withRemoveTruckFromRoute_createsInstance(self, mock_input):
         # Act
-        command = factory.create("removetruckfromroute param")
+        command = self.factory.create("9")
 
         # Assert
         self.assertIsInstance(command, RemoveTruckFromRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["1"])
 
-    def test_create_withSendPackageInfoToCustomer_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
+    @patch("builtins.input", side_effect=["1", "2"])
+    def test_create_withReassignPackage_createsInstance(self, mock_input):
         # Act
-        command = factory.create("sendpackageinfotocustomer param")
-
-        # Assert
-        self.assertIsInstance(command, SendPackageInfoToCustomerCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
-
-    def test_create_withShowRoutesInProgress_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
-        # Act
-        command = factory.create("showroutesinprogress")
-
-        # Assert
-        self.assertIsInstance(command, ShowRoutesInProgressCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 0)
-
-    def test_create_withUnassignPackageToRoute_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
-        # Act
-        command = factory.create("unassignpackagetoroute param1 param2")
-
-        # Assert
-        self.assertIsInstance(command, UnassignPackageToRouteCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 2)
-
-    def test_create_withReassignPackage_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
-        # Act
-        command = factory.create("reassignpackage param1 param2 param3")
+        command = self.factory.create("12")
 
         # Assert
         self.assertIsInstance(command, ReassignPackageCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 3)
+        self.assertEqual(list(command.params), ["1", "2"])
+
+    @patch("builtins.input", side_effect=["1"])
+    def test_create_withUnassignPackageFromRoute_createsInstance(self, mock_input):
+        # Act
+        command = self.factory.create("13")
+
+        # Assert
+        self.assertIsInstance(command, UnassignPackageFromRouteCommand)
+        self.assertEqual(list(command.params), ["1"])
 
     def test_create_withSetTime_createsInstance(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
         # Act
-        command = factory.create("settime param")
+        command = self.factory.create("settime 2023-10-10 10:00")
 
         # Assert
         self.assertIsInstance(command, SetTimeCommand)
-        self.assertIsInstance(command.app_data, ApplicationData)
-        self.assertEqual(len(command.params), 1)
+        self.assertEqual(list(command.params), ["2023-10-10 10:00"])
 
     def test_create_withInvalidCommand_raisesApplicationError(self):
-        # Arrange
-        data = ApplicationData()
-        factory = CommandFactory(data)
-
         # Act & Assert
         with self.assertRaises(ApplicationError):
-            factory.create("invalidcommand param")
+            self.factory.create("invalidcommand")
