@@ -295,7 +295,7 @@ class Route:
         Returns:
             str: The last known location, or the start location if no stops have been reached.
         """
-        last_stop = None
+        last_stop = self.locations[0]
         for stop in self.stops:
             if ApplicationTime.current() > self.stops[stop]:
                 last_stop = stop
@@ -375,5 +375,6 @@ class Route:
             f"\nPackages count: | {len(self._assigned_packages_ids)}\n{TABLE_SEP}"
             f"\nCurrent load:   | {self.load}\n{TABLE_SEP}"
             f"\nTruck Info:     | {truck_info}\n{TABLE_SEP}"
-            f"\nStatus:         | {self.status}\n{ROW_SEP}"
+            f"\nStatus:         | {self.status}\n{TABLE_SEP}"
+            f"\nCurrent stop:   | {self.current_location}\n{ROW_SEP}"
         )
