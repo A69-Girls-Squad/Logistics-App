@@ -50,3 +50,6 @@ class Engine:
             except (ApplicationError, ValueError) as err:
                 log.append(err.args[0])
                 print(err.args[0])
+
+            except KeyboardInterrupt as ki:
+                print("Application terminated")

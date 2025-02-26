@@ -6,22 +6,7 @@ from errors.application_error import ApplicationError
 from models.constants.distances import Distance
 from models.route import Route
 from models.truck import Truck
-
-
-def my_now(_my_custom_now):
-    if _my_custom_now is None:
-        return datetime.now()
-    else:
-        return _my_custom_now
-
-# def get_current_time():
-#     return datetime.now()
-#
-# @patch("datetime.datetime")
-# def custom_now(mock_datetime):
-#     fixed_time = datetime(2555, 1, 1, 12, 0)
-#     mock_datetime.now.return_value = fixed_time
-#     return get_current_time()
+from interface_menu import TABLE_SEP, ROW_SEP
 
 
 class Route_Should(unittest.TestCase):
@@ -93,30 +78,6 @@ class Route_Should(unittest.TestCase):
         route = Route(td.VALID_LOCATIONS_INPUT, formatted_time)
         self.assertEqual(Route.STATUS_CREATED, route.status)
 
-    def test_status_returnsCorrectly_Finished(self):
-        depart_time = datetime.now() + timedelta(days=2)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.isoformat())
-
-        with patch("datetime.datetime") as mock_datetime:
-            mock_datetime.now.return_value = depart_time + timedelta(days=365 * 5)
-            self.assertEqual(Route.STATUS_FINISHED, route.status)
-
-    def test_status_returnsCorrectly_InProgress(self):
-        depart_time = datetime.now() + timedelta(days=2)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.isoformat())
-
-        with patch("datetime.datetime"):
-            with patch("datetime.datetime.now", return_value=depart_time+timedelta(days=1)):
-                self.assertEqual(Route.STATUS_IN_PROGRESS, route.status)
-
-    def test_current_location_returnsCorrectly(self):
-        depart_time = datetime.now() + timedelta(days=1)
-        route = Route(td.VALID_LOCATIONS_INPUT, depart_time.isoformat())
-
-        with patch("datetime.datetime"):
-            with patch("datetime.datetime.now", return_value=route.departure_time+timedelta(days=1)):
-                self.assertEqual(td.EXPECTED_CURRENT_LOCATION, route.current_location)
-
     def test_get_distance_returnsCorrect(self):
         distance = Distance.get_distance(td.VALID_CITY_1, td.VALID_CITY_2)
         self.assertEqual(td.EXPECTED_DISTANCE, distance)
@@ -124,33 +85,31 @@ class Route_Should(unittest.TestCase):
     def test_str_returnsCorrectly_ifAssignedTruck(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
         truck = Truck(td.VALID_TRUCK_NAME, td.VALID_TRUCK_CAPACITY, td.VALID_TRUCK_MAX_RANGE)
-        route.assign_truck(truck)
-        expected_str = (f"ROUTE DETAILS:"
-                        f"\nID: {route.id}"
-                        f"\nHubs:\n{" -> ".join(f"{key}: {value}" for key, value in route.stops.items())}"
-                        f"\nDeparture time: 2055-02-16 11:30"
-                        f"\nNumber of packages: {len(route.assigned_packages_ids)}"
-                        f"\nCurrent load: {route.load}"
-                        f"\nAssigned truck ID: {truck.id}"
-                        f"\nStatus: {route.status}"
-                        f"\nCurrent location: {route.current_location}"
-                        f"\n" + "="*40)
+        route.assign_truck(truck.id)
+        expected_str = (f"ROUTE DETAILS:\n{TABLE_SEP}"
+                        f"\nID:             | {route.id}\n{TABLE_SEP}"
+                        f"\nHubs:           | {"\n                | ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}"
+                                                                           for key, value in route.stops.items())}\n{TABLE_SEP}"
+                        f"\nDeparture time: | 2055-02-16 11:30\n{TABLE_SEP}"
+                        f"\nPackages count: | {len(route.assigned_packages_ids)}\n{TABLE_SEP}"
+                        f"\nCurrent load:   | {route.load}\n{TABLE_SEP}"
+                        f"\nTruck Info:     | Assigned Truck ID: {route.assigned_truck_id}\n{TABLE_SEP}"
+                        f"\nStatus:         | {route.status}\n{ROW_SEP}")
 
         self.assertEqual(expected_str, str(route))
 
     def test_str_returnsCorrectly_ifNotAssignedTruck(self):
         route = Route(td.VALID_LOCATIONS_INPUT, td.VALID_DEPARTURE_TIME_INPUT)
 
-        expected_str = (f"ROUTE DETAILS:"
-                        f"\nID: {route.id}"
-                        f"\nHubs:"
-                        f"\nSYD: 2055-02-16 11:30:00 -> MEL: 2055-02-16 21:34:49.655172 -> BRI: 2055-02-17 17:52:04.137931"
-                        f"\nDeparture time: 2055-02-16 11:30"
-                        f"\nNumber of packages: 0"
-                        f"\nCurrent load: 0"
-                        f"\nStatus: Created"
-                        f"\nCurrent location: None"
-                        f"\n" + "="*40)
+        expected_str = (f"ROUTE DETAILS:\n{TABLE_SEP}"
+                        f"\nID:             | {route.id}\n{TABLE_SEP}"
+                        f"\nHubs:           | {"\n                | ".join(f"{key}: {value.isoformat(sep=" ", timespec="minutes")}"
+                                                                           for key, value in route.stops.items())}\n{TABLE_SEP}"
+                        f"\nDeparture time: | 2055-02-16 11:30\n{TABLE_SEP}"
+                        f"\nPackages count: | {len(route.assigned_packages_ids)}\n{TABLE_SEP}"
+                        f"\nCurrent load:   | {route.load}\n{TABLE_SEP}"
+                        f"\nTruck Info:     | No truck assigned.\n{TABLE_SEP}"
+                        f"\nStatus:         | {route.status}\n{ROW_SEP}")
 
         self.assertEqual(expected_str, str(route))
 

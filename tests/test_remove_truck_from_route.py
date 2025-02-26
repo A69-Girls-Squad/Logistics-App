@@ -25,8 +25,8 @@ class TestRemoveTruckFromRouteCommand(unittest.TestCase):
         output = cmd.execute()
 
         expected_output = (
-            "Truck with ID 1001 has been removed from Route ID 11, "
-            "Truck status changed to \"free\"."
+            "Truck with ID 1001 has been removed from Route ID 11"
+            "\nTruck status changed to \"free\"."
         )
         self.assertEqual(output, expected_output)
         app_data_mock.unassign_truck_from_route.assert_called_once_with(1001)

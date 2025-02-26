@@ -2,7 +2,7 @@ import unittest
 from models.package import Package
 from errors.application_error import ApplicationError
 import test_data as td
-from datetime import datetime
+from interface_menu import TABLE_SEP, ROW_SEP
 
 class PackageTests(unittest.TestCase):
     def setUp(self):
@@ -156,16 +156,17 @@ class PackageTests(unittest.TestCase):
         package.estimated_arrival_time = td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT
 
         expected_output = (
-            f"PACKAGE DETAILS\n"
-            f"ID: 1\n"
-            f"Start Location: {td.VALID_START_LOCATION}\n"
-            f"End Location: {td.VALID_END_LOCATION}\n"
-            f"Weight: {td.VALID_WEIGHT:.2f} kg\n"
-            f"Customer Email Address: {td.VALID_CUSTOMER_EMAIL}\n"
-            f"Package status: Awaiting Dispatch\n"
-            f"Departure time: {td.VALID_DEPARTURE_TIME_OUTPUT.isoformat(sep=' ', timespec='minutes')}\n"
-            f"Estimated arrival time: {td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT.isoformat(sep=' ', timespec='minutes')}"
-        )
+            f"{ROW_SEP}\nPACKAGE DETAILS:\n{TABLE_SEP}"
+            f"\nID:             | 1\n{TABLE_SEP}"
+            f"\nStart Location: | {td.VALID_START_LOCATION}\n{TABLE_SEP}"
+            f"\nEnd Location:   | {td.VALID_END_LOCATION}\n{TABLE_SEP}"
+            f"\nWeight:         | {td.VALID_WEIGHT:.2f} kg\n{TABLE_SEP}"
+            f"\nCustomer Email: | {td.VALID_CUSTOMER_EMAIL}\n{TABLE_SEP}"
+            f"\nPackage Status: | Awaiting Dispatch"
+            f"\nDeparture time: | {td.VALID_DEPARTURE_TIME_OUTPUT.isoformat(sep=' ', timespec='minutes')}"
+            f"\nArrival time:   | {td.VALID_ESTIMATED_ARRIVAL_TIME_OUTPUT.isoformat(sep=' ', timespec='minutes')}"
+            f"\nRoute ID:       | None\n{TABLE_SEP}"
+            )
 
         # Act
         result = str(package)

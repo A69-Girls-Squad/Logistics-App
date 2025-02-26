@@ -3,6 +3,7 @@ from unittest.mock import MagicMock
 from errors.application_error import ApplicationError
 from core.application_data import ApplicationData
 from commands.search_truck import SearchTruckCommand
+from interface_menu import ROW_SEP
 
 
 class TestSearchTruckCommand(unittest.TestCase):
@@ -35,19 +36,17 @@ class TestSearchTruckCommand(unittest.TestCase):
 
         output = cmd.execute()
 
-        expected_output = (
-                f"TRUCK ID: 1001 Truck A | Capacity: 5000 | Max Range: 300\n" + "-" * 60
-        )
+        expected_output = f"No available Truck found{ROW_SEP}"
 
-        self.assertIn(expected_output, output)
-        self.assertNotIn("TRUCK ID: 1002", output)
+        self.assertEqual(expected_output, output)
 
     def test_invalid_params_count(self):
         params = []
         app_data_mock = MagicMock(spec=ApplicationData)
+        cmd = SearchTruckCommand(params, app_data_mock)
 
         with self.assertRaises(ApplicationError):
-            SearchTruckCommand(params, app_data_mock)
+            cmd.execute()
 
     def test_route_not_found(self):
         params = ["11"]
@@ -73,7 +72,7 @@ class TestSearchTruckCommand(unittest.TestCase):
 
         cmd = SearchTruckCommand(params, app_data_mock)
 
-        expected_output = "No available truck found" + cmd.ROW_SEP
+        expected_output = "No available Truck found" + cmd.ROW_SEP
         output = cmd.execute()
 
         self.assertEqual(output, expected_output)

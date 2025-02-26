@@ -13,8 +13,9 @@ def _create_fake_params():
 
 class LogoutCommandTest_Should(unittest.TestCase):
     def test_initializer_raisesError_tooManyParamsCount(self):
+        cmd = LogoutCommand(["a"] * 3, Mock())
         with self.assertRaises(ApplicationError):
-            LogoutCommand(["a"] * 3, Mock())
+            cmd.execute()
 
     def test_initializer_passes_validParamsCount(self):
         LogoutCommand(["a"] * 0, Mock())

@@ -16,12 +16,14 @@ def _create_fake_params(
 
 class CreateRouteCommandTest_Should(unittest.TestCase):
     def test_initializer_raisesError_tooFewParamsCount(self):
+        cmd = CreateRouteCommand(["a"] * 1, Mock())
         with self.assertRaises(ApplicationError):
-            CreateRouteCommand(["a"] * 1, Mock())
+            cmd.execute()
 
     def test_initializer_raisesError_tooManyParamsCount(self):
+        cmd = CreateRouteCommand(["a"] * 3, Mock())
         with self.assertRaises(ApplicationError):
-            CreateRouteCommand(["a"] * 3, Mock())
+            cmd.execute()
 
     def test_initializer_passes_validParamsCount(self):
         CreateRouteCommand(["a"] * 2, Mock())
@@ -29,6 +31,7 @@ class CreateRouteCommandTest_Should(unittest.TestCase):
     def test_execute_createsRoute_validParams(self):
         fake_params = _create_fake_params()
         app_data = ApplicationData()
+        app_data.logged_in_employee = Mock()
         cmd = CreateRouteCommand(fake_params, app_data)
 
         output = cmd.execute()
@@ -37,11 +40,12 @@ class CreateRouteCommandTest_Should(unittest.TestCase):
                 f"\nLocations:      | {fake_params[0]}"
                 f"\n{BaseCommand.TABLE_SEP}"
                 f"\nDeparture Time: | {fake_params[1]}"
-                f"\n{BaseCommand.TABLE_SEP}") + BaseCommand.ROW_SEP*2
+                f"\n{BaseCommand.TABLE_SEP}")
         self.assertEqual(expected_message, output)
 
     def test_execute_raisesError_invalidLocations(self):
         app_data = ApplicationData()
+        app_data.logged_in_employee = Mock()
         cmd = CreateRouteCommand(_create_fake_params(locations="SYD"),app_data)
 
         with self.assertRaises(ApplicationError):
@@ -49,6 +53,7 @@ class CreateRouteCommandTest_Should(unittest.TestCase):
 
     def test_execute_raisesError_invalidDeparture_time(self):
         app_data = ApplicationData()
+        app_data.logged_in_employee = Mock()
         cmd = CreateRouteCommand(_create_fake_params(departure_time="TestInvalidDepartureTime"), app_data)
 
         with self.assertRaises(ApplicationError):

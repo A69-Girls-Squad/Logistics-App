@@ -26,6 +26,7 @@ class ReassignPackageCommand(BaseCommand):
         super().execute()
         package_id = try_parse_int(self.params[0])
         package = self.app_data.find_package_by_id(package_id)
+
         unassign_from_route_id = package.route_id
         assign_to_route_id = try_parse_int(self.params[1])
 

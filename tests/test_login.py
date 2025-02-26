@@ -17,12 +17,14 @@ def _create_fake_params(
 
 class LoginCommandTest_Should(unittest.TestCase):
     def test_initializer_raisesError_tooFewParamsCount(self):
+        cmd = LoginCommand(["a"] * 1, Mock())
         with self.assertRaises(ApplicationError):
-            LoginCommand(["a"] * 1, Mock())
+            cmd.execute()
 
     def test_initializer_raisesError_tooManyParamsCount(self):
+        cmd = LoginCommand(["a"] * 3, Mock())
         with self.assertRaises(ApplicationError):
-            LoginCommand(["a"] * 3, Mock())
+            cmd.execute()
 
     def test_initializer_passes_validParamsCount(self):
         LoginCommand(["a"] * 2, Mock())
@@ -35,7 +37,7 @@ class LoginCommandTest_Should(unittest.TestCase):
 
         output = cmd.execute()
 
-        self.assertEqual(f"Employee username successfully logged in!"+BaseCommand.ROW_SEP*2, output)
+        self.assertEqual(f"Employee username successfully logged in!", output)
 
     def test_execute_raisesError_invalidUsername(self):
         from errors.application_error import ApplicationError
