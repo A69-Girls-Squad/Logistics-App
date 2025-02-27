@@ -1,53 +1,45 @@
 import unittest
+from unittest.mock import MagicMock
 from commands.assign_package_to_route import AssignPackageToRouteCommand
 from errors.application_error import ApplicationError
 
-
-class ApplicationData:
-    def __init__(self):
-        self.has_logged_in_employee = True
-        self.logged_in_employee = "test_user"
-        self.packages = {}
-        self.routes = {}
-
-    def assign_package_to_route(self, package_id, route_id):
-        if package_id not in self.packages:
-            raise ApplicationError(f"Package with ID {package_id} does not exist.")
-        if route_id not in self.routes:
-            raise ApplicationError(f"Route with ID {route_id} does not exist.")
-        self.packages[package_id] = route_id
-
 class AssignPackageToRouteCommandTests(unittest.TestCase):
     def setUp(self):
-
-        self.app_data = ApplicationData()
-        self.app_data.packages = {1: None, 2: None}
-        self.app_data.routes = {101: None, 102: None}
+        self.mock_app_data = MagicMock()
+        self.mock_app_data.has_logged_in_employee = True
+        self.mock_app_data.logged_in_employee = "test_user"
+        self.mock_app_data.packages = {1: None, 2: None}
+        self.mock_app_data.routes = {101: None, 102: None}
         self.params = ["1", "101"]
 
     def test_init_withValidArguments_createsInstance(self):
+        # Arrange
+        params = ["1", "101"]
+        app_data = self.mock_app_data
+
         # Act
-        command = AssignPackageToRouteCommand(self.params, self.app_data)
+        command = AssignPackageToRouteCommand(params, app_data)
 
         # Assert
-        self.assertEqual(command.params, tuple(self.params))
-        self.assertEqual(command.app_data, self.app_data)
+        self.assertEqual(command.params, tuple(params))
+        self.assertEqual(command.app_data, app_data)
 
     def test_execute_withValidPackageAndRoute_assignsPackageAndReturnsMessage(self):
         # Arrange
-        command = AssignPackageToRouteCommand(self.params, self.app_data)
+        command = AssignPackageToRouteCommand(self.params, self.mock_app_data)
 
         # Act
         result = command.execute()
 
         # Assert
         self.assertEqual(result, "Package with ID 1 was assigned to Route with ID 101")
-        self.assertEqual(self.app_data.packages[1], 101)
+        self.mock_app_data.assign_package_to_route.assert_called_once_with(1, 101)
 
     def test_execute_withInvalidPackageId_raisesApplicationError(self):
         # Arrange
         invalid_package_id = "999"
-        command = AssignPackageToRouteCommand([invalid_package_id, "101"], self.app_data)
+        self.mock_app_data.assign_package_to_route.side_effect = ApplicationError(f"Package with ID {invalid_package_id} does not exist.")
+        command = AssignPackageToRouteCommand([invalid_package_id, "101"], self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
@@ -57,7 +49,8 @@ class AssignPackageToRouteCommandTests(unittest.TestCase):
     def test_execute_withInvalidRouteId_raisesApplicationError(self):
         # Arrange
         invalid_route_id = "999"
-        command = AssignPackageToRouteCommand(["1", invalid_route_id], self.app_data)
+        self.mock_app_data.assign_package_to_route.side_effect = ApplicationError(f"Route with ID {invalid_route_id} does not exist.")
+        command = AssignPackageToRouteCommand(["1", invalid_route_id], self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
@@ -67,7 +60,7 @@ class AssignPackageToRouteCommandTests(unittest.TestCase):
     def test_execute_withNonIntegerPackageId_raisesApplicationError(self):
         # Arrange
         invalid_package_id = "invalid"
-        command = AssignPackageToRouteCommand([invalid_package_id, "101"], self.app_data)
+        command = AssignPackageToRouteCommand([invalid_package_id, "101"], self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
@@ -77,7 +70,7 @@ class AssignPackageToRouteCommandTests(unittest.TestCase):
     def test_execute_withNonIntegerRouteId_raisesApplicationError(self):
         # Arrange
         invalid_route_id = "invalid"
-        command = AssignPackageToRouteCommand(["1", invalid_route_id], self.app_data)
+        command = AssignPackageToRouteCommand(["1", invalid_route_id], self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
@@ -87,7 +80,7 @@ class AssignPackageToRouteCommandTests(unittest.TestCase):
     def test_execute_withInsufficientParameters_raisesApplicationError(self):
         # Arrange
         insufficient_params = ["1"]
-        command = AssignPackageToRouteCommand(insufficient_params, self.app_data)
+        command = AssignPackageToRouteCommand(insufficient_params, self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
@@ -96,7 +89,7 @@ class AssignPackageToRouteCommandTests(unittest.TestCase):
 
     def test_requires_login_returnsTrue(self):
         # Arrange
-        command = AssignPackageToRouteCommand(self.params, self.app_data)
+        command = AssignPackageToRouteCommand(self.params, self.mock_app_data)
 
         # Act
         requires_login = command._requires_login()
@@ -106,7 +99,7 @@ class AssignPackageToRouteCommandTests(unittest.TestCase):
 
     def test_expected_params_count_returnsTwo(self):
         # Arrange
-        command = AssignPackageToRouteCommand(self.params, self.app_data)
+        command = AssignPackageToRouteCommand(self.params, self.mock_app_data)
 
         # Act
         expected_params = command._expected_params_count()

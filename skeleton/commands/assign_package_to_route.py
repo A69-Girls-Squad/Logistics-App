@@ -11,12 +11,6 @@ class AssignPackageToRouteCommand(BaseCommand):
     and assigns the package to the specified route. The action is logged, and a
     confirmation message is returned.
 
-    Attributes:
-        params (list): A list of parameters passed to the command. The first parameter
-                       should be the package ID, and the second should be the route ID.
-        app_data (ApplicationData): The application data object containing the state
-                                    of the application.
-
     Methods:
         execute(): Executes the command to assign the package to the route and logs
                    the action. Returns a confirmation message.
@@ -29,8 +23,8 @@ class AssignPackageToRouteCommand(BaseCommand):
     def execute(self) -> str:
         super().execute()
 
-        route_id = try_parse_int(self.params[0])
-        package_id = try_parse_int(self.params[1])
+        package_id = try_parse_int(self.params[0])
+        route_id = try_parse_int(self.params[1])
 
         self.app_data.assign_package_to_route(package_id, route_id)
         
