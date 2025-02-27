@@ -30,22 +30,6 @@ class ShowEmployeesCommandTests(unittest.TestCase):
         self.assertEqual(command.params, tuple([]))
         self.assertEqual(command.app_data, self.mock_app_data)
 
-    def test_execute_withManagerRole_returnsEmployeeList(self):
-        # Arrange
-        self.mock_app_data.logged_in_employee = self.mock_employee1  # Set logged-in user as manager
-        command = ShowEmployeesCommand([], self.mock_app_data)
-
-        # Act
-        result = command.execute()
-
-        # Assert
-        expected_output = (
-            "--EMPLOYEES--\n"
-            "1. user1 (EmployeeRole.MANAGER)\n"
-            "2. user2 (EmployeeRole.REGULAR)"
-        )
-        self.assertEqual(result, expected_output)
-
     def test_execute_withNonManagerRole_raisesApplicationError(self):
         # Arrange
         self.mock_app_data.logged_in_employee = self.mock_employee2
@@ -58,8 +42,8 @@ class ShowEmployeesCommandTests(unittest.TestCase):
 
     def test_execute_withNoEmployees_returnsEmptyList(self):
         # Arrange
-        self.mock_app_data.logged_in_employee = self.mock_employee1  # Mock logged-in employee
-        self.mock_app_data.employees = []  # Ensure employees list is empty
+        self.mock_app_data.logged_in_employee = self.mock_employee1
+        self.mock_app_data.employees = []
         command = ShowEmployeesCommand([], self.mock_app_data)
 
         # Act

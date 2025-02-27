@@ -41,14 +41,14 @@ class UnassignPackageFromRouteCommandTests(unittest.TestCase):
 
         # Assert
         self.assertEqual(result, "Package with ID 1 was unassigned from Route with ID 101")
-        self.mock_package.route_id = None  # Mocked package's route_id should be set to None
+        self.mock_package.route_id = None
         self.assertIsNone(self.mock_package.route_id)
         self.mock_app_data.unassign_package_from_route.assert_called_once_with(1)
 
     def test_execute_withInvalidPackageId_raisesApplicationError(self):
         # Arrange
         invalid_package_id = "999"
-        self.mock_app_data.find_package_by_id.return_value = None  # Simulate package not found
+        self.mock_app_data.find_package_by_id.return_value = None
         command = UnassignPackageFromRouteCommand([invalid_package_id], self.mock_app_data)
 
         # Act & Assert

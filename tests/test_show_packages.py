@@ -10,12 +10,10 @@ class ShowPackageCommandTests(unittest.TestCase):
         # Arrange:
         self.mock_app_data = MagicMock(spec=ApplicationData)
 
-        # Create a mock package to return when find_package_by_id is called
         self.mock_package = MagicMock()
         self.mock_package.id = 123
         self.mock_package.name = "Test Package"
 
-        # Set up the mock behavior for find_package_by_id
         self.mock_app_data.find_package_by_id.return_value = self.mock_package
 
     def test_init_withValidArguments_createsInstance(self):
