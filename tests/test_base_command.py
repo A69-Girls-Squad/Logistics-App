@@ -1,32 +1,28 @@
 import unittest
+from unittest.mock import MagicMock, patch
 from commands.base_command import BaseCommand
 from errors.application_error import ApplicationError
 
 
-class ApplicationData:
-    def __init__(self):
-        self.has_logged_in_employee = False
-        self.logged_in_employee = None
-
-class TestCommand(BaseCommand):
-    def _requires_login(self) -> bool:
-        return True
-
-    def _expected_params_count(self) -> int:
-        return 2
-
 class BaseCommandTests(unittest.TestCase):
     def setUp(self):
-        self.app_data = ApplicationData()
+        # Arrange: Mock the ApplicationData object
+        self.mock_app_data = MagicMock()
+        self.mock_app_data.has_logged_in_employee = False
+        self.mock_app_data.logged_in_employee = None
         self.params = ["param1", "param2"]
 
     def test_init_withValidArguments_createsInstance(self):
+        # Arrange
+        params = self.params
+        app_data = self.mock_app_data
+
         # Act
-        base_command = BaseCommand(self.params, self.app_data)
+        base_command = BaseCommand(params, app_data)
 
         # Assert
-        self.assertEqual(base_command.params, tuple(self.params))
-        self.assertEqual(base_command.app_data, self.app_data)
+        self.assertEqual(base_command.params, tuple(params))
+        self.assertEqual(base_command.app_data, app_data)
         self.assertIsNotNone(base_command.logger)
 
     def test_execute_withoutLoginRequired_returnsEmptyString(self):
@@ -38,7 +34,7 @@ class BaseCommandTests(unittest.TestCase):
             def _expected_params_count(self) -> int:
                 return 2
 
-        no_login_command = NoLoginCommand(self.params, self.app_data)
+        no_login_command = NoLoginCommand(self.params, self.mock_app_data)
 
         # Act
         result = no_login_command.execute()
@@ -48,7 +44,14 @@ class BaseCommandTests(unittest.TestCase):
 
     def test_execute_withLoginRequiredAndNotLoggedIn_raisesValueError(self):
         # Arrange
-        test_command = TestCommand(self.params, self.app_data)
+        class TestCommand(BaseCommand):
+            def _requires_login(self) -> bool:
+                return True
+
+            def _expected_params_count(self) -> int:
+                return 2
+
+        test_command = TestCommand(self.params, self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ValueError) as context:
@@ -64,7 +67,7 @@ class BaseCommandTests(unittest.TestCase):
             def _expected_params_count(self) -> int:
                 return 3
 
-        invalid_param_command = InvalidParamCountCommand(self.params, self.app_data)
+        invalid_param_command = InvalidParamCountCommand(self.params, self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
@@ -73,9 +76,9 @@ class BaseCommandTests(unittest.TestCase):
 
     def test_throw_if_employee_logged_in_withLoggedInEmployee_raisesValueError(self):
         # Arrange
-        self.app_data.has_logged_in_employee = True
-        self.app_data.logged_in_employee = type("Employee", (object,), {"username": "test_user"})
-        base_command = BaseCommand(self.params, self.app_data)
+        self.mock_app_data.has_logged_in_employee = True
+        self.mock_app_data.logged_in_employee = MagicMock(username="test_user")
+        base_command = BaseCommand(self.params, self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ValueError) as context:
@@ -84,8 +87,8 @@ class BaseCommandTests(unittest.TestCase):
 
     def test_throw_if_employee_logged_in_withNoLoggedInEmployee_doesNotRaise(self):
         # Arrange
-        self.app_data.has_logged_in_employee = False
-        base_command = BaseCommand(self.params, self.app_data)
+        self.mock_app_data.has_logged_in_employee = False
+        base_command = BaseCommand(self.params, self.mock_app_data)
 
         # Act & Assert
         try:
