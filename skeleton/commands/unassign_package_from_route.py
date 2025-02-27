@@ -1,6 +1,7 @@
 from commands.validation_helpers import try_parse_int
 from commands.base_command import BaseCommand
 from core.application_data import ApplicationData
+from errors.application_error import ApplicationError
 
 
 class UnassignPackageFromRouteCommand(BaseCommand):
@@ -29,7 +30,14 @@ class UnassignPackageFromRouteCommand(BaseCommand):
 
         package_id = try_parse_int(self.params[0])
         package = self.app_data.find_package_by_id(package_id)
+
+        if package is None:
+            raise ApplicationError(f"Package with ID {package_id} does not exist.")
+
         route_id = package.route_id
+
+        if route_id is None:
+            raise ApplicationError(f"Package with ID {package_id} is not assigned to any route.")
 
         self.app_data.unassign_package_from_route(package_id)
 
