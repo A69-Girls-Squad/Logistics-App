@@ -6,7 +6,7 @@ from errors.application_error import ApplicationError
 
 class BaseCommandTests(unittest.TestCase):
     def setUp(self):
-        # Arrange: Mock the ApplicationData object
+        # Arrange:
         self.mock_app_data = MagicMock()
         self.mock_app_data.has_logged_in_employee = False
         self.mock_app_data.logged_in_employee = None
