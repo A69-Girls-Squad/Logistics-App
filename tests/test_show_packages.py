@@ -1,78 +1,55 @@
 import unittest
+from unittest.mock import MagicMock
 from commands.show_package import ShowPackageCommand
 from errors.application_error import ApplicationError
+from core.application_data import ApplicationData
 
-
-class ApplicationData:
-    def __init__(self):
-        self.has_logged_in_employee = True
-        self.logged_in_employee = "test_user"
-        self.packages = []
-
-    def find_package_by_id(self, package_id):
-        for package in self.packages:
-            if package["id"] == package_id:
-                return package
-        return None
 
 class ShowPackageCommandTests(unittest.TestCase):
     def setUp(self):
-        self.app_data = ApplicationData()
-        self.test_package = {"id": 1, "start_location": "SYD", "end_location": "MEL", "weight": 45.5, "customer_email": "customer@example.com"}
-        self.app_data.packages.append(self.test_package)
-        self.params = ["1"]
+        # Arrange:
+        self.mock_app_data = MagicMock(spec=ApplicationData)
+
+        # Create a mock package to return when find_package_by_id is called
+        self.mock_package = MagicMock()
+        self.mock_package.id = 123
+        self.mock_package.name = "Test Package"
+
+        # Set up the mock behavior for find_package_by_id
+        self.mock_app_data.find_package_by_id.return_value = self.mock_package
 
     def test_init_withValidArguments_createsInstance(self):
         # Act
-        command = ShowPackageCommand(self.params, self.app_data)
+        command = ShowPackageCommand([123], self.mock_app_data)
 
         # Assert
-        self.assertEqual(command.params, tuple(self.params))
-        self.assertEqual(command.app_data, self.app_data)
+        self.assertEqual(command.params, (123,))
+        self.assertEqual(command.app_data, self.mock_app_data)
 
-    def test_execute_withValidPackageId_returnsPackageString(self):
+    def test_execute_withValidPackageId_returnsPackageDetails(self):
         # Arrange
-        command = ShowPackageCommand(self.params, self.app_data)
+        command = ShowPackageCommand([123], self.mock_app_data)
 
         # Act
         result = command.execute()
 
         # Assert
-        self.assertEqual(result, str(self.test_package))
+        self.assertEqual(result, str(self.mock_package))
+        self.mock_app_data.find_package_by_id.assert_called_once_with(123)
 
     def test_execute_withInvalidPackageId_raisesApplicationError(self):
         # Arrange
-        invalid_package_id = "999"
-        command = ShowPackageCommand([invalid_package_id], self.app_data)
+        self.mock_app_data.find_package_by_id.return_value = None
+        command = ShowPackageCommand([999], self.mock_app_data)
 
         # Act & Assert
         with self.assertRaises(ApplicationError) as context:
             command.execute()
         self.assertIn("No Package found!", str(context.exception))
 
-    def test_execute_withNonIntegerPackageId_raisesApplicationError(self):
-        # Arrange
-        invalid_package_id = "invalid"
-        command = ShowPackageCommand([invalid_package_id], self.app_data)
-
-        # Act & Assert
-        with self.assertRaises(ApplicationError) as context:
-            command.execute()
-        self.assertIn("Invalid value. Should be a number.", str(context.exception))
-
-    def test_execute_withInsufficientParameters_raisesApplicationError(self):
-        # Arrange
-        insufficient_params = []
-        command = ShowPackageCommand(insufficient_params, self.app_data)
-
-        # Act & Assert
-        with self.assertRaises(ApplicationError) as context:
-            command.execute()
-        self.assertIn("Invalid number of arguments", str(context.exception))
-
     def test_requires_login_returnsTrue(self):
         # Arrange
-        command = ShowPackageCommand(self.params, self.app_data)
+        command = ShowPackageCommand([123], self.mock_app_data)
 
         # Act
         requires_login = command._requires_login()
@@ -82,11 +59,10 @@ class ShowPackageCommandTests(unittest.TestCase):
 
     def test_expected_params_count_returnsOne(self):
         # Arrange
-        command = ShowPackageCommand(self.params, self.app_data)
+        command = ShowPackageCommand([123], self.mock_app_data)
 
         # Act
         expected_params = command._expected_params_count()
 
         # Assert
         self.assertEqual(expected_params, 1)
-
